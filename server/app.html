@@ -48,6 +48,8 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):hover .day-number{backg
 .shop-dialog{width:min(860px,calc(100% - 32px));max-width:none;max-height:calc(100dvh - 40px);padding:0;border:2px solid var(--ink);background:var(--paper);color:var(--ink);box-shadow:7px 7px 0 var(--shadow)}
 .shop-dialog::backdrop{background:#00000085}.shop-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:21px 24px;border-bottom:2px solid var(--ink);background:var(--lime);color:#000000}.shop-header h2{font-size:24px}.shop-close{width:34px;height:34px;border:2px solid #000000;background:#ffffff;color:#000000;font-size:23px;line-height:1}.shop-body{padding:24px}.shop-balance{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}.shop-balance span{font-size:13px}.shop-balance strong{font:900 30px/1.2 Arial,sans-serif;letter-spacing:-1px}.shop-help{margin:0;color:var(--muted);font-size:12px}.shop-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0}.shop-card{border:2px solid var(--ink);background:var(--paper);min-width:0;box-shadow:3px 3px 0 var(--shadow)}.theme-sample{height:106px;padding:16px;background:var(--sample);color:#000000;border-bottom:2px solid var(--ink);display:flex;flex-direction:column;justify-content:space-between}.sample-heading{width:70%;height:8px;background:#000000}.sample-lines{height:24px;border:1px solid #000000;background:linear-gradient(#ffffffaa,#ffffffaa);position:relative}.sample-lines::after{content:"";position:absolute;left:6px;top:6px;width:9px;height:9px;background:var(--sample);border:1px solid #000000}.shop-card-body{padding:13px 11px}.shop-card h3{font-size:14px;margin:0 0 6px}.theme-price{font-size:11px;color:var(--muted);min-height:18px;margin:0 0 12px}.theme-actions{display:grid;gap:7px}.shop-action{width:100%;padding:7px 5px;background:var(--paper);color:var(--ink);border:1.5px solid var(--ink);font-size:11px;font-weight:700}.shop-action.primary{background:var(--sample);color:#000000;border-color:#000000}.shop-action:disabled{opacity:.5;cursor:not-allowed}.shop-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px}.shop-bottom .shop-action{width:auto;padding:7px 12px}.shop-status{min-height:24px;margin:16px 0 0;font-size:12px;font-weight:700}.shop-open:not(:disabled):hover .shop-wallet-pill{color:inherit}.preview-indicator{margin:14px 0 0;font-size:12px;color:var(--muted)}
 @media(max-width:800px){.shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nav-right{gap:12px}}
+.trophy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:16px;list-style:none;padding:0;margin:16px 0 4px}.trophy-grid:empty{display:none}.trophy-card{text-align:center;padding:18px 12px;border:2px solid var(--ink);background:var(--paper);box-shadow:3px 3px 0 var(--shadow);overflow-wrap:anywhere}.trophy-card svg{background:#fff;border:2px solid #000;padding:5px;box-shadow:3px 3px 0 var(--shadow)}.trophy-card h3{font-size:15px;margin:10px 0 3px}
+@media(max-width:520px){.nav{flex-wrap:wrap;padding-block:12px;gap:10px}.nav-right{gap:8px;flex-wrap:wrap}}
 @media(max-width:520px){.shop-body{padding:16px}.shop-header{padding:17px 16px}.shop-header h2{font-size:20px}.shop-grid{gap:10px}.shop-card h3{font-size:12px}.shop-open{gap:6px;padding:6px 8px;font-size:11px}.shop-wallet-pill{padding:0 4px}.theme-sample{height:80px;padding:11px}.shop-card-body{padding:11px 8px}}
 
 .cloud-panel{border:2px solid var(--ink);background:var(--paper);padding:18px 20px;margin-top:24px;box-shadow:3px 3px 0 var(--shadow)}.cloud-panel[hidden]{display:none}.cloud-top,.cloud-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}.cloud-controls{margin-top:14px;justify-content:flex-start}.cloud-controls select{min-width:0;max-width:100%;flex:1;border:1.5px solid var(--ink);padding:8px;background:var(--paper);color:var(--ink);font:inherit;font-size:12px}.cloud-button{display:inline-block;border:1.5px solid var(--ink);padding:7px 12px;background:var(--lime);color:#000000;text-decoration:none;font-weight:700;font-size:12px}.cloud-button:hover{background:#000000;color:#ffffff}.cloud-button[aria-disabled="true"]{opacity:.5;pointer-events:none}.cloud-account{font-size:13px;font-weight:700}.cloud-status{margin:10px 0 0;font-size:12px;color:var(--muted)}
@@ -62,11 +64,75 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):hover .day-number{backg
 @media(max-width:520px){.detail-header,.detail-body{padding:17px}.detail-header h2{font-size:19px}}
 .task-open:is(:hover,:focus,:active){background:transparent;color:inherit;outline:1px solid #000000;outline-offset:0;border-radius:0}
 :root[data-theme="dark"] .task-open:is(:hover,:focus,:active){outline-color:var(--ink)}
+
+.shelf-theme-label{display:inline-block;margin:0 8px 12px 0;font-size:12px;font-weight:800}
+#shelfTheme{width:auto;max-width:100%;margin-bottom:12px}
+
+#trophyShelf[data-theme="classic"] .shop-body{background:#fff;color:#111}
+#trophyShelf[data-theme="classic"] .trophy-card{background:#fff;border:1px solid #111;box-shadow:3px 3px #111}
+#trophyShelf[data-theme="classic"] .shop-help{color:#4b4b4b}
+
+
+/* Vault: inset compartments with lit display shelves. */
+#trophyShelf[data-theme="steel"] .shop-body{background:#14181d;color:#f4f7fa}
+#trophyShelf[data-theme="steel"] .trophy-card{background:#232a32;border:1px solid #4b5864;box-shadow:inset 0 0 0 3px #171d23}
+#trophyShelf[data-theme="steel"] .trophy-card>div:first-child{display:grid;place-items:center;min-height:115px;border-bottom:5px solid #8195a5;background:radial-gradient(ellipse at 50% 5%,#647b90,#202a34 70%);box-shadow:0 5px 9px #0b1016}
+#trophyShelf[data-theme="steel"] .shop-help{color:#d3dee8}
+#trophyShelf[data-theme="arcade"] .shop-body{background:#1e1433 radial-gradient(#695383 1px,transparent 1px) 0 0/12px 12px;color:#f9f2ff}
+#trophyShelf[data-theme="arcade"] .trophy-card{background:#30204d;border:2px solid #d49aff;box-shadow:4px 4px #733ec2}
+#trophyShelf[data-theme="arcade"] .shop-help{color:#ead9ff}
+
+/* Gallery: white walls, soft daylight, and stone plinths. */
+#trophyShelf[data-theme="museum"] .shop-body{background:#e8e9e6;color:#191b1b}
+#trophyShelf[data-theme="museum"] .trophy-card{background:#fafaf8;border:1px solid #c7cac6;box-shadow:0 4px 10px #1c242013}
+#trophyShelf[data-theme="museum"] .trophy-card>div:first-child{display:grid;place-items:center;min-height:136px;padding-bottom:10px;background:linear-gradient(145deg,#fff 18%,#e5e8e4 85%)}
+#trophyShelf[data-theme="museum"] .trophy-card>div:first-child::after{content:"";width:68%;height:16px;background:linear-gradient(#e1e3df 25%,#b5bcb7 26%);box-shadow:5px 5px #1c24201a}
+#trophyShelf[data-theme="museum"] .shop-help{color:#474f4a}
+
+/* Walnut: warm wood grain and inset display cubbies. */
+#trophyShelf[data-theme="walnut"] .shop-body{background:#302019;color:#fff3df}
+#trophyShelf[data-theme="walnut"] .trophy-card{background:#4c3022;border:1px solid #af8057;box-shadow:4px 4px #1f130e}
+#trophyShelf[data-theme="walnut"] .trophy-card>div:first-child{display:grid;place-items:center;min-height:126px;border-bottom:8px solid #c19060;background:radial-gradient(ellipse at 50% 0%,#eac38a70,transparent 72%),repeating-linear-gradient(4deg,#41271c 0 4px,#513326 5px 9px);box-shadow:inset 0 0 12px #1f120a}
+#trophyShelf[data-theme="walnut"] .shop-help{color:#f0d7ba}
+
+/* Observatory: an orbital display against a star field. */
+#trophyShelf[data-theme="observatory"] .shop-body{position:relative;isolation:isolate;background:#000;color:#e1f6ff}
+#trophyShelf[data-theme="observatory"] .shop-body::before,
+#trophyShelf[data-theme="observatory"] .shop-body::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
+#trophyShelf[data-theme="observatory"] .shop-body::before{
+  background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22560%22%20height%3D%22360%22%3E%3Ccircle%20cx%3D%22150.6%22%20cy%3D%2264.6%22%20r%3D%220.74%22%20fill%3D%22%23fff%22%20opacity%3D%220.63%22%2F%3E%3Ccircle%20cx%3D%2223.6%22%20cy%3D%22161.6%22%20r%3D%220.31%22%20fill%3D%22%23fff%22%20opacity%3D%220.23%22%2F%3E%3Ccircle%20cx%3D%2297.9%22%20cy%3D%22337.7%22%20r%3D%220.41%22%20fill%3D%22%23fff%22%20opacity%3D%220.33%22%2F%3E%3Ccircle%20cx%3D%22476.1%22%20cy%3D%2282.6%22%20r%3D%220.45%22%20fill%3D%22%23fff%22%20opacity%3D%220.37%22%2F%3E%3Ccircle%20cx%3D%22195.8%22%20cy%3D%22168.3%22%20r%3D%220.29%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%2230.2%22%20cy%3D%22115.5%22%20r%3D%220.44%22%20fill%3D%22%23fff%22%20opacity%3D%220.36%22%2F%3E%3Ccircle%20cx%3D%22519.9%22%20cy%3D%22300.8%22%20r%3D%220.55%22%20fill%3D%22%23fff%22%20opacity%3D%220.46%22%2F%3E%3Ccircle%20cx%3D%225.1%22%20cy%3D%2221.4%22%20r%3D%220.25%22%20fill%3D%22%23fff%22%20opacity%3D%220.18%22%2F%3E%3Ccircle%20cx%3D%22325.6%22%20cy%3D%22166.9%22%20r%3D%220.36%22%20fill%3D%22%23fff%22%20opacity%3D%220.28%22%2F%3E%3Ccircle%20cx%3D%22395.5%22%20cy%3D%22230.8%22%20r%3D%220.40%22%20fill%3D%22%23fff%22%20opacity%3D%220.31%22%2F%3E%3Ccircle%20cx%3D%22498.2%22%20cy%3D%22249.4%22%20r%3D%220.32%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.24%22%2F%3E%3Ccircle%20cx%3D%22545.5%22%20cy%3D%2238.0%22%20r%3D%220.40%22%20fill%3D%22%23fff%22%20opacity%3D%220.32%22%2F%3E%3Ccircle%20cx%3D%22518.5%22%20cy%3D%22154.8%22%20r%3D%220.68%22%20fill%3D%22%23fff%22%20opacity%3D%220.57%22%2F%3E%3Ccircle%20cx%3D%22409.2%22%20cy%3D%22304.5%22%20r%3D%220.41%22%20fill%3D%22%23fff%22%20opacity%3D%220.33%22%2F%3E%3Ccircle%20cx%3D%22430.0%22%20cy%3D%22140.2%22%20r%3D%220.40%22%20fill%3D%22%23fff%22%20opacity%3D%220.31%22%2F%3E%3Ccircle%20cx%3D%22188.8%22%20cy%3D%22113.1%22%20r%3D%220.32%22%20fill%3D%22%23fff%22%20opacity%3D%220.24%22%2F%3E%3Ccircle%20cx%3D%2281.0%22%20cy%3D%22110.3%22%20r%3D%220.54%22%20fill%3D%22%23fff%22%20opacity%3D%220.45%22%2F%3E%3Ccircle%20cx%3D%228.6%22%20cy%3D%2244.1%22%20r%3D%220.28%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.21%22%2F%3E%3Ccircle%20cx%3D%2257.4%22%20cy%3D%22308.3%22%20r%3D%220.60%22%20fill%3D%22%23fff%22%20opacity%3D%220.50%22%2F%3E%3Ccircle%20cx%3D%22174.6%22%20cy%3D%22105.0%22%20r%3D%220.53%22%20fill%3D%22%23fff%22%20opacity%3D%220.44%22%2F%3E%3Ccircle%20cx%3D%22441.6%22%20cy%3D%22181.0%22%20r%3D%220.81%22%20fill%3D%22%23fff%22%20opacity%3D%220.69%22%2F%3E%3Ccircle%20cx%3D%22364.7%22%20cy%3D%2258.4%22%20r%3D%220.81%22%20fill%3D%22%23fff%22%20opacity%3D%220.69%22%2F%3E%3Ccircle%20cx%3D%22158.2%22%20cy%3D%22345.4%22%20r%3D%220.78%22%20fill%3D%22%23fff%22%20opacity%3D%220.66%22%2F%3E%3Ccircle%20cx%3D%22510.0%22%20cy%3D%2236.1%22%20r%3D%220.78%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.66%22%2F%3E%3Ccircle%20cx%3D%22217.9%22%20cy%3D%22266.0%22%20r%3D%220.80%22%20fill%3D%22%23fff%22%20opacity%3D%220.68%22%2F%3E%3Ccircle%20cx%3D%2253.2%22%20cy%3D%2231.0%22%20r%3D%220.71%22%20fill%3D%22%23fff%22%20opacity%3D%220.60%22%2F%3E%3Ccircle%20cx%3D%22372.2%22%20cy%3D%2289.5%22%20r%3D%220.54%22%20fill%3D%22%23fff%22%20opacity%3D%220.44%22%2F%3E%3Ccircle%20cx%3D%22555.6%22%20cy%3D%2226.8%22%20r%3D%220.26%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.19%22%2F%3E%3Ccircle%20cx%3D%22218.5%22%20cy%3D%22301.8%22%20r%3D%220.36%22%20fill%3D%22%23fff%22%20opacity%3D%220.28%22%2F%3E%3Ccircle%20cx%3D%2256.5%22%20cy%3D%2262.5%22%20r%3D%220.35%22%20fill%3D%22%23fff%22%20opacity%3D%220.27%22%2F%3E%3Ccircle%20cx%3D%22339.6%22%20cy%3D%22263.1%22%20r%3D%220.73%22%20fill%3D%22%23fff%22%20opacity%3D%220.62%22%2F%3E%3Ccircle%20cx%3D%22164.4%22%20cy%3D%22229.5%22%20r%3D%220.30%22%20fill%3D%22%23fff%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22166.0%22%20cy%3D%22196.5%22%20r%3D%220.73%22%20fill%3D%22%23fff%22%20opacity%3D%220.61%22%2F%3E%3Ccircle%20cx%3D%22486.4%22%20cy%3D%22252.5%22%20r%3D%220.36%22%20fill%3D%22%23fff%22%20opacity%3D%220.28%22%2F%3E%3Ccircle%20cx%3D%22287.9%22%20cy%3D%22295.3%22%20r%3D%220.35%22%20fill%3D%22%23fff%22%20opacity%3D%220.27%22%2F%3E%3Ccircle%20cx%3D%22267.8%22%20cy%3D%2258.5%22%20r%3D%220.63%22%20fill%3D%22%23fff%22%20opacity%3D%220.53%22%2F%3E%3Ccircle%20cx%3D%22387.2%22%20cy%3D%22115.6%22%20r%3D%220.27%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.20%22%2F%3E%3Ccircle%20cx%3D%2266.7%22%20cy%3D%22281.5%22%20r%3D%220.82%22%20fill%3D%22%23fff%22%20opacity%3D%220.70%22%2F%3E%3Ccircle%20cx%3D%22514.0%22%20cy%3D%2215.5%22%20r%3D%220.80%22%20fill%3D%22%23fff%22%20opacity%3D%220.69%22%2F%3E%3Ccircle%20cx%3D%22150.6%22%20cy%3D%22236.1%22%20r%3D%220.33%22%20fill%3D%22%23fff%22%20opacity%3D%220.25%22%2F%3E%3Ccircle%20cx%3D%22191.7%22%20cy%3D%2264.0%22%20r%3D%220.56%22%20fill%3D%22%23fff%22%20opacity%3D%220.46%22%2F%3E%3Ccircle%20cx%3D%2231.7%22%20cy%3D%2249.2%22%20r%3D%220.42%22%20fill%3D%22%23fff%22%20opacity%3D%220.33%22%2F%3E%3Ccircle%20cx%3D%22314.8%22%20cy%3D%22291.8%22%20r%3D%220.61%22%20fill%3D%22%23fff%22%20opacity%3D%220.50%22%2F%3E%3Ccircle%20cx%3D%22244.9%22%20cy%3D%22262.5%22%20r%3D%220.37%22%20fill%3D%22%23fff%22%20opacity%3D%220.29%22%2F%3E%3Ccircle%20cx%3D%22114.4%22%20cy%3D%22172.3%22%20r%3D%220.38%22%20fill%3D%22%23fff%22%20opacity%3D%220.30%22%2F%3E%3Ccircle%20cx%3D%22296.3%22%20cy%3D%22311.9%22%20r%3D%220.80%22%20fill%3D%22%23fff%22%20opacity%3D%220.69%22%2F%3E%3Ccircle%20cx%3D%22229.7%22%20cy%3D%22148.5%22%20r%3D%220.76%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.65%22%2F%3E%3Ccircle%20cx%3D%22509.4%22%20cy%3D%22110.0%22%20r%3D%220.55%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.46%22%2F%3E%3Ccircle%20cx%3D%22293.9%22%20cy%3D%22278.2%22%20r%3D%220.63%22%20fill%3D%22%23fff%22%20opacity%3D%220.52%22%2F%3E%3Ccircle%20cx%3D%2243.2%22%20cy%3D%22153.2%22%20r%3D%220.59%22%20fill%3D%22%23fff%22%20opacity%3D%220.49%22%2F%3E%3Ccircle%20cx%3D%22419.2%22%20cy%3D%22220.5%22%20r%3D%220.56%22%20fill%3D%22%23fff%22%20opacity%3D%220.46%22%2F%3E%3Ccircle%20cx%3D%22463.2%22%20cy%3D%22156.7%22%20r%3D%220.40%22%20fill%3D%22%23fff%22%20opacity%3D%220.31%22%2F%3E%3Ccircle%20cx%3D%22507.4%22%20cy%3D%22213.2%22%20r%3D%220.63%22%20fill%3D%22%23fff%22%20opacity%3D%220.52%22%2F%3E%3Ccircle%20cx%3D%22516.7%22%20cy%3D%2285.5%22%20r%3D%220.27%22%20fill%3D%22%23fff%22%20opacity%3D%220.20%22%2F%3E%3Ccircle%20cx%3D%22147.5%22%20cy%3D%22223.2%22%20r%3D%220.74%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.62%22%2F%3E%3Ccircle%20cx%3D%22324.7%22%20cy%3D%2264.8%22%20r%3D%220.59%22%20fill%3D%22%23fff%22%20opacity%3D%220.49%22%2F%3E%3Ccircle%20cx%3D%22204.4%22%20cy%3D%2288.1%22%20r%3D%220.75%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.64%22%2F%3E%3Ccircle%20cx%3D%2289.7%22%20cy%3D%22224.1%22%20r%3D%220.80%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.68%22%2F%3E%3Ccircle%20cx%3D%2224.7%22%20cy%3D%22294.4%22%20r%3D%220.38%22%20fill%3D%22%23fff%22%20opacity%3D%220.30%22%2F%3E%3Ccircle%20cx%3D%22493.7%22%20cy%3D%22122.5%22%20r%3D%220.45%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.36%22%2F%3E%3Ccircle%20cx%3D%22198.1%22%20cy%3D%22227.2%22%20r%3D%220.46%22%20fill%3D%22%23fff%22%20opacity%3D%220.37%22%2F%3E%3Ccircle%20cx%3D%22370.1%22%20cy%3D%22221.4%22%20r%3D%220.52%22%20fill%3D%22%23fff%22%20opacity%3D%220.43%22%2F%3E%3Ccircle%20cx%3D%22385.3%22%20cy%3D%22224.4%22%20r%3D%220.66%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.55%22%2F%3E%3Ccircle%20cx%3D%22482.6%22%20cy%3D%22121.9%22%20r%3D%220.56%22%20fill%3D%22%23fff%22%20opacity%3D%220.46%22%2F%3E%3Ccircle%20cx%3D%22491.3%22%20cy%3D%2246.3%22%20r%3D%220.29%22%20fill%3D%22%23fff%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22162.9%22%20cy%3D%22256.8%22%20r%3D%220.61%22%20fill%3D%22%23fff%22%20opacity%3D%220.51%22%2F%3E%3Ccircle%20cx%3D%22219.0%22%20cy%3D%2294.0%22%20r%3D%220.60%22%20fill%3D%22%23fff%22%20opacity%3D%220.50%22%2F%3E%3Ccircle%20cx%3D%2254.0%22%20cy%3D%22349.0%22%20r%3D%220.76%22%20fill%3D%22%23fff%22%20opacity%3D%220.65%22%2F%3E%3Ccircle%20cx%3D%22311.2%22%20cy%3D%2298.7%22%20r%3D%220.53%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.44%22%2F%3E%3Ccircle%20cx%3D%22473.2%22%20cy%3D%22266.6%22%20r%3D%220.26%22%20fill%3D%22%23fff%22%20opacity%3D%220.19%22%2F%3E%3Ccircle%20cx%3D%22517.0%22%20cy%3D%22208.4%22%20r%3D%220.82%22%20fill%3D%22%23fff%22%20opacity%3D%220.70%22%2F%3E%3Ccircle%20cx%3D%22360.1%22%20cy%3D%22109.8%22%20r%3D%220.52%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.43%22%2F%3E%3Ccircle%20cx%3D%22351.5%22%20cy%3D%22249.0%22%20r%3D%220.37%22%20fill%3D%22%23fff%22%20opacity%3D%220.29%22%2F%3E%3Ccircle%20cx%3D%22124.6%22%20cy%3D%22230.0%22%20r%3D%220.41%22%20fill%3D%22%23fff%22%20opacity%3D%220.32%22%2F%3E%3Ccircle%20cx%3D%22442.6%22%20cy%3D%22327.3%22%20r%3D%220.42%22%20fill%3D%22%23fff%22%20opacity%3D%220.33%22%2F%3E%3Ccircle%20cx%3D%22112.4%22%20cy%3D%22128.4%22%20r%3D%220.37%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.29%22%2F%3E%3Ccircle%20cx%3D%2247.7%22%20cy%3D%22311.5%22%20r%3D%220.47%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.38%22%2F%3E%3Ccircle%20cx%3D%22209.4%22%20cy%3D%22103.4%22%20r%3D%220.67%22%20fill%3D%22%23fff%22%20opacity%3D%220.56%22%2F%3E%3Ccircle%20cx%3D%22125.6%22%20cy%3D%22302.8%22%20r%3D%220.74%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.63%22%2F%3E%3Ccircle%20cx%3D%2232.7%22%20cy%3D%2216.8%22%20r%3D%220.49%22%20fill%3D%22%23fff%22%20opacity%3D%220.40%22%2F%3E%3Ccircle%20cx%3D%22370.5%22%20cy%3D%22335.8%22%20r%3D%220.48%22%20fill%3D%22%23fff%22%20opacity%3D%220.39%22%2F%3E%3Ccircle%20cx%3D%22259.6%22%20cy%3D%22105.8%22%20r%3D%220.77%22%20fill%3D%22%23fff%22%20opacity%3D%220.65%22%2F%3E%3C%2Fsvg%3E");
+  animation:observatory-drift 165s linear infinite;
+}
+#trophyShelf[data-theme="observatory"] .shop-body::after{
+  background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22560%22%20height%3D%22360%22%3E%3Ccircle%20cx%3D%22184.2%22%20cy%3D%22149.2%22%20r%3D%220.94%22%20fill%3D%22%23fff%22%20opacity%3D%220.45%22%2F%3E%3Ccircle%20cx%3D%22374.2%22%20cy%3D%22299.1%22%20r%3D%221.40%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.78%22%2F%3E%3Ccircle%20cx%3D%2225.2%22%20cy%3D%22344.5%22%20r%3D%221.12%22%20fill%3D%22%23fff%22%20opacity%3D%220.58%22%2F%3E%3Ccircle%20cx%3D%22126.8%22%20cy%3D%22235.8%22%20r%3D%220.78%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.34%22%2F%3E%3Ccircle%20cx%3D%22220.8%22%20cy%3D%22304.4%22%20r%3D%221.60%22%20fill%3D%22%23fff%22%20opacity%3D%220.91%22%2F%3E%3Cpath%20d%3D%22M220.8%20301.4v6m-3-3h6%22%20stroke%3D%22%23dceaff%22%20stroke-width%3D%22.45%22%20opacity%3D%22.52%22%2F%3E%3Ccircle%20cx%3D%22306.6%22%20cy%3D%22243.7%22%20r%3D%221.17%22%20fill%3D%22%23fff%22%20opacity%3D%220.61%22%2F%3E%3Ccircle%20cx%3D%22206.1%22%20cy%3D%2277.0%22%20r%3D%221.24%22%20fill%3D%22%23fff%22%20opacity%3D%220.66%22%2F%3E%3Ccircle%20cx%3D%2286.2%22%20cy%3D%22344.5%22%20r%3D%220.83%22%20fill%3D%22%23b9d5ff%22%20opacity%3D%220.38%22%2F%3E%3Ccircle%20cx%3D%22458.1%22%20cy%3D%22238.5%22%20r%3D%221.19%22%20fill%3D%22%23fff%22%20opacity%3D%220.63%22%2F%3E%3Ccircle%20cx%3D%22109.6%22%20cy%3D%22249.9%22%20r%3D%220.90%22%20fill%3D%22%23fff%22%20opacity%3D%220.42%22%2F%3E%3Ccircle%20cx%3D%22499.7%22%20cy%3D%22133.8%22%20r%3D%221.63%22%20fill%3D%22%23fff%22%20opacity%3D%220.93%22%2F%3E%3Cpath%20d%3D%22M499.7%20130.8v6m-3-3h6%22%20stroke%3D%22%23dceaff%22%20stroke-width%3D%22.45%22%20opacity%3D%22.52%22%2F%3E%3Ccircle%20cx%3D%22444.7%22%20cy%3D%22340.8%22%20r%3D%221.20%22%20fill%3D%22%23fff%22%20opacity%3D%220.64%22%2F%3E%3Ccircle%20cx%3D%22388.8%22%20cy%3D%2211.1%22%20r%3D%221.59%22%20fill%3D%22%23fff%22%20opacity%3D%220.91%22%2F%3E%3Cpath%20d%3D%22M388.8%208.1v6m-3-3h6%22%20stroke%3D%22%23dceaff%22%20stroke-width%3D%22.45%22%20opacity%3D%22.52%22%2F%3E%3Ccircle%20cx%3D%22364.5%22%20cy%3D%22204.9%22%20r%3D%221.37%22%20fill%3D%22%23fff%22%20opacity%3D%220.76%22%2F%3E%3Ccircle%20cx%3D%22171.6%22%20cy%3D%2210.7%22%20r%3D%220.80%22%20fill%3D%22%23fff%22%20opacity%3D%220.35%22%2F%3E%3Ccircle%20cx%3D%22508.5%22%20cy%3D%2212.8%22%20r%3D%220.60%22%20fill%3D%22%23fff%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%2260.3%22%20cy%3D%22231.7%22%20r%3D%221.22%22%20fill%3D%22%23fff%22%20opacity%3D%220.65%22%2F%3E%3Ccircle%20cx%3D%22249.2%22%20cy%3D%22155.3%22%20r%3D%221.64%22%20fill%3D%22%23fff%22%20opacity%3D%220.94%22%2F%3E%3Cpath%20d%3D%22M249.2%20152.3v6m-3-3h6%22%20stroke%3D%22%23dceaff%22%20stroke-width%3D%22.45%22%20opacity%3D%22.52%22%2F%3E%3Ccircle%20cx%3D%22232.0%22%20cy%3D%22116.8%22%20r%3D%220.82%22%20fill%3D%22%23fff%22%20opacity%3D%220.37%22%2F%3E%3Ccircle%20cx%3D%22198.5%22%20cy%3D%22199.3%22%20r%3D%221.37%22%20fill%3D%22%23fff%22%20opacity%3D%220.75%22%2F%3E%3Ccircle%20cx%3D%22247.1%22%20cy%3D%22322.6%22%20r%3D%221.35%22%20fill%3D%22%23fff%22%20opacity%3D%220.74%22%2F%3E%3Ccircle%20cx%3D%22471.0%22%20cy%3D%22329.7%22%20r%3D%220.97%22%20fill%3D%22%23fff%22%20opacity%3D%220.47%22%2F%3E%3C%2Fsvg%3E");
+  animation:observatory-drift 91s linear infinite,observatory-twinkle 7s ease-in-out infinite alternate;
+}
+@keyframes observatory-drift{to{background-position:560px 360px}}
+@keyframes observatory-twinkle{from{opacity:.46}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  #trophyShelf[data-theme="observatory"] .shop-body::before,
+  #trophyShelf[data-theme="observatory"] .shop-body::after{animation:none}
+}
+#trophyShelf[data-theme="observatory"] .trophy-card{background:#09111ce8;border:1px solid #538ca5;box-shadow:0 0 12px #65c8f02c}
+#trophyShelf[data-theme="observatory"] .trophy-card>div:first-child{display:grid;place-items:center;min-height:126px}
+#trophyShelf[data-theme="observatory"] .shop-help{color:#b9dce9}
+#trophyShelf:is([data-theme="classic"],[data-theme="steel"],[data-theme="museum"],[data-theme="walnut"],[data-theme="observatory"]) .trophy-card svg{width:84px;height:84px;padding:0;background:transparent;border:0;box-shadow:none}
+#trophyShelf[data-theme="observatory"] .trophy-card{background:#0006;border-color:#8ebdd44d;box-shadow:none}
+#trophyShelf[data-theme="observatory"] .trophy-card>div:first-child{min-height:148px}
+#trophyShelf[data-theme="observatory"] .trophy-card svg{
+  width:112px;height:112px;
+  filter:drop-shadow(0 0 1px #eaf5ff) drop-shadow(0 0 2px #c5e5ff) drop-shadow(0 0 10px #b6dfff88);
+}
+.trophy-pick-trigger{display:grid;place-items:center;margin-inline:auto;padding:8px;border:1px solid transparent;background:transparent}
+.trophy-pick-trigger:hover,.trophy-pick-trigger:focus-visible{border-color:currentColor;background:transparent;color:inherit;outline-offset:2px}
+.trophy-picker-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;margin-top:16px}
+.trophy-choice{display:grid;justify-items:center;gap:8px;padding:10px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);font-size:12px;font-weight:700}
+.trophy-choice[aria-pressed="true"]{background:var(--lime);color:#000}
 </style>
 </head>
 <body>
 
-<header class="topbar"><div class="wrap nav"><div class="brand"><span class="brand-icon" aria-hidden="true">↗</span><span>PROGRESS<br>TRACKER</span></div><div class="nav-right"><button class="shop-open" id="shopOpen" type="button">테마 상점 <span class="shop-wallet-pill" id="walletBalance">0 P</span></button><button class="nav-button" id="theme" aria-label="어두운 테마로 전환" title="테마 전환">◐</button></div></div></header>
+<header class="topbar"><div class="wrap nav"><div class="brand"><span class="brand-icon" aria-hidden="true">↗</span><span>PROGRESS<br>TRACKER</span></div><div class="nav-right"><button class="shop-open" id="trophyOpen" type="button">트로피 진열장</button><button class="shop-open" id="shopOpen" type="button">상점 <span class="shop-wallet-pill" id="walletBalance">0 P</span></button><button class="nav-button" id="theme" aria-label="어두운 테마로 전환" title="테마 전환">◐</button></div></div></header>
 <main class="wrap">
 <section class="cloud-panel" id="cloudPanel" aria-label="공용 계정과 프로젝트" hidden><div class="cloud-top"><span class="cloud-account" id="cloudAccount">계정 확인 중</span><a class="cloud-button" id="cloudLogin" href="https://sensior-progress-tracker.pages.dev/auth/login">GitHub 로그인</a><button class="cloud-button" id="cloudLogout" type="button" hidden>로그아웃</button></div><div class="cloud-controls" id="cloudControls" hidden><label for="cloudProjects">프로젝트</label><select id="cloudProjects"><option value="">프로젝트 선택</option></select><button class="cloud-button" id="cloudImport" type="button">JSON 가져오기</button><input id="cloudImportFile" type="file" accept=".html,.json,text/html,application/json" hidden></div><p class="cloud-status" id="cloudStatus" role="status"></p></section>
 
@@ -90,11 +156,53 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):hover .day-number{backg
 <div class="celebration-card"><div class="celebration-mark" aria-hidden="true">✓</div><h2 id="celebrationTitle">프로젝트 완료!</h2><p id="celebrationSummary"></p><button class="celebration-close" id="celebrationClose" type="button" autofocus>닫기</button></div>
 </dialog>
 
+<dialog class="shop-dialog" id="trophyShelf" aria-labelledby="trophyTitle">
+<div class="shop-header"><h2 id="trophyTitle">트로피 진열장</h2><button class="shop-close" id="trophyClose" type="button" aria-label="트로피 진열장 닫기" autofocus>×</button></div>
+<div class="shop-body">
+<label class="shelf-theme-label" for="shelfTheme">진열장 테마</label>
+<select id="shelfTheme" class="shop-action" disabled>
+<option value="classic">기본</option>
+</select>
+<p class="shop-help" id="trophyStatus" role="status"></p><ul class="trophy-grid" id="trophyItems"></ul></div>
+</dialog>
+<dialog class="shop-dialog" id="trophyPicker" aria-labelledby="trophyPickerTitle">
+  <div class="shop-header"><h2 id="trophyPickerTitle">트로피 모양 선택</h2><button class="shop-close" id="trophyPickerClose" type="button" aria-label="모양 선택 닫기">×</button></div>
+  <div class="shop-body"><p class="shop-help" id="trophyPickerStatus" role="status"></p><div class="trophy-picker-grid" id="trophyChoices"></div></div>
+</dialog>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="trophy-silver" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="#858d98"/><stop offset=".28" stop-color="#e8edf2"/><stop offset=".43" stop-color="#f8fafc"/><stop offset=".63" stop-color="#a4adb8"/><stop offset=".83" stop-color="#d5dbe2"/><stop offset="1" stop-color="#7b8591"/></linearGradient>
+<symbol id="trophy-style-1" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M23 26H10v8q0 18 18 20m45-28h13v8q0 18-18 20" fill="none"/><path d="M23 17h50v25q0 24-25 24T23 42Z"/><path d="M48 66v14M30 80h36v9H30Z"/></g></symbol>
+<symbol id="trophy-style-2" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="m23 12 16 43 13-7-8-36zm50 0L57 55l-13-7 8-36z" fill="#fff"/><circle cx="48" cy="65" r="24"/><path d="m48 50 4 10 11 1-8 7 2 11-9-6-9 6 2-11-8-7 11-1z" fill="#111" stroke="none"/></g></symbol>
+<symbol id="trophy-style-3" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="m48 12 11 23 26 4-19 18 5 26-23-12-23 12 5-26-19-18 26-4z"/><path d="M48 26v43m0-16 21-10" fill="none" stroke-width="2"/></g></symbol>
+<symbol id="trophy-style-4" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M48 12 74 35 65 69 48 81 31 69 22 35Z"/><path d="m48 12 10 24-10 45-10-45zm-26 23 16 1h20l16-1" fill="none" stroke-width="2"/><path d="M29 82h38v8H29Z" fill="#fff"/></g></symbol>
+<symbol id="trophy-style-5" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M48 11q20 14 18 39l-8 18H38l-8-18q-2-25 18-39Z"/><path d="m30 43-12 13v17l20-10m28-20 12 13v17L58 63" fill="#fff"/><circle cx="48" cy="37" r="7" fill="#fff"/><path d="m40 73 8 17 8-17" fill="none"/></g></symbol>
+<symbol id="trophy-style-6" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M46 83Q11 72 16 29l9 16 8-15 3 22-8 8 17 17m9 6q35-11 30-54l-9 16-8-15-3 22 8 8-17 17"/><circle cx="50" cy="49" r="13"/></g></symbol>
+<symbol id="trophy-style-7" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M50 10 80 23v27q0 23-30 40Q20 73 20 50V23Z"/><path d="m35 50 10 10 20-23" fill="none"/></g></symbol>
+<symbol id="trophy-style-8" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="m14 32 19 14 17-25 17 25 19-14-8 42H22Z"/><path d="M25 64h50"/><circle cx="50" cy="17" r="5"/></g></symbol>
+<symbol id="trophy-style-9" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M53 9 21 57h25l-5 33 38-51H54l12-30Z"/></g></symbol>
+<symbol id="trophy-style-10" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M8 80 43 20l17 29 10-16 22 47Z"/><path d="m31 41 12 8 11-9M43 20v60" fill="none"/></g></symbol>
+<symbol id="trophy-style-11" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M26 84V14m0 3q18-10 33 0t23 0v36q-12 7-24 0t-32 0M15 84h44v7H15Z"/></g></symbol>
+<symbol id="trophy-style-12" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M27 17h46v12q0 12-17 21 17 10 17 22v11H27V72q0-12 17-22-17-9-17-21Z"/><path d="M20 15h60v7H20zm0 65h60v7H20zm14-8 16-13 16 13Z"/></g></symbol>
+<symbol id="trophy-style-13" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><circle cx="50" cy="53" r="32"/><path d="m66 35-8 25-24 11 8-25Z"/><path d="m42 46 16 14M50 16v-6" fill="none"/></g></symbol>
+<symbol id="trophy-style-14" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M36 53a20 20 0 1 1 20-20l29 29-8 8-7-7-7 7 7 7-9 9Z"/><circle cx="37" cy="33" r="7" fill="#fff"/></g></symbol>
+<symbol id="trophy-style-15" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M48 73Q22 73 10 26l33 19 7 15 7-15 33-19Q78 73 52 73l-2 11Z"/><path d="m20 49 27 11m33-11L53 60" fill="none"/></g></symbol>
+<symbol id="trophy-style-16" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M53 10q5 20 17 30 24 35-12 48Q24 95 20 65q-2-17 16-30-1 14 8 16 12-16 9-41Z"/><path d="M52 59q-19 22-2 27 19-4 2-27Z" fill="#fff"/></g></symbol>
+<symbol id="trophy-style-17" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><circle cx="50" cy="50" r="25"/><ellipse cx="50" cy="50" rx="45" ry="13" transform="rotate(-32 50 50)" fill="none"/><circle cx="82" cy="29" r="6"/></g></symbol>
+<symbol id="trophy-style-18" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M11 28h12V17h19v11h16V17h19v11h12v24H77v12H65v12H54v11h-8V76H35V64H23V52H11Z"/><path d="M23 36v10h8" fill="none"/></g></symbol>
+<symbol id="trophy-style-19" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="m50 13 33 20v37L50 89 17 70V33Z"/><path d="m17 33 33 19 33-19M50 52v37" fill="none"/><path d="M50 32h1m-18 21h1m5 16h1m21 2h1m8-16h1" stroke-width="6"/></g></symbol>
+<symbol id="trophy-style-20" viewBox="0 0 100 100"><g fill="url(#trophy-silver)" stroke="#111" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M21 83h58v8H21zm7 0q-1-20 20-31l-8-8-12 8-10-7 14-18 15-4 3-12 11 11q21 14 14 61Z"/><path d="M43 34h1" stroke-width="5"/></g></symbol>
+</defs></svg>
+<template id="trophyIcon"><svg viewBox="0 0 100 100" width="64" height="64" aria-hidden="true"><use href="#trophy-style-1"/></svg></template>
 <dialog class="shop-dialog" id="themeShop" aria-labelledby="shopTitle" aria-describedby="shopHelp">
-<div class="shop-header"><h2 id="shopTitle">테마 상점</h2><button class="shop-close" id="shopClose" aria-label="테마 상점 닫기" type="button" autofocus>×</button></div>
+<div class="shop-header"><h2 id="shopTitle">상점</h2><button class="shop-close" id="shopClose" aria-label="상점 닫기" type="button" autofocus>×</button></div>
 <div class="shop-body"><div class="shop-balance"><span>보유 포인트</span><strong id="shopBalance">0 P</strong></div><p class="shop-help" id="shopHelp">보유 포인트로 테마를 구매하세요. 구매한 테마는 계속 사용할 수 있어요.</p>
 <div class="shop-grid" id="shopItems"></div>
 <div class="shop-bottom"><span class="shop-help">기본 네온 라임은 무료예요.</span><button class="shop-action" id="defaultTheme" type="button">기본 테마 적용</button></div>
+<h3>트로피 디자인</h3><p class="shop-help">진열장에서 프로젝트마다 보유한 디자인을 고를 수 있어요. 기본 챔피언 컵은 무료예요.</p>
+<div class="shop-grid" id="trophyShopItems"></div>
+<h3>진열장 테마</h3><p class="shop-help">기본은 무료예요. 구매한 테마는 트로피 진열장에서 선택할 수 있어요.</p>
+<div class="shop-grid" id="shelfShopItems"></div>
+<p class="shop-help" id="shelfShopStatus" role="status"></p>
 <p class="preview-indicator" id="previewIndicator"></p><p class="shop-status" id="shopStatus" role="status"></p><p class="shop-help" id="shopFootnote">완료한 업무마다 10P를 최초 한 번 지급합니다. 포인트와 테마는 계정에 저장됩니다.</p></div>
 </dialog>
 
@@ -177,6 +285,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):hover .day-number{backg
     try {
       var result = await cloudApi('/api/projects/' + encodeURIComponent(cloudProjectId) + '/tasks','PATCH',{taskId:task.id,done:checked});
       state[task.id] = checked; dates[task.id] = result.date; cloudWallet = result.wallet;
+      trophyAwarded = result.trophyAwarded === true;
       cloudMessage(result.reward ? '업무 완료! ' + result.reward + 'P를 적립하고 완료한 날짜에 등록했어요.' : '완료 상태를 저장했어요.');
       refreshWallet();
     } catch(error) { cloudMessage(error.message); }
@@ -188,15 +297,127 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):hover .day-number{backg
   }
   var colors = ['var(--lime)'];
   function el(tag, cls, value) { var node = document.createElement(tag); if (cls) node.className = cls; if (value !== undefined) node.textContent = value; return node; }
+  var trophyNames = ['챔피언 컵', '리본 메달', '스타 배지', '크리스털', '로켓', '월계관', '방패', '왕관', '번개', '산봉우리', '깃발', '모래시계', '나침반', '열쇠', '날개', '불꽃', '궤도', '픽셀 하트', '주사위', '체스 나이트'];
+  var trophyAwarded = false;
+  var trophyStyles = {active:1,owned:[1]};
+  var trophyPrice = 200;
+  function trophyIcon(styleId) {
+    var icon = document.getElementById('trophyIcon').content.cloneNode(true);
+    icon.querySelector('use').setAttribute('href','#trophy-style-' + styleId);
+    return icon;
+  }
+  var trophyShelf = document.getElementById('trophyShelf');
+  var shelfTheme = document.getElementById('shelfTheme');
+  var shelfCatalog = [
+    ['classic','기본','#ffffff'], ['steel','철제 선반','#aebbc4'],
+    ['arcade','아케이드','#cfb5ff'], ['museum','박물관','#e5e8e4'],
+    ['walnut','월넛 선반','#d2ab7c'], ['observatory','우주 관측소','#8ebdd4']
+  ];
+  var ownedShelfThemes = ['classic'];
+  var savedShelfTheme = 'classic';
+  function applyShelfTheme(theme) {
+    savedShelfTheme = theme;
+    shelfTheme.value = theme;
+    trophyShelf.dataset.theme = theme;
+  }
+  shelfTheme.onchange = async function() {
+    shelfTheme.disabled = true;
+    try {
+      var result = await cloudApi('/api/trophy-shelf-theme','PATCH',{theme:shelfTheme.value});
+      applyShelfTheme(result.theme);
+    } catch(error) {
+      shelfTheme.value = savedShelfTheme;
+      trophyStatus.textContent = error.message;
+    } finally { shelfTheme.disabled = false; }
+  };
+  var trophyStatus = document.getElementById('trophyStatus');
+  var trophyItems = document.getElementById('trophyItems');
+  document.getElementById('trophyOpen').onclick = async function() {
+    if (trophyShelf.open) return;
+    trophyItems.replaceChildren();
+    trophyShelf.showModal();
+    if (!cloudSession?.user) { trophyStatus.textContent = 'GitHub 로그인 후 트로피를 볼 수 있어요.'; return; }
+    trophyStatus.textContent = '트로피를 불러오는 중이에요.';
+    try {
+      var [trophies, styles, shelf] = await Promise.all([
+        cloudApi('/api/trophies'),cloudApi('/api/trophy-styles'),cloudApi('/api/trophy-shelf-theme')
+      ]);
+      ownedShelfThemes = shelf.owned;
+      shelfTheme.replaceChildren();
+      shelfCatalog.forEach(function([id,name]) {
+        if (!ownedShelfThemes.includes(id)) return;
+        var option = el('option','',name);
+        option.value = id;
+        shelfTheme.appendChild(option);
+      });
+      applyShelfTheme(shelf.theme);
+      shelfTheme.disabled = false;
+      trophyStyles = styles;
+      trophyItems.replaceChildren();
+      trophyStatus.textContent = trophies.length ? '획득한 트로피 ' + trophies.length + '개' : '아직 트로피가 없어요. 프로젝트를 100% 완료하면 받을 수 있어요.';
+      trophies.forEach(function(trophy) {
+        var card = el('li','trophy-card');
+        var icon = el('div');
+        var trigger = el('button','trophy-pick-trigger');
+        trigger.type = 'button';
+        trigger.setAttribute('aria-label',trophy.title + ' 트로피 모양 바꾸기');
+        trigger.setAttribute('aria-haspopup','dialog');
+        trigger.appendChild(trophyIcon(trophy.styleId));
+        trigger.onclick = function() { openTrophyPicker(trophy,styles.owned,trigger); };
+        icon.appendChild(trigger);
+        card.appendChild(icon);
+        card.appendChild(el('h3','',trophy.title));
+        card.appendChild(el('p','shop-help',trophy.completedDate ? trophy.completedDate.replace(/-/g,'.') + ' 완료' : '완료 날짜 기록 없음'));
+        trophyItems.appendChild(card);
+      });
+    } catch(error) { trophyStatus.textContent = error.message; }
+  };
+  var trophyPicker = document.getElementById('trophyPicker');
+  var trophyChoices = document.getElementById('trophyChoices');
+  var trophyPickerStatus = document.getElementById('trophyPickerStatus');
+  document.getElementById('trophyPickerClose').onclick = function() { trophyPicker.close(); };
+  function openTrophyPicker(trophy, owned, trigger) {
+    trophyPickerStatus.textContent = trophy.title;
+    trophyChoices.replaceChildren();
+    var saving = false;
+    trophyPicker.oncancel = function(event) { if (saving) event.preventDefault(); };
+    var close = document.getElementById('trophyPickerClose');
+    owned.forEach(function(id) {
+      var choice = el('button','trophy-choice');
+      choice.type = 'button';
+      choice.setAttribute('aria-pressed',String(id === trophy.styleId));
+      choice.appendChild(trophyIcon(id));
+      choice.appendChild(el('span','',trophyNames[id-1]));
+      choice.onclick = async function() {
+        if (saving) return;
+        if (id === trophy.styleId) { trophyPicker.close(); return; }
+        saving = true;
+        close.disabled = true;
+        trophyPickerStatus.textContent = '저장하는 중이에요.';
+        try {
+          var result = await cloudApi('/api/trophies','PATCH',{projectId:trophy.projectId,styleId:id});
+          trophy.styleId = result.styleId;
+          trigger.replaceChildren(trophyIcon(result.styleId));
+          trophyStatus.textContent = trophy.title + ' 트로피 모양을 바꿨어요.';
+          trophyPicker.close();
+        } catch(error) {
+          trophyPickerStatus.textContent = error.message;
+        } finally { saving = false; close.disabled = false; }
+      };
+      trophyChoices.appendChild(choice);
+    });
+    trophyPicker.showModal();
+  }
+  document.getElementById('trophyClose').onclick = function() { trophyShelf.close(); };
   document.title = data.project + ' · Progress Tracker';
   document.getElementById('title').textContent = data.project;
   document.getElementById('subtitle').textContent = data.subtitle || '';
   document.getElementById('updated').textContent = data.updated ? 'UPDATED / ' + data.updated : '';
   var themeCatalog = [
-    {id:'pink', name:'네온 핑크', color:'#ff7de9', price:1000},
-    {id:'red', name:'빨강', color:'#ff6666', price:1000},
-    {id:'orange', name:'오렌지', color:'#ffae66', price:1000},
-    {id:'blue', name:'파랑', color:'#6aa9ff', price:1000}
+    {id:'pink', name:'네온 핑크', color:'#ff7de9', price:100},
+    {id:'red', name:'빨강', color:'#ff6666', price:100},
+    {id:'orange', name:'오렌지', color:'#ffae66', price:100},
+    {id:'blue', name:'파랑', color:'#6aa9ff', price:100}
   ];
   var wallet = null, previewTheme = null, shopBusy = false;
   var shop = document.getElementById('themeShop');
@@ -234,6 +455,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):hover .day-number{backg
       action.onclick = function() { return transactTheme(theme.id); };
       actions.appendChild(preview); actions.appendChild(action); body.appendChild(actions); card.appendChild(body); root.appendChild(card);
     });
+    if (shop.open) { renderTrophyShop(); renderShelfShop(); }
     document.getElementById('defaultTheme').disabled = shopBusy || !wallet || (wallet.activeTheme === 'lime' && !previewTheme);
     document.getElementById('previewIndicator').textContent = previewTheme ? themeById(previewTheme).name + ' 미리보기 중 · 상점을 닫으면 원래 테마로 돌아갑니다.' : '';
   }
@@ -247,7 +469,105 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):hover .day-number{backg
     } catch (error) { document.getElementById('shopStatus').textContent = error.message; }
     finally { shopBusy = false; refreshWallet(); var target = document.getElementById(buttonId); if (target && !target.disabled) target.focus({preventScroll:true}); else document.getElementById('shopClose').focus({preventScroll:true}); }
   }
-  document.getElementById('shopOpen').onclick = async function() { document.getElementById('shopStatus').textContent = ''; previewTheme = null; if (cloudSession?.user) { try { cloudWallet = await cloudApi('/api/wallet'); } catch(error) { document.getElementById('shopStatus').textContent = error.message; } } refreshWallet(); if (!shop.open) shop.showModal(); };
+  function renderTrophyShop() {
+    var root = document.getElementById('trophyShopItems');
+    root.replaceChildren();
+    trophyNames.forEach(function(name,index) {
+      var id = index + 1;
+      var owned = trophyStyles.owned.includes(id);
+      var card = el('article','shop-card trophy-card');
+      card.appendChild(trophyIcon(id));
+      card.appendChild(el('h3','',name));
+      card.appendChild(el('p','theme-price',id === 1 ? '무료' : owned ? '구매 완료' : trophyPrice + ' P'));
+      var action = el('button','shop-action',owned ? '보유 중' : trophyPrice + ' P로 구매');
+      action.type = 'button';
+      action.id = 'trophy-buy-' + id;
+      action.disabled = shopBusy || !wallet || owned || wallet.balance < trophyPrice;
+      action.setAttribute('aria-label',name + ' ' + action.textContent);
+      action.onclick = function() { return transactTrophy(id); };
+      card.appendChild(action);
+      root.appendChild(card);
+    });
+  }
+  async function transactTrophy(id) {
+    if (shopBusy) return;
+    shopBusy = true;
+    renderShop();
+    try {
+      var result = await cloudApi('/api/trophy-styles','POST',{styleId:id,purchaseOnly:true});
+      trophyStyles = result.styles;
+      cloudWallet = result.wallet;
+      document.getElementById('shopStatus').textContent = trophyNames[id-1] + ' 구매 완료. 진열장에서 적용할 프로젝트를 고르세요.';
+    } catch (error) { document.getElementById('shopStatus').textContent = error.message; }
+    finally {
+      shopBusy = false;
+      refreshWallet();
+      if (shop.open) {
+        var button = document.getElementById('trophy-buy-' + id);
+        (button && !button.disabled ? button : document.getElementById('shopClose')).focus({preventScroll:true});
+      }
+    }
+  }
+  function renderShelfShop() {
+    var root = document.getElementById('shelfShopItems');
+    root.replaceChildren();
+    shelfCatalog.slice(1).forEach(function([id,name,color]) {
+      var owned = ownedShelfThemes.includes(id);
+      var card = el('article','shop-card');
+      card.style.setProperty('--sample',color);
+      var sample = el('div','theme-sample');
+      sample.setAttribute('aria-hidden','true');
+      sample.appendChild(el('span','sample-heading'));
+      sample.appendChild(el('span','sample-lines'));
+      card.appendChild(sample);
+      var content = el('div','shop-card-body');
+      content.appendChild(el('h3','',name));
+      var button = el('button','shop-action primary',owned ? '보유 중' : '100 P로 구매');
+      button.type = 'button';
+      button.id = 'buy-shelf-' + id;
+      button.disabled = shopBusy || !wallet || owned || wallet.balance < 100;
+      button.setAttribute('aria-label',name + ' ' + button.textContent);
+      button.onclick = async function() {
+        if (shopBusy) return;
+        shopBusy = true;
+        renderShop();
+        var status = document.getElementById('shelfShopStatus');
+        try {
+          cloudWallet = await cloudApi('/api/trophy-shelf-theme','POST',{theme:id});
+          if (!ownedShelfThemes.includes(id)) ownedShelfThemes.push(id);
+          status.textContent = name + ' 구매 완료. 진열장에서 선택할 수 있어요.';
+        } catch(error) { status.textContent = error.message; }
+        finally {
+          shopBusy = false;
+          refreshWallet();
+          if (shop.open) {
+            var next = document.getElementById(button.id);
+            (next && !next.disabled ? next : document.getElementById('shopClose')).focus();
+          }
+        }
+      };
+      content.appendChild(button);
+      card.appendChild(content);
+      root.appendChild(card);
+    });
+  }
+  document.getElementById('shopOpen').onclick = async function() {
+    document.getElementById('shopStatus').textContent = '';
+    previewTheme = null;
+    if (cloudSession?.user) {
+      try {
+        var [latestWallet, latestStyles, shelf] = await Promise.all([
+          cloudApi('/api/wallet'),cloudApi('/api/trophy-styles'),cloudApi('/api/trophy-shelf-theme')
+        ]);
+        cloudWallet = latestWallet;
+        trophyStyles = latestStyles;
+        ownedShelfThemes = shelf.owned;
+      }
+      catch(error) { document.getElementById('shopStatus').textContent = error.message; }
+    }
+    if (!shop.open) shop.showModal();
+    refreshWallet();
+  };
   document.getElementById('shopClose').onclick = function() { shop.close(); };
   shop.addEventListener('close',function() { previewTheme = null; refreshWallet(); });
   document.getElementById('defaultTheme').onclick = function() { return transactTheme('lime'); };
@@ -266,7 +586,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):hover .day-number{backg
     document.getElementById('confetti').replaceChildren();
   }
   function celebrate(total) {
-    document.getElementById('celebrationSummary').textContent = total + '개 업무를 모두 완료했어요. 수고했어요!';
+    document.getElementById('celebrationSummary').textContent = total + '개 업무를 모두 완료했어요. ' + (trophyAwarded ? '진열장에 새 트로피가 추가됐어요!' : '수고했어요!');
     if (!celebration.open) celebration.showModal();
     clearConfetti();
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;

@@ -11,13 +11,13 @@ const wrangler=new URL('../node_modules/wrangler/bin/wrangler.js',import.meta.ur
 const cwd=new URL('../',import.meta.url);
 async function sql(file,query){await writeFile(file,query);execFileSync(process.execPath,[fileURLToPath(wrangler),'d1','execute','progress-tracker','--local','--file',fileURLToPath(file)],{cwd,stdio:'pipe'});}
 await mkdir(new URL('../.wrangler/',import.meta.url),{recursive:true});
-await sql(seed,`INSERT INTO users(id,login) VALUES('${id}','local-qa'); INSERT INTO wallets(user_id,balance) VALUES('${id}',980); INSERT INTO sessions(token_hash,user_id,expires_at) VALUES('${await hash(token)}','${id}',${Math.floor(Date.now()/1000)+600});`);
+await sql(seed,`INSERT INTO users(id,login) VALUES('${id}','local-qa'); INSERT INTO wallets(user_id,balance) VALUES('${id}',80); INSERT INTO sessions(token_hash,user_id,expires_at) VALUES('${await hash(token)}','${id}',${Math.floor(Date.now()/1000)+600});`);
 async function api(path,method='GET',payload){const response=await fetch(origin+path,{method,headers:{Cookie:'__Host-pt_session='+token,Origin:origin,...(payload?{'Content-Type':'application/json'}:{})},body:payload?JSON.stringify(payload):undefined});const result=await response.json();assert(response.ok,JSON.stringify(result));return result;}
 try{
   assert.equal((await api('/api/health')).status,'ok');
   const project=await api('/api/projects','POST',{project:'Local QA',projectId:id,phases:[{title:'검증',tasks:[{id:'a',text:'업무 A'},{id:'b',text:'업무 B'}]}]});
   await api('/api/projects/'+project.id+'/tasks','PATCH',{taskId:'a',done:true});
-  let result=await api('/api/projects/'+project.id+'/tasks','PATCH',{taskId:'b',done:true});assert.equal(result.reward,10);assert.equal(result.wallet.balance,1000);
+  let result=await api('/api/projects/'+project.id+'/tasks','PATCH',{taskId:'b',done:true});assert.equal(result.reward,10);assert.equal(result.wallet.balance,100);
   result=await api('/api/projects/'+project.id+'/tasks','PATCH',{taskId:'b',done:true});assert.equal(result.reward,0);
   let wallet=await api('/api/themes/purchase','POST',{themeId:'blue',price:0});assert.equal(wallet.balance,0);assert.deepEqual(wallet.owned,['blue']);
   wallet=await api('/api/themes/purchase','POST',{themeId:'blue'});assert.equal(wallet.balance,0);

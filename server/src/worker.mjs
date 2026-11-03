@@ -31,7 +31,43 @@ async function body(request){
 }
 async function user(request,db){const token=cookie(request,SESSION);if(!token||!/^[a-f0-9]{64}$/.test(token))return null;return stmt(db,'SELECT u.id,u.login FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires_at>?',await hash(token),now()).first();}
 export async function getWallet(db,userId){const row=await stmt(db,'SELECT balance,active_theme FROM wallets WHERE user_id=?',userId).first();const owned=await stmt(db,'SELECT theme_id FROM purchases WHERE user_id=? ORDER BY theme_id',userId).all();return {version:1,balance:row.balance,activeTheme:row.active_theme,owned:owned.results.map(r=>r.theme_id)};}
+async function trophyStyles(db,userId){
+ const active=await stmt(db,'SELECT style_id FROM trophy_preferences WHERE user_id=?',userId).first();
+ const owned=await stmt(db,'SELECT style_id FROM trophy_purchases WHERE user_id=? ORDER BY style_id',userId).all();
+ return {active:active?.style_id ?? 1,owned:[1,...owned.results.map(row=>row.style_id)]};
+}
+async function selectTrophyStyle(db,userId,styleId,purchaseOnly){
+ if(!Number.isInteger(styleId)||styleId<1||styleId>20)throw new HttpError(400,'존재하지 않는 트로피입니다.');
+ if(purchaseOnly){
+  if(styleId!==1)await stmt(db,'INSERT INTO trophy_purchases(user_id,style_id) VALUES(?,?) ON CONFLICT(user_id,style_id) DO NOTHING',userId,styleId).run();
+ }else if(styleId===1)await stmt(db,'DELETE FROM trophy_preferences WHERE user_id=?',userId).run();
+ else await db.batch([
+  stmt(db,'INSERT INTO trophy_purchases(user_id,style_id) VALUES(?,?) ON CONFLICT(user_id,style_id) DO NOTHING',userId,styleId),
+  stmt(db,'INSERT INTO trophy_preferences(user_id,style_id) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET style_id=excluded.style_id',userId,styleId)
+ ]);
+ return {styles:await trophyStyles(db,userId),wallet:await getWallet(db,userId)};
+}
+async function changeProjectTrophy(db,userId,projectId,styleId){
+ if(!Number.isInteger(styleId)||styleId<1||styleId>20)throw new HttpError(400,'존재하지 않는 트로피입니다.');
+ const result=await stmt(db,`UPDATE project_trophies SET style_id=?
+  WHERE project_id=? AND user_id=?
+  AND (?=1 OR EXISTS(SELECT 1 FROM trophy_purchases WHERE user_id=? AND style_id=?))`,
+  styleId,projectId,userId,styleId,userId,styleId).run();
+ if(!result.meta.changes){
+  if(!await stmt(db,'SELECT project_id FROM project_trophies WHERE project_id=? AND user_id=?',projectId,userId).first())
+   throw new HttpError(404,'획득한 트로피를 찾을 수 없습니다.');
+  throw new HttpError(403,'보유한 디자인만 적용할 수 있습니다.');
+ }
+ return {styleId};
+}
 async function project(db,userId,id){const row=await stmt(db,'SELECT * FROM projects WHERE id=? AND user_id=?',id,userId).first();if(!row)throw new HttpError(404,'프로젝트를 찾을 수 없습니다.');return row;}
+function awardTrophy(db,userId,projectValue,byKey=false){
+ return stmt(db,`INSERT INTO project_trophies(project_id,user_id,title,completed_date)
+ SELECT p.id,p.user_id,p.title,? FROM projects p WHERE p.user_id=? AND p.${byKey?'project_key':'id'}=?
+ AND EXISTS(SELECT 1 FROM tasks t WHERE t.project_id=p.id)
+ AND NOT EXISTS(SELECT 1 FROM tasks t WHERE t.project_id=p.id AND t.done=0)
+ ON CONFLICT(project_id) DO NOTHING`,completionDate(),userId,projectValue);
+}
 async function projectData(db,row){const result=await stmt(db,'SELECT id,done,date FROM tasks WHERE project_id=?',row.id).all();const tasks=new Map(result.results.map(t=>[t.id,t]));const data=JSON.parse(row.snapshot);for(const phase of data.phases)for(const task of phase.tasks){const saved=tasks.get(task.id);task.done=!!saved?.done;task.date=saved?.date||'';}data.projectId=row.project_key;return data;}
 export async function registerProject(db,userId,data){
  const tasks=validateProject(data),key=data.projectId||'name-'+await hash(data.project),id=crypto.randomUUID();
@@ -40,6 +76,7 @@ export async function registerProject(db,userId,data){
  for(const task of tasks)operations.push(stmt(db,'INSERT INTO tasks(project_id,id,done,date) SELECT id,?,?,? FROM projects WHERE project_key=? AND user_id=? ON CONFLICT(project_id,id) DO NOTHING',task.id,task.done,task.date,key,userId));
  operations.push(stmt(db,'DELETE FROM tasks WHERE project_id=(SELECT id FROM projects WHERE user_id=? AND project_key=?) AND id NOT IN (SELECT value FROM json_each(?))',userId,key,JSON.stringify(tasks.map(t=>t.id))));
  operations.push(stmt(db,`INSERT INTO task_reward_claims(project_id,task_id,user_id) SELECT t.project_id,t.id,p.user_id FROM tasks t JOIN projects p ON p.id=t.project_id WHERE p.user_id=? AND p.project_key=? AND t.done=1 AND NOT EXISTS(SELECT 1 FROM task_reward_claims c WHERE c.project_id=t.project_id AND c.task_id=t.id)`,userId,key));
+ operations.push(awardTrophy(db,userId,key,true));
  await db.batch(operations);return stmt(db,'SELECT id FROM projects WHERE user_id=? AND project_key=?',userId,key).first();
 }
 export async function setTask(db,userId,projectId,taskId,patch){
@@ -48,9 +85,10 @@ export async function setTask(db,userId,projectId,taskId,patch){
  else if(Object.hasOwn(patch,'date')){validateDate(patch.date);operations.push(stmt(db,'UPDATE tasks SET date=? WHERE project_id=? AND id=?',patch.date,projectId,taskId));}
  else throw new HttpError(400,'변경할 완료 상태 또는 날짜가 필요합니다.');
  if(patch.done===true)operations.push(stmt(db,`INSERT INTO task_reward_claims(project_id,task_id,user_id) SELECT t.project_id,t.id,p.user_id FROM tasks t JOIN projects p ON p.id=t.project_id WHERE p.id=? AND p.user_id=? AND t.id=? AND t.done=1 ON CONFLICT(project_id,task_id) DO NOTHING`,projectId,userId,taskId));
+ if(patch.done===true)operations.push(awardTrophy(db,userId,projectId));
  const results=await db.batch(operations);
  const saved=await stmt(db,'SELECT date FROM tasks WHERE project_id=? AND id=?',projectId,taskId).first();
- return {wallet:await getWallet(db,userId),reward:results[1]?.meta.changes?10:0,date:saved.date};
+ return {wallet:await getWallet(db,userId),reward:results[1]?.meta.changes?10:0,date:saved.date,trophyAwarded:!!results[2]?.meta.changes};
 }
 export async function purchaseTheme(db,userId,themeId){
  if(themeId!=='lime'&&!await stmt(db,'SELECT id FROM themes WHERE id=?',themeId).first())throw new HttpError(400,'존재하지 않는 테마입니다.');const operations=[];
@@ -84,6 +122,37 @@ async function route(request,env){
  if(path==='/api/health'){await env.DB.prepare('SELECT user_id FROM wallets LIMIT 1').first();return json({status:'ok',storage:'D1'});}
  const account=await user(request,env.DB);if(path==='/api/session')return json({user:account,wallet:account?await getWallet(env.DB,account.id):null,loginReady:!!(env.GITHUB_CLIENT_ID&&env.GITHUB_CLIENT_SECRET&&env.PUBLIC_ORIGIN)});if(!account)throw new HttpError(401,'로그인이 필요합니다.');const id=account.id;
  if(path==='/api/wallet'&&request.method==='GET')return json(await getWallet(env.DB,id));
+ if(path==='/api/trophies'&&request.method==='GET')return json((await stmt(env.DB,'SELECT project_id AS projectId,title,completed_date AS completedDate,style_id AS styleId FROM project_trophies WHERE user_id=? ORDER BY completed_date DESC,project_id',id).all()).results);
+ if(path==='/api/trophies'&&request.method==='PATCH'){
+  const patch=await body(request);
+  return json(await changeProjectTrophy(env.DB,id,text(patch.projectId,120,'프로젝트 ID'),patch.styleId));
+ }
+ if(path==='/api/trophy-styles'&&request.method==='GET')return json(await trophyStyles(env.DB,id));
+ if(path==='/api/trophy-shelf-theme'&&request.method==='GET'){
+  const row=await stmt(env.DB,'SELECT shelf_theme AS theme FROM users WHERE id=?',id).first();
+  const purchases=await stmt(env.DB,'SELECT theme FROM shelf_theme_purchases WHERE user_id=?',id).all();
+  const owned=['classic',...purchases.results.map(row=>row.theme)];
+  return json({theme:owned.includes(row.theme)?row.theme:'classic',owned});
+ }
+ if(path==='/api/trophy-shelf-theme'&&request.method==='POST'){
+  const {theme}=await body(request);
+  if(!['steel','arcade','museum','walnut','observatory'].includes(theme))throw new HttpError(400,'구매할 수 없는 진열장 테마입니다.');
+  await stmt(env.DB,'INSERT INTO shelf_theme_purchases(user_id,theme) VALUES(?,?) ON CONFLICT(user_id,theme) DO NOTHING',id,theme).run();
+  return json(await getWallet(env.DB,id));
+ }
+ if(path==='/api/trophy-shelf-theme'&&request.method==='PATCH'){
+  const {theme}=await body(request);
+  if(!['classic','steel','arcade','museum','walnut','observatory'].includes(theme))throw new HttpError(400,'존재하지 않는 진열장 테마입니다.');
+  const saved=await stmt(env.DB,`UPDATE users SET shelf_theme=? WHERE id=?
+   AND (?='classic' OR EXISTS(SELECT 1 FROM shelf_theme_purchases WHERE user_id=? AND theme=?))`,
+   theme,id,theme,id,theme).run();
+  if(!saved.meta.changes)throw new HttpError(403,'보유한 진열장 테마만 선택할 수 있습니다.');
+  return json({theme});
+ }
+ if(path==='/api/trophy-styles'&&request.method==='POST'){
+  const purchase=await body(request);
+  return json(await selectTrophyStyle(env.DB,id,purchase.styleId,purchase.purchaseOnly===true));
+ }
  if(path==='/api/themes/purchase'&&request.method==='POST')return json(await purchaseTheme(env.DB,id,(await body(request)).themeId));
  if(path==='/api/projects'&&request.method==='GET')return json((await stmt(env.DB,'SELECT p.id,p.title,COUNT(t.id) AS total,COALESCE(SUM(t.done),0) AS done FROM projects p LEFT JOIN tasks t ON t.project_id=p.id WHERE p.user_id=? GROUP BY p.id ORDER BY p.created_at DESC',id).all()).results);
  if(path==='/api/projects'&&request.method==='POST')return json(await registerProject(env.DB,id,await body(request)),201);

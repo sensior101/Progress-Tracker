@@ -45,6 +45,70 @@ test('migrations initialize a zero wallet and protect incomplete rewards',async(
   assert.throws(()=>sql.prepare('INSERT INTO task_reward_claims(project_id,task_id,user_id) VALUES(?,?,?)').run(id,'one','alice'),/task_incomplete/);
   assert.equal((await getWallet(db,'alice')).balance,0);sql.close();
 });
+test('shelf themes require ownership and charge 100P once across retries',async()=>{
+  const {request,sql}=await fixture();
+  const path='/api/trophy-shelf-theme';
+  sql.prepare("UPDATE users SET shelf_theme='arcade' WHERE id='alice'").run();
+  assert.deepEqual(await (await request(path)).json(),{theme:'classic',owned:['classic']});
+  assert.equal((await request(path,'PATCH',{theme:'arcade'})).status,403);
+  assert.equal((await request(path,'POST',{theme:'arcade'})).status,409);
+  sql.prepare("UPDATE wallets SET balance=100 WHERE user_id='alice'").run();
+  const purchases=await Promise.all([request(path,'POST',{theme:'arcade'}),request(path,'POST',{theme:'arcade'})]);
+  for(const purchase of purchases){
+    assert.equal(purchase.status,200);
+    assert.equal((await purchase.json()).balance,0);
+  }
+  assert.equal((await request(path,'PATCH',{theme:'arcade'})).status,200);
+  assert.deepEqual(await (await request(path)).json(),{theme:'arcade',owned:['classic','arcade']});
+  assert.equal((await request(path,'PATCH',{theme:'classic'})).status,200);
+  sql.close();
+});
+
+test('trophy purchases debit once, reject insufficient funds and retain ownership when switching styles',async()=>{
+  const {request,sql}=await fixture();
+  const buy=styleId=>request('/api/trophy-styles','POST',{styleId});
+  assert.equal((await buy(2)).status,409);
+  assert.equal((await buy(21)).status,400);
+  sql.prepare('UPDATE wallets SET balance=200 WHERE user_id=?').run('alice');
+  const [first,retry]=await Promise.all([buy(20),buy(20)]);
+  for(const result of [first,retry]){
+    assert.equal(result.status,200);
+    const {wallet,styles}=await result.json();
+    assert.equal(wallet.balance,0);
+    assert.deepEqual(styles,{active:20,owned:[1,20]});
+  }
+  assert.equal((await buy(2)).status,409);
+  assert.deepEqual((await (await buy(1)).json()).styles,{active:1,owned:[1,20]});
+  assert.deepEqual((await (await buy(20)).json()).styles,{active:20,owned:[1,20]});
+  assert.equal(sql.prepare("SELECT COUNT(*) AS count FROM point_ledger WHERE event_key LIKE 'trophy:%'").get().count,1);
+  sql.close();
+});
+test('the trophy shelf shows only the account’s first completion, even after reset and rename',async()=>{
+  const {db,sql,request}=await fixture();
+  const {id}=await registerProject(db,'alice',template);
+  const completeBob=structuredClone(template);completeBob.project='Private Bob project';
+  completeBob.phases[0].tasks.forEach(task=>task.done=true);
+  await registerProject(db,'bob',completeBob);
+  assert.equal((await request('/api/trophies','GET',undefined,{anonymous:true})).status,401);
+  assert.deepEqual(await (await request('/api/trophies')).json(),[]);
+  assert.equal((await setTask(db,'alice',id,'one',{done:true})).trophyAwarded,false);
+  assert.equal((await setTask(db,'alice',id,'two',{done:true})).trophyAwarded,true);
+  await request('/api/projects/'+id+'/reset','POST',{});
+  await registerProject(db,'alice',{...template,project:'Renamed'});
+  await setTask(db,'alice',id,'one',{done:true});
+  assert.equal((await setTask(db,'alice',id,'two',{done:true})).trophyAwarded,false);
+  assert.deepEqual(await (await request('/api/trophies')).json(),[{projectId:id,title:template.project,completedDate:completionDate(),styleId:1}]);
+  const second=await registerProject(db,'alice',{...completeBob,project:'Second',projectId:'second'});
+  assert.equal((await request('/api/trophies','PATCH',{projectId:id,styleId:16})).status,403);
+  sql.prepare('UPDATE wallets SET balance=200 WHERE user_id=?').run('alice');
+  assert.equal((await request('/api/trophy-styles','POST',{styleId:16,purchaseOnly:true})).status,200);
+  assert.equal((await request('/api/trophies','PATCH',{projectId:id,styleId:16})).status,200);
+  const shelf=await (await request('/api/trophies')).json();
+  assert.equal(shelf.find(trophy=>trophy.projectId===id).styleId,16);
+  assert.equal(shelf.find(trophy=>trophy.projectId===second.id).styleId,1);
+  assert.equal(sql.prepare('SELECT COUNT(*) AS count FROM project_trophies WHERE user_id=?').get('bob').count,1);
+  sql.close();
+});
 test('each completed task pays 10P exactly once across retries and reset/recompletion',async()=>{
   const {db,sql}=await fixture();const {id}=await registerProject(db,'alice',template);
   assert.equal((await setTask(db,'alice',id,'one',{done:true})).reward,10);
@@ -56,13 +120,13 @@ test('each completed task pays 10P exactly once across retries and reset/recompl
 test('purchase debit/ownership/equip are atomic, replay costs nothing',async()=>{
   const {db,sql}=await fixture();const {id}=await registerProject(db,'alice',template);
   await setTask(db,'alice',id,'one',{done:true});await setTask(db,'alice',id,'two',{done:true});
-  sql.prepare('UPDATE wallets SET balance=1000 WHERE user_id=?').run('alice');
+  sql.prepare('UPDATE wallets SET balance=100 WHERE user_id=?').run('alice');
   let wallet=await purchaseTheme(db,'alice','pink');assert.equal(wallet.balance,0);assert.deepEqual(wallet.owned,['pink']);assert.equal(wallet.activeTheme,'pink');
   await purchaseTheme(db,'alice','pink');await purchaseTheme(db,'alice','lime');wallet=await getWallet(db,'alice');assert.equal(wallet.balance,0);assert.equal(wallet.activeTheme,'lime');
   assert.equal(sql.prepare('SELECT count(*) n FROM point_ledger').get().n,3);sql.close();
 });
 test('insufficient funds and racing different purchases never overdraw or retain ownership',async()=>{
-  const {db,sql}=await fixture();sql.prepare('UPDATE wallets SET balance=1000 WHERE user_id=?').run('alice');
+  const {db,sql}=await fixture();sql.prepare('UPDATE wallets SET balance=100 WHERE user_id=?').run('alice');
   const result=await Promise.allSettled([purchaseTheme(db,'alice','blue'),purchaseTheme(db,'alice','orange')]);assert.equal(result.filter(r=>r.status==='fulfilled').length,1);
   const wallet=await getWallet(db,'alice');assert.equal(wallet.balance,0);assert.equal(wallet.owned.length,1);assert.equal(sql.prepare('SELECT count(*) n FROM point_ledger').get().n,1);sql.close();
 });
@@ -130,6 +194,8 @@ test('migration retains legacy rewards/ownership and credits only unpaid complet
   sql.prepare('INSERT INTO projects(id,user_id,project_key,title,snapshot) VALUES(?,?,?,?,?)').run('unpaid','bob','unpaid','Unpaid',JSON.stringify(template));
   sql.prepare('INSERT INTO tasks(project_id,id,done) VALUES(?,?,1)').run('unpaid','one');
   sql.exec(readFileSync(new URL('../migrations/0002_task_rewards.sql',import.meta.url),'utf8'));
+  sql.exec(readFileSync(new URL('../migrations/0003_project_trophies.sql',import.meta.url),'utf8'));
+  assert.equal(sql.prepare('SELECT completed_date FROM project_trophies WHERE project_id=?').get('old').completed_date,completionDate());
   assert.equal((await getWallet(db,'alice')).balance,0);assert.deepEqual((await getWallet(db,'alice')).owned,['pink']);
   assert.equal((await setTask(db,'alice','old','one',{done:true})).reward,0);
   assert.equal((await getWallet(db,'bob')).balance,10);
