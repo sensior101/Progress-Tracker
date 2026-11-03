@@ -45,6 +45,38 @@ test('migrations initialize a zero wallet and protect incomplete rewards',async(
   assert.throws(()=>sql.prepare('INSERT INTO task_reward_claims(project_id,task_id,user_id) VALUES(?,?,?)').run(id,'one','alice'),/task_incomplete/);
   assert.equal((await getWallet(db,'alice')).balance,0);sql.close();
 });
+test('sticker packs use their listed prices and charge once per account',async()=>{
+  const {request,sql}=await fixture();
+  const path='/api/sticker-packs';
+  const buy=packId=>request(path,'POST',{packId});
+  sql.prepare("UPDATE wallets SET balance=260 WHERE user_id='alice'").run();
+  assert.equal((await buy('workshop')).status,400);
+  for(const [packId,balance] of [['basic',230],['weather',200],['dog',100],['cat',0],['cat',0]]){
+    const purchase=await buy(packId);
+    assert.equal(purchase.status,200);
+    assert.equal((await purchase.json()).balance,balance);
+  }
+  assert.deepEqual((await (await request(path)).json()).sort(),['basic','cat','dog','weather']);
+  assert.equal(sql.prepare("SELECT COUNT(*) AS count FROM point_ledger WHERE event_key LIKE 'sticker-pack:%'").get().count,4);
+  const project=await (await request('/api/projects','POST',template)).json();
+  const stickers='/api/projects/'+project.id+'/stickers';
+  const selection={packId:'cat',sticker:19,x:0.25,y:0.7};
+  assert.equal((await request(stickers,'POST',{...selection,packId:'workshop'})).status,403);
+  const placed=await request(stickers,'POST',selection);
+  assert.equal(placed.status,201);
+  const sticker=await placed.json();
+  assert.deepEqual(await (await request(stickers)).json(),[sticker]);
+  assert.equal((await request(stickers,'PATCH',{moveId:sticker.id,x:-1,y:0.5})).status,400);
+  assert.equal((await request(stickers,'PATCH',{moveId:sticker.id,x:0.03,y:0.5})).status,200);
+  assert.deepEqual(await (await request(stickers)).json(),[{...sticker,x:0.03,y:0.5,canvas:'page'}]);
+  assert.equal((await request(stickers,'PATCH',{resizeId:sticker.id,scale:4})).status,400);
+  assert.equal((await request(stickers,'PATCH',{resizeId:sticker.id,scale:2})).status,200);
+  assert.deepEqual(await (await request(stickers)).json(),[{...sticker,x:0.03,y:0.5,canvas:'page',scale:2}]);
+  assert.equal((await request(stickers,'PATCH',{removeId:sticker.id})).status,200);
+  assert.deepEqual(await (await request(stickers)).json(),[]);
+  sql.close();
+});
+
 test('shelf themes require ownership and charge 100P once across retries',async()=>{
   const {request,sql}=await fixture();
   const path='/api/trophy-shelf-theme';

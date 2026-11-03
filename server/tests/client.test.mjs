@@ -6,7 +6,7 @@ import vm from 'node:vm';
 const html=readFileSync(new URL('../app.html',import.meta.url),'utf8');
 const code=[...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)].find(m=>!m[1].includes('application/json'))[2];
 const project={project:'UI test',phases:[{title:'개발',tasks:[{id:'a',text:'업무 A',details:'목적: 사용자 요청 처리\n순서: 입력 검증 후 처리\n완료 기준: 성공·실패 확인'},{id:'b',text:'업무 B',done:true}]}]};
-async function boot({failTask=false,anonymous=false}={}) {
+async function boot({failTask=false,anonymous=false,stickerPacks=[]}={}) {
   let doc;
   class Element {
     constructor(){this.children=[];this.attrs={};this.style={setProperty(k,v){this[k]=v;}};this.dataset={};this.value='';this.events={};this.open=false;this.disabled=false;this._text='';}
@@ -33,6 +33,8 @@ async function boot({failTask=false,anonymous=false}={}) {
     else if(path==='/api/trophies')result=options.method==='PATCH'?{styleId:payload.styleId}:[{projectId:'p1',title:'완료한 프로젝트',completedDate:'2026-11-04',styleId:1}];
     else if(path==='/api/trophy-styles')result={active:1,owned:[1,16]};
     else if(path==='/api/trophy-shelf-theme')result={theme:payload?.theme || 'classic',owned:['classic']};
+    else if(path==='/api/sticker-packs')result=stickerPacks;
+    else if(path==='/api/projects/p1/stickers')result=options.method==='POST'?{id:'s1',...payload}:options.method==='PATCH'?{ok:true}:[];
     else if(path==='/api/projects/p1/tasks') {
       if(failTask)return {ok:false,json:async()=>({error:'테스트 저장 실패'})};
       wallet={...wallet,balance:1510};result={wallet,reward:payload.done?10:0,date:'2026-11-04'};
@@ -46,6 +48,48 @@ async function boot({failTask=false,anonymous=false}={}) {
   await vm.runInNewContext(code,{document:doc,location:contextLocation,URL,fetch,window:{addEventListener(){},matchMedia:()=>({matches:true})},navigator:{},localStorage:{getItem(){throw new Error('Browser storage must not be used');},setItem(){throw new Error('Browser storage must not be used');}},confirm:()=>true,setTimeout:()=>1,clearTimeout(){}});
   return {roots,get:id=>doc.getElementById(id),doc,requests,storage,location:contextLocation};
 }
+
+test('sticker placement reopens the last used pack and dragging saves the drop point',async()=>{
+  const {roots,requests}=await boot({stickerPacks:['basic','weather']});
+  const canvas=roots.projectCanvas;
+  canvas.closest=()=>null;
+  canvas.getBoundingClientRect=()=>({left:0,top:0,width:1000,height:1000});
+  assert.equal(roots.stickerEditToggle.hidden,false);
+  roots.stickerEditToggle.onclick();
+  assert.equal(roots.stickerSurface.hidden,false);
+  assert.equal(roots.stickerLayer.inert,false);
+  roots.stickerSurface.onclick({clientX:100,clientY:200});
+  await roots.stickerAttach.onclick();
+  assert.equal(roots.stickerOptions.children.length,2);
+  roots.stickerOptions.children[0].onclick();
+  await roots.stickerOptions.children[0].onclick();
+  const sticker=roots.stickerLayer.children[0];
+  sticker.onclick({stopPropagation(){}});
+  sticker.getBoundingClientRect=()=>({left:80,top:180,width:40,height:40});
+  sticker.setPointerCapture=()=>{};
+  sticker.onpointerdown({isPrimary:true,button:0,pointerId:1,clientX:100,clientY:200});
+  sticker.onpointermove({pointerId:1,clientX:40,clientY:300});
+  await sticker.onpointerup({pointerId:1,clientX:40,clientY:300});
+  assert.deepEqual(requests.at(-1).payload,{moveId:'s1',x:0.04,y:0.3});
+  sticker.onpointerdown({isPrimary:true,button:0,pointerId:2,clientX:120,clientY:220,target:sticker.children[4]});
+  sticker.onpointermove({pointerId:2,clientX:140,clientY:240});
+  await sticker.onpointerup({pointerId:2,clientX:140,clientY:240});
+  assert.deepEqual(requests.at(-1).payload,{resizeId:'s1',scale:2});
+  sticker.onpointerdown({isPrimary:true,button:0,pointerId:3,clientX:100,clientY:200});
+  sticker.onpointermove({pointerId:3,clientX:140,clientY:240});
+  assert.equal(sticker.style['--sticker-scale'],2);
+  await sticker.onpointerup({pointerId:3,clientX:140,clientY:240});
+  assert.equal(sticker.style['--sticker-scale'],2);
+  roots.stickerSurface.onclick({clientX:200,clientY:200});
+  await roots.stickerAttach.onclick();
+  assert.equal(roots.stickerOptions.children.length,20);
+  assert.equal(roots.stickerEditorTitle.textContent,'기본 스티커팩');
+  roots.stickerEditorClose.onclick();
+  roots.stickerEditToggle.onclick();
+  assert.equal(roots.stickerLayer.inert,true);
+  assert.equal(roots.stickerSurface.hidden,true);
+  assert.equal(roots.stickerAttach.hidden,true);
+});
 
 test('the trophy shelf displays the saved name and completion date',async()=>{
   const b=await boot();

@@ -20,8 +20,8 @@
 @media(max-width:520px){.calendar-nav{padding:12px}.calendar-nav h3{font-size:17px}.calendar-button{padding:4px 8px}.day{padding:6px 4px;min-height:68px}.day-preview{display:none}.day-count{font-size:9px}.calendar-side{padding:16px}}
 
 /* Shared hover treatment for all enabled buttons, including selected dates and filters. */
-button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):hover{background:#000000;color:#ffffff;border-color:#000000}
-button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):hover .day-number{background:transparent;color:inherit}
+button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):not(.placed-sticker):hover{background:#000000;color:#ffffff;border-color:#000000}
+button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):not(.placed-sticker):hover .day-number{background:transparent;color:inherit}
 .calendar-side h3,.calendar-side .date-caption,.schedule-form label,.schedule-status{background-color:var(--paper);width:fit-content;max-width:100%}
 .agenda-item{background-color:var(--paper)}
 
@@ -129,14 +129,47 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
 .trophy-choice{display:grid;place-items:center;gap:3px;width:104px;height:104px;padding:6px;border:1px solid var(--line);border-radius:0;background:transparent;color:var(--ink);font-size:11px;font-weight:700}
 .trophy-choice:hover,.trophy-choice[aria-pressed="true"]{border-color:#000;box-shadow:inset 0 0 0 1px #000}
 #trophyPicker .shop-body{background:#fff;color:#111;--line:#ccc;--ink:#111;--muted:#555}
-#shelfPreview .trophy-card>div:first-child{min-height:126px}
-#shelfPreview .trophy-grid{margin-top:0}
+#shelfPreview .trophy-card{aspect-ratio:1;min-width:0;display:grid}
+#shelfPreview .trophy-card>div:first-child{min-height:0}
+#shelfPreview .trophy-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:0}
+.sticker-pack-cover{display:block;width:100%;height:106px;object-fit:contain;padding:8px;background:#ece9e3;border-bottom:2px solid var(--ink)}
+#stickerPreviewImage{display:block;width:100%;height:auto;background:#ece9e3}
+#projectCanvas{display:flow-root;position:relative;isolation:isolate}
+#stickerLayer{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+#stickerSurface{position:absolute;inset:0;z-index:1;cursor:crosshair}
+#stickerSurface[hidden],#stickerEditToggle[hidden]{display:none}
+#stickerEditToggle{position:fixed;right:16px;bottom:16px;z-index:3}
+#stickerEditToggle[aria-pressed="false"]{background:var(--paper);color:var(--ink)}
+#stickerLayer[inert] .placed-sticker{pointer-events:none}
+.placed-sticker{position:absolute;transform:translate(-50%,-50%);width:clamp(32px,5vw,72px);height:clamp(32px,5vw,72px);padding:0;border:0;background:transparent;pointer-events:auto}
+#stickerAttach{position:absolute;z-index:2;transform:translate(-50%,6px);width:max-content}
+#stickerAttach[hidden],#stickerActions[hidden]{display:none}
+.placed-sticker[aria-pressed="true"]{outline:2px solid #000;outline-offset:0;box-shadow:0 0 0 3px #fff;border-radius:0;cursor:grab;touch-action:none}
+#stickerActions{position:absolute;z-index:2;display:flex;gap:4px;width:max-content;transform:translate(-50%,clamp(20px,3vw,40px))}
+.placed-sticker[data-dragging="true"]{cursor:grabbing}
+.placed-sticker{width:calc(clamp(32px,5vw,72px) * var(--sticker-scale,1));height:calc(clamp(32px,5vw,72px) * var(--sticker-scale,1))}
+#stickerActions{transform:translate(-50%,calc(clamp(16px,2.5vw,36px) * var(--sticker-scale,1) + 6px))}
+.sticker-corner{display:none;position:absolute;width:12px;height:12px;background:#fff;border:2px solid #000}
+.placed-sticker[aria-pressed="true"] .sticker-corner{display:block}
+.sticker-corner[data-corner="nw"]{top:-6px;left:-6px;cursor:nwse-resize}
+.sticker-corner[data-corner="ne"]{top:-6px;right:-6px;cursor:nesw-resize}
+.sticker-corner[data-corner="sw"]{bottom:-6px;left:-6px;cursor:nesw-resize}
+.sticker-corner[data-corner="se"]{bottom:-6px;right:-6px;cursor:nwse-resize}
+.sticker-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px;margin-top:12px}
+.sticker-option{min-width:0;padding:6px;border:1px solid var(--ink);background:var(--paper)}
+.sticker-art{display:block;aspect-ratio:1;background-repeat:no-repeat}
 </style>
 </head>
 <body>
 
 <header class="topbar"><div class="wrap nav"><div class="brand"><span class="brand-icon" aria-hidden="true">↗</span><span>PROGRESS<br>TRACKER</span></div><div class="nav-right"><button class="shop-open" id="trophyOpen" type="button">트로피 진열장</button><button class="shop-open" id="shopOpen" type="button">상점 <span class="shop-wallet-pill" id="walletBalance">0 P</span></button><button class="nav-button" id="theme" aria-label="어두운 테마로 전환" title="테마 전환">◐</button></div></div></header>
-<main class="wrap">
+<div id="projectCanvas">
+<div id="stickerSurface" hidden></div>
+<div id="stickerLayer" aria-label="붙인 스티커" inert></div>
+<button class="cloud-button" id="stickerEditToggle" type="button" aria-pressed="false" hidden>스티커 편집 OFF</button>
+<button class="cloud-button" id="stickerAttach" type="button" hidden>스티커 붙이기</button>
+<div id="stickerActions" hidden><button class="cloud-button" id="stickerRemove" type="button">떼기</button></div>
+<main class="wrap" id="projectContent">
 <section class="cloud-panel" id="cloudPanel" aria-label="공용 계정과 프로젝트" hidden><div class="cloud-top"><span class="cloud-account" id="cloudAccount">계정 확인 중</span><a class="cloud-button" id="cloudLogin" href="https://sensior-progress-tracker.pages.dev/auth/login">GitHub 로그인</a><button class="cloud-button" id="cloudLogout" type="button" hidden>로그아웃</button></div><div class="cloud-controls" id="cloudControls" hidden><label for="cloudProjects">프로젝트</label><select id="cloudProjects"><option value="">프로젝트 선택</option></select><button class="cloud-button" id="cloudImport" type="button">JSON 가져오기</button><input id="cloudImportFile" type="file" accept=".html,.json,text/html,application/json" hidden></div><p class="cloud-status" id="cloudStatus" role="status"></p></section>
 
 <div class="hero"><div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div></div>
@@ -152,7 +185,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
 <p class="schedule-status" id="scheduleStatus" role="status"></p><ul class="agenda" id="agenda" aria-label="선택한 날짜의 업무"></ul></div></div></section>
 <div class="board-toolbar"><div class="board-title"><h2>프로젝트 보드</h2><span class="phase-count" id="phaseCount"></span></div><div class="filters" role="group" aria-label="작업 상태 필터"><button class="filter" data-filter="all" aria-pressed="true">전체</button><button class="filter" data-filter="pending" aria-pressed="false">미완료</button><button class="filter" data-filter="done" aria-pressed="false">완료</button></div></div>
 <div class="board" id="phases"></div><div class="bottom-note"><p class="save-note" role="status"><span class="save-dot" aria-hidden="true"></span><span id="saveText">체크 상태와 등록 날짜는 계정에 저장됩니다.</span></p><button class="reset" id="reset">체크 초기화 ↺</button></div>
-<footer><span class="mono">SMALL STEPS. REAL PROGRESS.</span><span class="mono" id="updated"></span></footer></main>
+<footer><span class="mono">SMALL STEPS. REAL PROGRESS.</span><span class="mono" id="updated"></span></footer></main></div>
 
 <dialog class="celebration" id="celebration" aria-labelledby="celebrationTitle" aria-describedby="celebrationSummary">
 <div class="confetti" id="confetti" aria-hidden="true"></div>
@@ -173,6 +206,18 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
   <div class="shop-body"><ul class="trophy-grid" aria-hidden="true">
     <li class="trophy-card"><div></div></li><li class="trophy-card"><div></div></li><li class="trophy-card"><div></div></li>
   </ul></div>
+</dialog>
+<dialog class="shop-dialog" id="stickerEditor" aria-labelledby="stickerEditorTitle">
+  <div class="shop-header"><h2 id="stickerEditorTitle">스티커팩 선택</h2><button class="shop-close" id="stickerEditorClose" type="button" aria-label="닫기">×</button></div>
+  <div class="shop-body">
+    <p class="shop-help" id="stickerEditorStatus" role="status"></p>
+    <button class="shop-action" id="stickerPackBack" type="button" hidden>← 스티커팩 선택</button>
+    <div class="sticker-options" id="stickerOptions"></div>
+  </div>
+</dialog>
+<dialog class="shop-dialog" id="stickerPreview" aria-labelledby="stickerPreviewTitle">
+  <div class="shop-header"><h2 id="stickerPreviewTitle"></h2><button class="shop-close" id="stickerPreviewClose" type="button" aria-label="미리보기 닫기">×</button></div>
+  <div class="shop-body"><img id="stickerPreviewImage" alt=""></div>
 </dialog>
 <dialog class="shop-dialog" id="trophyPicker" aria-labelledby="trophyPickerTitle">
   <div class="shop-header"><h2 id="trophyPickerTitle">트로피 모양 선택</h2><button class="shop-close" id="trophyPickerClose" type="button" aria-label="모양 선택 닫기">×</button></div>
@@ -207,11 +252,14 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
 <div class="shop-body"><div class="shop-balance"><span>보유 포인트</span><strong id="shopBalance">0 P</strong></div><p class="shop-help" id="shopHelp">보유 포인트로 테마를 구매하세요. 구매한 테마는 계속 사용할 수 있어요.</p>
 <div class="shop-grid" id="shopItems"></div>
 <div class="shop-bottom"><span class="shop-help">기본 네온 라임은 무료예요.</span><button class="shop-action" id="defaultTheme" type="button">기본 테마 적용</button></div>
-<h3>트로피 디자인</h3><p class="shop-help">진열장에서 프로젝트마다 보유한 디자인을 고를 수 있어요. 기본 챔피언 컵은 무료예요.</p>
-<div class="shop-grid" id="trophyShopItems"></div>
 <h3>진열장 테마</h3><p class="shop-help">기본은 무료예요. 구매한 테마는 트로피 진열장에서 선택할 수 있어요.</p>
 <div class="shop-grid" id="shelfShopItems"></div>
 <p class="shop-help" id="shelfShopStatus" role="status"></p>
+<h3>트로피 디자인</h3><p class="shop-help">진열장에서 프로젝트마다 보유한 디자인을 고를 수 있어요. 기본 챔피언 컵은 무료예요.</p>
+<div class="shop-grid" id="trophyShopItems"></div>
+<h3>스티커팩</h3><p class="shop-help">팩마다 스티커 20종이 들어 있어요.</p>
+<div class="shop-grid" id="stickerShopItems"></div>
+<p class="shop-help" id="stickerShopStatus" role="status"></p>
 <p class="preview-indicator" id="previewIndicator"></p><p class="shop-status" id="shopStatus" role="status"></p><p class="shop-help" id="shopFootnote">완료한 업무마다 10P를 최초 한 번 지급합니다. 포인트와 테마는 계정에 저장됩니다.</p></div>
 </dialog>
 
@@ -464,7 +512,11 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
       action.onclick = function() { return transactTheme(theme.id); };
       actions.appendChild(preview); actions.appendChild(action); body.appendChild(actions); card.appendChild(body); root.appendChild(card);
     });
-    if (shop.open) { renderTrophyShop(); renderShelfShop(); }
+    if (shop.open) {
+      renderTrophyShop();
+      renderPackShop('shelf',shelfCatalog,ownedShelfThemes);
+      renderPackShop('sticker',stickerCatalog,ownedStickerPacks);
+    }
     document.getElementById('defaultTheme').disabled = shopBusy || !wallet || (wallet.activeTheme === 'lime' && !previewTheme);
     document.getElementById('previewIndicator').textContent = previewTheme ? themeById(previewTheme).name + ' 미리보기 중 · 상점을 닫으면 원래 테마로 돌아갑니다.' : '';
   }
@@ -519,17 +571,256 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
   }
   var shelfPreview = document.getElementById('shelfPreview');
   document.getElementById('shelfPreviewClose').onclick = function() { shelfPreview.close(); };
-  function renderShelfShop() {
-    var root = document.getElementById('shelfShopItems');
+  var stickerPreview = document.getElementById('stickerPreview');
+  document.getElementById('stickerPreviewClose').onclick = function() { stickerPreview.close(); };
+  var stickerCatalog = [
+    ['basic','기본 스티커팩','#ece9e3',30,'basic.svg'],
+    ['weather','날씨 스티커팩','#ece9e3',30,'weather.png'],
+    ['dog','골든 리트리버 스티커팩','#ece9e3',100,'dog.png'],
+    ['cat','검은 고양이 스티커팩','#ece9e3',100,'cat.png']
+  ];
+  var ownedStickerPacks = [];
+  var projectCanvas = document.getElementById('projectCanvas');
+  var stickerLayer = document.getElementById('stickerLayer');
+  var stickerAttach = document.getElementById('stickerAttach');
+  var stickerEditor = document.getElementById('stickerEditor');
+  var stickerOptions = document.getElementById('stickerOptions');
+  var stickerEditorStatus = document.getElementById('stickerEditorStatus');
+  var stickerPackBack = document.getElementById('stickerPackBack');
+  var stickerEditorClose = document.getElementById('stickerEditorClose');
+  var stickerPoint;
+  var savingSticker = false;
+  var projectStickerUrl = '/api/projects/' + encodeURIComponent(cloudProjectId) + '/stickers';
+
+  function stickerArt(packId,index) {
+    var art = el('span','sticker-art');
+    art.setAttribute('aria-hidden','true');
+    var path = packId === 'basic' ? 'basic-' + index + '.svg' : packId + '/' + index + '.png';
+    art.style.backgroundImage = 'url("/sticker-packs/' + path + '")';
+    art.style.backgroundSize = 'contain';
+    art.style.backgroundPosition = 'center';
+    return art;
+  }
+  var stickerActions = document.getElementById('stickerActions');
+  var stickerRemove = document.getElementById('stickerRemove');
+  var selectedSticker = null;
+  var lastStickerPack = null;
+  var editingSticker = false;
+  function stickerLeft(sticker) {
+    if (sticker.canvas === 'page') return sticker.x*100 + '%';
+    return 'calc(50% + min(100%, 1320px) * ' + (sticker.x-.5) + ')';
+  }
+  function positionSticker(node,sticker) {
+    node.style.left = stickerLeft(sticker);
+    node.style.top = sticker.y*100 + '%';
+    node.style.setProperty('--sticker-scale',sticker.scale ?? 1);
+  }
+  function selectPlacedSticker(selection) {
+    if (selectedSticker) selectedSticker.button.setAttribute('aria-pressed','false');
+    selectedSticker = selection;
+    stickerActions.hidden = !selection;
+    if (!selection) return;
+    selection.button.setAttribute('aria-pressed','true');
+    positionSticker(stickerActions,selection.sticker);
+    stickerActions.style.left = 'clamp(54px,' + stickerLeft(selection.sticker) + ',calc(100% - 54px))';
+  }
+  function showPlacedSticker(sticker) {
+    var button = el('button','placed-sticker');
+    button.type = 'button';
+    button.setAttribute('aria-label','붙인 스티커 선택');
+    button.setAttribute('aria-pressed','false');
+    positionSticker(button,sticker);
+    button.appendChild(stickerArt(sticker.packId,sticker.sticker));
+    ['nw','ne','sw','se'].forEach(function(corner) {
+      var handle = el('span','sticker-corner');
+      handle.dataset.corner = corner;
+      handle.setAttribute('aria-hidden','true');
+      button.appendChild(handle);
+    });
+    var selection = {button:button,sticker:sticker};
+    button.onclick = function(event) {
+      event.stopPropagation();
+      if (editingSticker) return;
+      stickerAttach.hidden = true;
+      selectPlacedSticker(selection);
+    };
+    var drag = null;
+    button.onpointerdown = function(event) {
+      if (!event.isPrimary || event.button !== 0 || editingSticker || selectedSticker !== selection) return;
+      var box = button.getBoundingClientRect();
+      drag = {id:event.pointerId,x:event.clientX,y:event.clientY,
+        offsetX:event.clientX-box.left-box.width/2,offsetY:event.clientY-box.top-box.height/2};
+      var corner = event.target?.dataset.corner;
+      if (corner) {
+        drag.resize = {width:box.width,x:corner.endsWith('e')?1:-1,y:corner.startsWith('s')?1:-1};
+      }
+      button.setPointerCapture(event.pointerId);
+    };
+    function dragPosition(event) {
+      if (!drag.resize) return {...sticker,...canvasPoint(event.clientX-drag.offsetX,event.clientY-drag.offsetY),canvas:'page'};
+      var delta = (event.clientX-drag.x)*drag.resize.x + (event.clientY-drag.y)*drag.resize.y;
+      var scale = (sticker.scale ?? 1)*(1+delta/drag.resize.width);
+      return {...sticker,scale:Math.max(.5,Math.min(3,scale))};
+    }
+    button.onpointermove = function(event) {
+      if (!drag || drag.id !== event.pointerId) return;
+      if (!drag.moved && Math.hypot(event.clientX-drag.x,event.clientY-drag.y)<4) return;
+      drag.moved = true;
+      button.dataset.dragging = 'true';
+      stickerActions.hidden = true;
+      positionSticker(button,dragPosition(event));
+    };
+    function cancelDrag(event) {
+      if (!drag || drag.id !== event.pointerId) return;
+      drag = null;
+      delete button.dataset.dragging;
+      positionSticker(button,sticker);
+      selectPlacedSticker(selection);
+    }
+    button.onpointercancel = cancelDrag;
+    button.onlostpointercapture = cancelDrag;
+    button.onpointerup = async function(event) {
+      if (!drag || drag.id !== event.pointerId) return;
+      var moved = drag.moved;
+      var resizing = !!drag.resize;
+      var point = dragPosition(event);
+      drag = null;
+      delete button.dataset.dragging;
+      if (!moved) return;
+      editingSticker = true;
+      positionSticker(button,point);
+      try {
+        var patch = resizing ? {resizeId:sticker.id,scale:point.scale} : {moveId:sticker.id,x:point.x,y:point.y};
+        await cloudApi(projectStickerUrl,'PATCH',patch);
+        Object.assign(sticker,point);
+      } catch(error) { cloudMessage(error.message); }
+      finally {
+        positionSticker(button,sticker);
+        selectPlacedSticker(selection);
+        editingSticker = false;
+      }
+    };
+    stickerLayer.appendChild(button);
+  }
+  stickerRemove.onclick = async function() {
+    if (!selectedSticker || editingSticker) return;
+    editingSticker = true;
+    try {
+      await cloudApi(projectStickerUrl,'PATCH',{removeId:selectedSticker.sticker.id});
+      selectedSticker.button.remove();
+      selectPlacedSticker(null);
+      cloudMessage('스티커를 뗐어요.');
+    } catch(error) { cloudMessage(error.message); }
+    finally { editingSticker = false; }
+  };
+  function showStickerPacks() {
+    document.getElementById('stickerEditorTitle').textContent = '스티커팩 선택';
+    stickerPackBack.hidden = true;
+    stickerOptions.replaceChildren();
+    stickerEditorStatus.textContent = ownedStickerPacks.length ? '' : '상점에서 스티커팩을 구매한 뒤 붙일 수 있어요.';
+    stickerCatalog.forEach(function([id,name]) {
+      if (!ownedStickerPacks.includes(id)) return;
+      var button = el('button','sticker-option',name);
+      button.type = 'button';
+      button.onclick = function() { showStickerChoices(id,name); };
+      stickerOptions.appendChild(button);
+    });
+  }
+  function showStickerChoices(packId,name) {
+    stickerEditorStatus.textContent = '';
+    document.getElementById('stickerEditorTitle').textContent = name;
+    stickerPackBack.hidden = false;
+    stickerOptions.replaceChildren();
+    for (let index=0; index<20; index++) {
+      var button = el('button','sticker-option');
+      button.type = 'button';
+      button.setAttribute('aria-label','스티커 ' + (index+1));
+      button.appendChild(stickerArt(packId,index));
+      button.onclick = async function() {
+        if (savingSticker) return;
+        savingSticker = stickerEditorClose.disabled = stickerPackBack.disabled = true;
+        try {
+          var sticker = await cloudApi(projectStickerUrl,'POST',{packId,sticker:index,...stickerPoint,canvas:'page'});
+          lastStickerPack = packId;
+          showPlacedSticker(sticker);
+          stickerEditor.close();
+          stickerAttach.hidden = true;
+        } catch(error) { stickerEditorStatus.textContent = error.message; }
+        finally { savingSticker = stickerEditorClose.disabled = stickerPackBack.disabled = false; }
+      };
+      stickerOptions.appendChild(button);
+    }
+  }
+  stickerEditorClose.onclick = function() { stickerEditor.close(); };
+  stickerEditor.oncancel = function(event) { if (savingSticker) event.preventDefault(); };
+  stickerPackBack.onclick = showStickerPacks;
+  stickerAttach.onclick = async function() {
+    if (stickerEditor.open) return;
+    stickerOptions.replaceChildren();
+    stickerPackBack.hidden = true;
+    document.getElementById('stickerEditorTitle').textContent = '스티커팩 선택';
+    stickerEditorStatus.textContent = '보유한 스티커팩을 불러오는 중이에요.';
+    stickerEditor.showModal();
+    try {
+      ownedStickerPacks = await cloudApi('/api/sticker-packs');
+      if (!stickerEditor.open) return;
+      var recent = stickerCatalog.find(function([id]) { return id === lastStickerPack && ownedStickerPacks.includes(id); });
+      if (recent) showStickerChoices(recent[0],recent[1]);
+      else showStickerPacks();
+    } catch(error) { stickerEditorStatus.textContent = error.message; }
+  };
+  function canvasPoint(clientX,clientY) {
+    var bounds = projectCanvas.getBoundingClientRect();
+    return {
+      x:Math.max(0,Math.min(1,(clientX-bounds.left)/bounds.width)),
+      y:Math.max(0,Math.min(1,(clientY-bounds.top)/bounds.height))
+    };
+  }
+  if (cloudSession?.user && cloudProjectId) {
+    var stickerSurface = document.getElementById('stickerSurface');
+    var stickerEditToggle = document.getElementById('stickerEditToggle');
+    var stickerEditingEnabled = false;
+    stickerEditToggle.hidden = false;
+    stickerEditToggle.onclick = function() {
+      stickerEditingEnabled = !stickerEditingEnabled;
+      stickerSurface.hidden = !stickerEditingEnabled;
+      stickerLayer.inert = !stickerEditingEnabled;
+      stickerEditToggle.setAttribute('aria-pressed',String(stickerEditingEnabled));
+      stickerEditToggle.textContent = '스티커 편집 ' + (stickerEditingEnabled ? 'ON' : 'OFF');
+      if (!stickerEditingEnabled) {
+        stickerAttach.hidden = true;
+        selectPlacedSticker(null);
+      }
+    };
+    stickerSurface.onclick = function(event) {
+      if (editingSticker) return;
+      stickerPoint = canvasPoint(event.clientX,event.clientY);
+      selectPlacedSticker(null);
+      stickerAttach.style.left = 'clamp(70px,'  + stickerPoint.x*100 + '%,calc(100% - 70px))';
+      stickerAttach.style.top = stickerPoint.y*100 + '%';
+      stickerAttach.hidden = false;
+    };
+    cloudApi(projectStickerUrl).then(function(stickers) { stickers.forEach(showPlacedSticker); })
+      .catch(function(error) { cloudMessage(error.message); });
+  }
+  function renderPackShop(category,catalog,ownedItems) {
+    var isSticker = category === 'sticker';
+    var root = document.getElementById(category + 'ShopItems');
     root.replaceChildren();
-    shelfCatalog.forEach(function([id,name,color,price = 100]) {
-      var owned = ownedShelfThemes.includes(id);
+    catalog.forEach(function([id,name,color,price = 100,asset]) {
+      var owned = ownedItems.includes(id);
       var card = el('article','shop-card');
       card.style.setProperty('--sample',color);
-      var sample = el('div','theme-sample');
+      var sample = isSticker ? el('img','sticker-pack-cover') : el('div','theme-sample');
       sample.setAttribute('aria-hidden','true');
-      sample.appendChild(el('span','sample-heading'));
-      sample.appendChild(el('span','sample-lines'));
+      if (isSticker) {
+        sample.alt = '';
+        sample.loading = 'lazy';
+        sample.src = '/sticker-packs/' + asset;
+      } else {
+        sample.appendChild(el('span','sample-heading'));
+        sample.appendChild(el('span','sample-lines'));
+      }
       card.appendChild(sample);
       var content = el('div','shop-card-body');
       content.appendChild(el('h3','',name));
@@ -537,6 +828,14 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
       preview.type = 'button';
       preview.setAttribute('aria-label',name + ' 미리보기');
       preview.onclick = function() {
+        if (isSticker) {
+          document.getElementById('stickerPreviewTitle').textContent = name;
+          var image = document.getElementById('stickerPreviewImage');
+          image.alt = name + ' 20종';
+          image.src = '/sticker-packs/' + asset;
+          stickerPreview.showModal();
+          return;
+        }
         document.getElementById('shelfPreviewTitle').textContent = name + ' 미리보기';
         shelfPreview.dataset.theme = id;
         shelfPreview.showModal();
@@ -545,18 +844,20 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
       actions.appendChild(preview);
       var button = el('button','shop-action primary',id === 'classic' ? '무료 기본' : owned ? '보유 중' : price + ' P로 구매');
       button.type = 'button';
-      button.id = 'buy-shelf-' + id;
+      button.id = 'buy-' + category + '-' + id;
       button.disabled = shopBusy || !wallet || owned || wallet.balance < price;
       button.setAttribute('aria-label',name + ' ' + button.textContent);
       button.onclick = async function() {
         if (shopBusy) return;
         shopBusy = true;
         renderShop();
-        var status = document.getElementById('shelfShopStatus');
+        var status = document.getElementById(category + 'ShopStatus');
         try {
-          cloudWallet = await cloudApi('/api/trophy-shelf-theme','POST',{theme:id});
-          if (!ownedShelfThemes.includes(id)) ownedShelfThemes.push(id);
-          status.textContent = name + ' 구매 완료. 진열장에서 선택할 수 있어요.';
+          cloudWallet = isSticker
+            ? await cloudApi('/api/sticker-packs','POST',{packId:id})
+            : await cloudApi('/api/trophy-shelf-theme','POST',{theme:id});
+          if (!ownedItems.includes(id)) ownedItems.push(id);
+          status.textContent = name + (isSticker ? ' 구매 완료.' : ' 구매 완료. 진열장에서 선택할 수 있어요.');
         } catch(error) { status.textContent = error.message; }
         finally {
           shopBusy = false;
@@ -578,12 +879,14 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
     previewTheme = null;
     if (cloudSession?.user) {
       try {
-        var [latestWallet, latestStyles, shelf] = await Promise.all([
-          cloudApi('/api/wallet'),cloudApi('/api/trophy-styles'),cloudApi('/api/trophy-shelf-theme')
+        var [latestWallet, latestStyles, shelf, stickers] = await Promise.all([
+          cloudApi('/api/wallet'),cloudApi('/api/trophy-styles'),cloudApi('/api/trophy-shelf-theme'),
+          cloudApi('/api/sticker-packs')
         ]);
         cloudWallet = latestWallet;
         trophyStyles = latestStyles;
         ownedShelfThemes = shelf.owned;
+        ownedStickerPacks = stickers;
       }
       catch(error) { document.getElementById('shopStatus').textContent = error.message; }
     }

@@ -128,6 +128,17 @@ async function route(request,env){
   return json(await changeProjectTrophy(env.DB,id,text(patch.projectId,120,'프로젝트 ID'),patch.styleId));
  }
  if(path==='/api/trophy-styles'&&request.method==='GET')return json(await trophyStyles(env.DB,id));
+ if(path==='/api/sticker-packs'&&request.method==='GET'){
+  const purchases=await stmt(env.DB,'SELECT pack_id FROM sticker_pack_purchases WHERE user_id=?',id).all();
+  return json(purchases.results.map(row=>row.pack_id));
+ }
+ if(path==='/api/sticker-packs'&&request.method==='POST'){
+  const {packId}=await body(request);
+  if(typeof packId!=='string'||!await stmt(env.DB,'SELECT id FROM sticker_packs WHERE id=?',packId).first())
+   throw new HttpError(400,'구매할 수 없는 스티커팩입니다.');
+  await stmt(env.DB,'INSERT INTO sticker_pack_purchases(user_id,pack_id) VALUES(?,?) ON CONFLICT(user_id,pack_id) DO NOTHING',id,packId).run();
+  return json(await getWallet(env.DB,id));
+ }
  if(path==='/api/trophy-shelf-theme'&&request.method==='GET'){
   const row=await stmt(env.DB,'SELECT shelf_theme AS theme FROM users WHERE id=?',id).first();
   const purchases=await stmt(env.DB,'SELECT theme FROM shelf_theme_purchases WHERE user_id=?',id).all();
@@ -156,7 +167,47 @@ async function route(request,env){
  if(path==='/api/themes/purchase'&&request.method==='POST')return json(await purchaseTheme(env.DB,id,(await body(request)).themeId));
  if(path==='/api/projects'&&request.method==='GET')return json((await stmt(env.DB,'SELECT p.id,p.title,COUNT(t.id) AS total,COALESCE(SUM(t.done),0) AS done FROM projects p LEFT JOIN tasks t ON t.project_id=p.id WHERE p.user_id=? GROUP BY p.id ORDER BY p.created_at DESC',id).all()).results);
  if(path==='/api/projects'&&request.method==='POST')return json(await registerProject(env.DB,id,await body(request)),201);
- const match=path.match(/^\/api\/projects\/([^/]+)(?:\/(tasks|reset))?$/);if(match){const row=await project(env.DB,id,match[1]);if(!match[2]&&request.method==='GET')return json(await projectData(env.DB,row));if(match[2]==='tasks'&&request.method==='PATCH'){const patch=await body(request);return json(await setTask(env.DB,id,row.id,text(patch.taskId,120,'업무 ID'),patch));}if(match[2]==='reset'&&request.method==='POST'){await stmt(env.DB,'UPDATE tasks SET done=0 WHERE project_id=?',row.id).run();return json({ok:true});}}
+ const match=path.match(/^\/api\/projects\/([^/]+)(?:\/(tasks|reset|stickers))?$/);if(match){const row=await project(env.DB,id,match[1]);if(!match[2]&&request.method==='GET')return json(await projectData(env.DB,row));if(match[2]==='tasks'&&request.method==='PATCH'){const patch=await body(request);return json(await setTask(env.DB,id,row.id,text(patch.taskId,120,'업무 ID'),patch));}if(match[2]==='reset'&&request.method==='POST'){await stmt(env.DB,'UPDATE tasks SET done=0 WHERE project_id=?',row.id).run();return json({ok:true});}
+  if(match[2]==='stickers'){
+   if(request.method==='GET'){
+    const list=await stmt(env.DB,'SELECT id,pack_id AS packId,sticker,x,y,canvas,scale FROM project_stickers WHERE project_id=? ORDER BY rowid',row.id).all();
+    return json(list.results);
+   }
+   if(request.method==='PATCH'){
+    const patch=await body(request);
+    if(Object.hasOwn(patch,'moveId')){
+     const {moveId,x,y}=patch;
+     text(moveId,120,'스티커 ID');
+     if(![x,y].every(n=>typeof n==='number'&&n>=0&&n<=1))throw new HttpError(400,'스티커 위치가 올바르지 않습니다.');
+     const moved=await stmt(env.DB,"UPDATE project_stickers SET x=?,y=?,canvas='page' WHERE project_id=? AND id=?",x,y,row.id,moveId).run();
+     if(!moved.meta.changes)throw new HttpError(404,'스티커를 찾을 수 없습니다.');
+    }else if(Object.hasOwn(patch,'resizeId')){
+     const {resizeId,scale}=patch;
+     text(resizeId,120,'스티커 ID');
+     if(typeof scale!=='number'||scale<0.5||scale>3)throw new HttpError(400,'스티커 크기가 올바르지 않습니다.');
+     const resized=await stmt(env.DB,'UPDATE project_stickers SET scale=? WHERE project_id=? AND id=?',scale,row.id,resizeId).run();
+     if(!resized.meta.changes)throw new HttpError(404,'스티커를 찾을 수 없습니다.');
+    }else{
+     await stmt(env.DB,'DELETE FROM project_stickers WHERE project_id=? AND id=?',row.id,text(patch.removeId,120,'스티커 ID')).run();
+    }
+    return json({ok:true});
+   }
+   if(request.method==='POST'){
+    const {packId,sticker,x,y,canvas='content'}=await body(request);
+    text(packId,32,'스티커팩');
+    if(!['content','page'].includes(canvas)||!Number.isInteger(sticker)||sticker<0||sticker>19||![x,y].every(n=>typeof n==='number'&&n>=0&&n<=1))
+     throw new HttpError(400,'스티커 또는 위치가 올바르지 않습니다.');
+    if(!await stmt(env.DB,'SELECT pack_id FROM sticker_pack_purchases WHERE user_id=? AND pack_id=?',id,packId).first())
+     throw new HttpError(403,'보유한 스티커팩만 사용할 수 있습니다.');
+    const stickerId=crypto.randomUUID();
+    const result=await stmt(env.DB,`INSERT INTO project_stickers(id,project_id,pack_id,sticker,x,y,canvas)
+     SELECT ?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM project_stickers WHERE project_id=?)<80`,
+     stickerId,row.id,packId,sticker,x,y,canvas,row.id).run();
+    if(!result.meta.changes)throw new HttpError(409,'프로젝트에 스티커는 최대 80개까지 붙일 수 있어요.');
+    return json({id:stickerId,packId,sticker,x,y,canvas,scale:1},201);
+   }
+  }
+ }
  throw new HttpError(404,'경로를 찾을 수 없습니다.');
 }
 export default {async fetch(request,env){try{return await route(request,env);}catch(error){if(String(error.message).includes('insufficient_points'))return json({error:'포인트가 부족합니다.'},409);if(error instanceof HttpError)return json({error:error.message},error.status);return json({error:'서버 처리에 실패했습니다. 잠시 후 다시 시도하세요.'},500);}}};

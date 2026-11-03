@@ -1,0 +1,2 @@
+ALTER TABLE project_stickers ADD COLUMN scale REAL NOT NULL DEFAULT 1
+  CHECK(scale BETWEEN 0.5 AND 3);
