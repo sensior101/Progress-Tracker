@@ -61,6 +61,12 @@ test('shelf themes require ownership and charge 100P once across retries',async(
   assert.equal((await request(path,'PATCH',{theme:'arcade'})).status,200);
   assert.deepEqual(await (await request(path)).json(),{theme:'arcade',owned:['classic','arcade']});
   assert.equal((await request(path,'PATCH',{theme:'classic'})).status,200);
+  sql.prepare("UPDATE wallets SET balance=499 WHERE user_id='alice'").run();
+  assert.equal((await request(path,'POST',{theme:'observatory'})).status,409);
+  sql.prepare("UPDATE wallets SET balance=500 WHERE user_id='alice'").run();
+  const observatory=await request(path,'POST',{theme:'observatory'});
+  assert.equal(observatory.status,200);
+  assert.equal((await observatory.json()).balance,0);
   sql.close();
 });
 
