@@ -1,0 +1,13 @@
+name = "sensior-progress-tracker"
+pages_build_output_dir = "./public"
+compatibility_date = "2026-11-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "progress-tracker"
+database_id = "b8f9c1a3-f9fe-486f-a50a-da5357e75347"
+migrations_dir = "migrations"
+
+[vars]
+GITHUB_CLIENT_ID = "Ov23lid4Wt3L7dvD7uUY"
+PUBLIC_ORIGIN = "https://sensior-progress-tracker.pages.dev"

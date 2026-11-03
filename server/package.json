@@ -1,0 +1,16 @@
+{
+  "name": "progress-tracker-server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "build": "node build.mjs",
+    "dev": "npm run build && wrangler pages dev public",
+    "db:local": "wrangler d1 migrations apply progress-tracker --local",
+    "db:remote": "wrangler d1 migrations apply progress-tracker --remote",
+    "deploy": "npm run build && wrangler pages deploy public --project-name sensior-progress-tracker"
+  },
+  "devDependencies": {
+    "wrangler": "^4.157.0"
+  }
+}

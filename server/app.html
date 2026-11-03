@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f1f1f1">
+<title>Progress Tracker</title>
+<style>
+
+:root{color-scheme:light;--bg:#f1f1f1;--paper:#ffffff;--ink:#000000;--muted:#626262;--lime:#edff55;--line:#d6d6d6;--shadow:#000000;--grid:#00000012}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#202020;--paper:#2c2c2c;--ink:#ffffff;--muted:#bdbdbd;--line:#505050;--shadow:#000000;--grid:#ffffff12}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "Pretendard","Malgun Gothic",system-ui,sans-serif}button,input{font:inherit}button{cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent}button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:5px}.wrap{max-width:1320px;margin:auto;padding:0 48px}.topbar{border-bottom:2px solid var(--ink)}.nav{min-height:88px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:11px;font-size:17px;font-weight:900;letter-spacing:-.7px;line-height:1.05}.brand-icon{display:grid;place-items:center;width:36px;height:36px;border:2px solid #000000;background:var(--lime);color:#000000;font-size:25px;box-shadow:3px 3px 0 var(--shadow)}.nav-right{display:flex;align-items:center;gap:24px}.mono{font-family:"Courier New",monospace;font-size:11px;font-weight:700;letter-spacing:1.3px}.nav-button{width:38px;height:38px;display:grid;place-items:center;border:2px solid var(--ink);background:var(--paper);font-size:20px;box-shadow:2px 2px 0 var(--shadow)}.hero{padding:40px 0 32px}h1{font-size:clamp(34px,4.3vw,62px);line-height:1.2;letter-spacing:-2.7px;margin:0 0 16px;font-weight:900;overflow-wrap:anywhere}.subtitle{margin:0;color:var(--muted);font-size:15px}.overview{display:grid;grid-template-columns:1.15fr 1fr 1fr;border:2px solid var(--ink);box-shadow:6px 6px 0 var(--shadow);margin-bottom:29px}.overview>div{padding:24px 26px;min-width:0}.overview>div+div{border-left:2px solid var(--ink)}.progress-card{background:var(--lime);color:#000000}.metric-title{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;gap:10px}.metric-title .mono{font-size:10px}.big-number{font-family:Arial,sans-serif;font-size:65px;line-height:1.15;font-weight:900;letter-spacing:-4px;margin:12px 0}.big-number small{font-size:28px;letter-spacing:-1px;margin-left:3px}.bar{height:12px;background:#00000020;border:1.5px solid #000000}.bar>span{display:block;height:100%;background:#000000;transition:width .2s}.metric-foot{font-size:12px;margin-top:8px}.count-card{background:var(--paper)}.count-numbers{display:flex;gap:30px;margin:17px 0 10px}.count-numbers strong{display:block;font:900 43px/1.2 Arial,sans-serif;letter-spacing:-2px}.count-numbers span{display:block;color:var(--muted);font-size:12px;margin-top:5px}.count-numbers>div+div{border-left:1px solid var(--line);padding-left:30px}.next-card{background:var(--paper);display:flex;flex-direction:column}.next-title{font-size:19px;line-height:1.45;letter-spacing:-.7px;margin:21px 0 8px;font-weight:800;overflow-wrap:anywhere}.next-phase{color:var(--muted);font-size:12px;margin-top:auto}.board-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:45px 0 22px}.board-title{display:flex;align-items:center;gap:12px}h2{font-size:22px;line-height:1.3;letter-spacing:-.8px;margin:0}.phase-count{border:1.5px solid var(--ink);padding:1px 8px;font:700 12px/1.6 "Courier New",monospace;background:var(--paper)}.filters{display:flex;border:2px solid var(--ink);background:var(--paper)}.filter{padding:7px 15px;border:0;background:transparent;font-size:12px;font-weight:700}.filter+.filter{border-left:1px solid var(--ink)}.filter[aria-pressed="true"]{background:var(--ink);color:var(--bg)}.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:22px;align-items:start}.phase{border:2px solid var(--ink);background:var(--paper);box-shadow:4px 4px 0 var(--shadow);min-width:0}.phase-heading{padding:18px 20px;border-bottom:2px solid var(--ink);background:var(--phase-color);color:#000000}.phase-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.phase-no{font:700 11px/1.5 "Courier New",monospace;letter-spacing:1px}.badge{font-size:10px;font-weight:800;padding:2px 8px;border:1.5px solid #000000;background:#ffffff;box-shadow:2px 2px 0 #000000}.phase-toggle{width:100%;display:flex;justify-content:space-between;gap:15px;align-items:center;text-align:left;border:0;padding:0;background:transparent;color:inherit;font-weight:900;font-size:20px;letter-spacing:-.7px}.phase-toggle .chevron{font-size:21px;font-weight:400}.desc{font-size:12px;margin:8px 0 0;opacity:.8}.tasks{margin:0;list-style:none;padding:5px 18px}.task{display:flex;gap:12px;padding:18px 0;align-items:flex-start}.task+.task{border-top:1px solid var(--line)}.task input{appearance:none;-webkit-appearance:none;flex:0 0 20px;width:20px;height:20px;margin:2px 0 0;border:2px solid var(--ink);background:var(--paper);cursor:pointer;display:grid;place-content:center;border-radius:0}.task input:checked{background:var(--lime);border-color:#000000}.task input:checked::after{content:"";width:9px;height:5px;border-left:2px solid #000000;border-bottom:2px solid #000000;transform:translateY(-1px) rotate(-45deg)}.task label{flex:1;cursor:pointer;font-size:13px;line-height:1.65;overflow-wrap:anywhere}.task.checked .task-text{text-decoration:line-through;color:var(--muted)}.note{display:block;color:var(--muted);font-size:11px;margin-top:5px}.phase-footer{display:flex;justify-content:space-between;gap:12px;padding:13px 19px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);align-items:center}.mini-bar{width:75px;height:5px;background:var(--line)}.mini-bar span{display:block;height:100%;background:var(--ink)}.empty{font-size:12px;color:var(--muted);padding:24px 0}.bottom-note{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:28px 0 42px}.save-note{margin:0;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px}.save-dot{height:6px;width:6px;border-radius:50%;background:var(--muted);flex-shrink:0}.reset{border:0;border-bottom:1px solid var(--muted);color:var(--muted);background:transparent;padding:2px 0;font-size:11px;white-space:nowrap}footer{border-top:2px solid var(--ink);padding:18px 0 24px;display:flex;gap:20px;justify-content:space-between;color:var(--muted)}footer .mono{font-size:10px;letter-spacing:.7px}.nav-button:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--shadow)}.nav-button:active{transform:translate(2px,2px);box-shadow:none}
+@media(min-width:1000px){.phase:only-child{max-width:600px}}
+@media(max-width:800px){.wrap{padding:0 24px}.overview{grid-template-columns:1fr 1fr}.overview .progress-card{grid-column:1/-1}.overview>.count-card{border-left:0;border-top:2px solid var(--ink)}.overview>.next-card{border-top:2px solid var(--ink)}.board{gap:20px}}
+@media(max-width:520px){.wrap{padding:0 20px}.nav{min-height:72px}.hero{padding:30px 0 26px}h1{letter-spacing:-1.5px}.subtitle{font-size:13px}.overview{box-shadow:4px 4px 0 var(--shadow);grid-template-columns:1fr}.overview>div{padding:19px 16px}.overview>.next-card{border-left:0}.count-numbers{gap:40px}.count-numbers>div+div{padding-left:40px}.big-number{font-size:64px}.next-title{margin:15px 0 8px}.board-toolbar{align-items:flex-start;flex-direction:column;margin-top:34px;gap:16px}.filter{padding:8px 18px}.board{grid-template-columns:1fr}.bottom-note{align-items:flex-start}footer{flex-direction:column;gap:8px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+
+.calendar-section{margin:36px 0 0}.calendar-intro{margin:8px 0 18px;color:var(--muted);font-size:12px}.calendar-layout{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(260px,1fr);border:2px solid var(--ink);box-shadow:4px 4px 0 var(--shadow);background:var(--paper)}.calendar-main{min-width:0}.calendar-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px;border-bottom:2px solid var(--ink)}.calendar-nav h3{font-size:20px;margin:0;letter-spacing:-.7px}.calendar-actions{display:flex;gap:6px}.calendar-button{border:1.5px solid var(--ink);background:var(--paper);padding:5px 10px;font-size:12px;min-height:34px}.weekdays,.calendar-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.weekdays span{padding:9px 0;text-align:center;font-size:11px;color:var(--muted);border-bottom:1px solid var(--line)}.day{position:relative;min-width:0;min-height:92px;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:transparent;color:var(--ink);text-align:left;padding:8px;display:flex;flex-direction:column;align-items:flex-start;gap:5px}.day:nth-child(7n){border-right:0}.day.blank{background:var(--bg)}.day[aria-pressed="true"]{background:var(--lime);color:#000000;box-shadow:inset 0 0 0 2px #000000}.day-number{font:700 13px/1.5 "Courier New",monospace}.day[aria-current="date"] .day-number{background:var(--ink);color:var(--paper);padding:0 5px}.day-preview{max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:10px}.day-count{font-size:10px;font-weight:700}.calendar-side{border-left:2px solid var(--ink);padding:20px;min-width:0;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}.calendar-side h3{margin:0 0 4px;font-size:17px}.date-caption{margin:0 0 18px;font-size:11px;color:var(--muted)}.schedule-form{display:grid;gap:8px}.schedule-form label{font-size:12px;font-weight:700}.schedule-form select,.schedule-form input{width:100%;min-width:0;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:9px 8px;border-radius:0;font:inherit;font-size:12px}.schedule-submit{border:2px solid #000000;background:var(--lime);color:#000000;padding:9px;font-weight:800;font-size:12px;box-shadow:2px 2px 0 var(--shadow);margin:6px 2px 0 0}.schedule-submit:disabled{opacity:.5;cursor:not-allowed}.schedule-status{font-size:11px;min-height:18px;margin:8px 0;color:var(--muted)}.agenda{list-style:none;padding:0;margin:12px 0 0}.agenda-item{padding:12px 0;border-top:1px solid var(--line);display:flex;align-items:flex-start;gap:8px}.agenda-item input{margin:4px 0 0;accent-color:#000000;width:17px;height:17px;flex-shrink:0}.agenda-item label{font-size:12px;overflow-wrap:anywhere;flex:1}.agenda-item.done .agenda-text{text-decoration:line-through;color:var(--muted)}.agenda-item small{display:block;color:var(--muted);font-size:10px}.remove-date{border:0;background:transparent;color:var(--muted);font-size:11px;padding:0 2px;white-space:nowrap}.task-body{flex:1;min-width:0}.task-body label{display:block}.task-date{display:block;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:10px;padding:2px 7px;margin:9px 0 0;text-align:left}.task-date.scheduled{background:var(--lime);color:#000000;border-color:#000000}.task-date:hover{border-color:var(--ink)}select:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+@media(max-width:800px){.calendar-layout{grid-template-columns:1fr}.calendar-side{border-left:0;border-top:2px solid var(--ink)}.day{min-height:80px}}
+@media(max-width:520px){.calendar-nav{padding:12px}.calendar-nav h3{font-size:17px}.calendar-button{padding:4px 8px}.day{padding:6px 4px;min-height:68px}.day-preview{display:none}.day-count{font-size:9px}.calendar-side{padding:16px}}
+
+/* Shared hover treatment for all enabled buttons, including selected dates and filters. */
+button:not(:disabled):not(.phase-toggle):not(.task-open):hover{background:#000000;color:#ffffff;border-color:#000000}
+button:not(:disabled):not(.phase-toggle):not(.task-open):hover .day-number{background:transparent;color:inherit}
+.calendar-side h3,.calendar-side .date-caption,.schedule-form label,.schedule-status{background-color:var(--paper);width:fit-content;max-width:100%}
+.agenda-item{background-color:var(--paper)}
+
+.phase-heading:is(:hover,:focus-within){background:#000000;color:#ffffff}
+.phase-heading:is(:hover,:focus-within) .phase-toggle{background:transparent;color:inherit}
+.phase-heading:is(:hover,:focus-within) .badge{background:#000000;color:#ffffff;border-color:#ffffff;box-shadow:2px 2px 0 #ffffff}
+.phase-heading:is(:hover,:focus-within) .desc{opacity:1}
+.phase-heading .phase-toggle:focus-visible{outline-color:currentColor}
+.agenda-text,.day-preview{font-weight:700}
+
+.celebration{padding:8px;border:0;background:transparent;color:#000000;width:min(440px,calc(100% - 32px));max-width:none;overflow:visible}
+.celebration::backdrop{background:#00000085}
+.celebration-card{position:relative;z-index:1;border:2px solid #000000;background:#ffffff;box-shadow:7px 7px 0 #000000;text-align:center;padding:30px 24px}
+.celebration-mark{display:grid;place-items:center;width:66px;height:66px;margin:0 auto 20px;background:var(--lime);border:2px solid #000000;box-shadow:3px 3px 0 #000000;font-size:36px;font-weight:900}
+.celebration-card h2{font-size:28px;margin:0 0 12px}.celebration-card p{font-size:14px;margin:0 0 24px;line-height:1.8}
+.celebration-close{background:var(--lime);color:#000000;border:2px solid #000000;padding:10px 24px;font-weight:800;box-shadow:3px 3px 0 #000000}
+.confetti{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.confetti-piece{position:absolute;left:var(--x);top:-24px;width:var(--w);height:var(--h);background:var(--color);animation:confetti-fall var(--duration) var(--delay) ease-in both}
+@keyframes confetti-fall{from{transform:translate3d(0,-4vh,0) rotate(0deg)}to{transform:translate3d(var(--drift),110vh,0) rotate(var(--spin))}}
+@media(prefers-reduced-motion:reduce){.confetti{display:none}.confetti-piece{animation:none}}
+
+.shop-open{display:flex;align-items:center;gap:10px;padding:8px 13px;border:2px solid var(--ink);background:var(--paper);font-size:12px;font-weight:800;box-shadow:2px 2px 0 var(--shadow)}
+.shop-wallet-pill{padding:1px 6px;border:1px solid currentColor;font-family:"Courier New",monospace;white-space:nowrap}
+.shop-dialog{width:min(860px,calc(100% - 32px));max-width:none;max-height:calc(100dvh - 40px);padding:0;border:2px solid var(--ink);background:var(--paper);color:var(--ink);box-shadow:7px 7px 0 var(--shadow)}
+.shop-dialog::backdrop{background:#00000085}.shop-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:21px 24px;border-bottom:2px solid var(--ink);background:var(--lime);color:#000000}.shop-header h2{font-size:24px}.shop-close{width:34px;height:34px;border:2px solid #000000;background:#ffffff;color:#000000;font-size:23px;line-height:1}.shop-body{padding:24px}.shop-balance{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}.shop-balance span{font-size:13px}.shop-balance strong{font:900 30px/1.2 Arial,sans-serif;letter-spacing:-1px}.shop-help{margin:0;color:var(--muted);font-size:12px}.shop-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0}.shop-card{border:2px solid var(--ink);background:var(--paper);min-width:0;box-shadow:3px 3px 0 var(--shadow)}.theme-sample{height:106px;padding:16px;background:var(--sample);color:#000000;border-bottom:2px solid var(--ink);display:flex;flex-direction:column;justify-content:space-between}.sample-heading{width:70%;height:8px;background:#000000}.sample-lines{height:24px;border:1px solid #000000;background:linear-gradient(#ffffffaa,#ffffffaa);position:relative}.sample-lines::after{content:"";position:absolute;left:6px;top:6px;width:9px;height:9px;background:var(--sample);border:1px solid #000000}.shop-card-body{padding:13px 11px}.shop-card h3{font-size:14px;margin:0 0 6px}.theme-price{font-size:11px;color:var(--muted);min-height:18px;margin:0 0 12px}.theme-actions{display:grid;gap:7px}.shop-action{width:100%;padding:7px 5px;background:var(--paper);color:var(--ink);border:1.5px solid var(--ink);font-size:11px;font-weight:700}.shop-action.primary{background:var(--sample);color:#000000;border-color:#000000}.shop-action:disabled{opacity:.5;cursor:not-allowed}.shop-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px}.shop-bottom .shop-action{width:auto;padding:7px 12px}.shop-status{min-height:24px;margin:16px 0 0;font-size:12px;font-weight:700}.shop-open:not(:disabled):hover .shop-wallet-pill{color:inherit}.preview-indicator{margin:14px 0 0;font-size:12px;color:var(--muted)}
+@media(max-width:800px){.shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nav-right{gap:12px}}
+@media(max-width:520px){.shop-body{padding:16px}.shop-header{padding:17px 16px}.shop-header h2{font-size:20px}.shop-grid{gap:10px}.shop-card h3{font-size:12px}.shop-open{gap:6px;padding:6px 8px;font-size:11px}.shop-wallet-pill{padding:0 4px}.theme-sample{height:80px;padding:11px}.shop-card-body{padding:11px 8px}}
+
+.cloud-panel{border:2px solid var(--ink);background:var(--paper);padding:18px 20px;margin-top:24px;box-shadow:3px 3px 0 var(--shadow)}.cloud-panel[hidden]{display:none}.cloud-top,.cloud-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}.cloud-controls{margin-top:14px;justify-content:flex-start}.cloud-controls select{min-width:0;max-width:100%;flex:1;border:1.5px solid var(--ink);padding:8px;background:var(--paper);color:var(--ink);font:inherit;font-size:12px}.cloud-button{display:inline-block;border:1.5px solid var(--ink);padding:7px 12px;background:var(--lime);color:#000000;text-decoration:none;font-weight:700;font-size:12px}.cloud-button:hover{background:#000000;color:#ffffff}.cloud-button[aria-disabled="true"]{opacity:.5;pointer-events:none}.cloud-account{font-size:13px;font-weight:700}.cloud-status{margin:10px 0 0;font-size:12px;color:var(--muted)}
+[hidden]{display:none!important}
+
+.board{align-items:stretch;padding:0;background:none;border:0}
+.phase{display:flex;flex-direction:column;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+.phase-heading{flex-shrink:0}.tasks{flex:1}.phase-footer{margin-top:auto}
+@supports(grid-template-rows:subgrid){.phase{display:grid;grid-row:span 3;grid-template-rows:subgrid;row-gap:0}.phase-heading{grid-row:1}.tasks{grid-row:2}.phase-footer{grid-row:3;margin-top:0}}
+.task-open{display:block;width:100%;text-align:left;font:inherit;font-weight:700;font-size:13px;line-height:1.65;border:0;background:transparent;color:inherit;padding:2px 3px;margin:-2px -3px;overflow-wrap:anywhere;cursor:pointer}.task-open .task-text{display:block}.agenda-body{flex:1;min-width:0}.agenda-body small{display:block;font-size:10px;color:var(--muted)}
+.task-detail{width:min(680px,calc(100% - 32px));max-width:none;max-height:calc(100dvh - 40px);padding:0;border:2px solid var(--ink);background:var(--paper);color:var(--ink);box-shadow:6px 6px 0 var(--shadow)}.task-detail::backdrop{background:#00000085}.detail-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:22px;background:var(--lime);color:#000000;border-bottom:2px solid var(--ink)}.detail-header h2{font-size:22px;overflow-wrap:anywhere;line-height:1.5}.detail-body{padding:22px}.detail-meta{font-size:12px;color:var(--muted);margin:0 0 18px}.detail-text{font-size:14px;line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere;margin:0}.detail-close{flex:0 0 34px;min-height:34px;border:2px solid #000000;background:#ffffff;color:#000000;font-size:21px;line-height:1}
+@media(max-width:520px){.detail-header,.detail-body{padding:17px}.detail-header h2{font-size:19px}}
+.task-open:is(:hover,:focus,:active){background:transparent;color:inherit;outline:1px solid #000000;outline-offset:0;border-radius:0}
+:root[data-theme="dark"] .task-open:is(:hover,:focus,:active){outline-color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header class="topbar"><div class="wrap nav"><div class="brand"><span class="brand-icon" aria-hidden="true">↗</span><span>PROGRESS<br>TRACKER</span></div><div class="nav-right"><button class="shop-open" id="shopOpen" type="button">테마 상점 <span class="shop-wallet-pill" id="walletBalance">0 P</span></button><button class="nav-button" id="theme" aria-label="어두운 테마로 전환" title="테마 전환">◐</button></div></div></header>
+<main class="wrap">
+<section class="cloud-panel" id="cloudPanel" aria-label="공용 계정과 프로젝트" hidden><div class="cloud-top"><span class="cloud-account" id="cloudAccount">계정 확인 중</span><a class="cloud-button" id="cloudLogin" href="https://sensior-progress-tracker.pages.dev/auth/login">GitHub 로그인</a><button class="cloud-button" id="cloudLogout" type="button" hidden>로그아웃</button></div><div class="cloud-controls" id="cloudControls" hidden><label for="cloudProjects">프로젝트</label><select id="cloudProjects"><option value="">프로젝트 선택</option></select><button class="cloud-button" id="cloudImport" type="button">JSON 가져오기</button><input id="cloudImportFile" type="file" accept=".html,.json,text/html,application/json" hidden></div><p class="cloud-status" id="cloudStatus" role="status"></p></section>
+
+<div class="hero"><div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div></div>
+<div class="overview" aria-label="프로젝트 진행 현황">
+<div class="progress-card"><div class="metric-title"><span>전체 진행률</span><span class="mono">PROGRESS ↗</span></div><div class="big-number"><span id="percent">0</span><small>%</small></div><div class="bar" id="progress" role="progressbar" aria-label="전체 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="overallBar"></span></div><div class="metric-foot" id="overallText"></div></div>
+<div class="count-card"><div class="metric-title"><span>작업 현황</span><span class="mono">TASKS / ✓</span></div><div class="count-numbers"><div><strong id="doneCount">0</strong><span>완료한 작업</span></div><div><strong id="leftCount">0</strong><span>남은 작업</span></div></div><div class="metric-foot" id="phaseSummary"></div></div>
+<div class="next-card"><div class="metric-title"><span>다음 할 일</span><span class="mono">UP NEXT →</span></div><div class="next-title" id="nextTask"></div><div class="next-phase" id="nextPhase"></div></div></div>
+<section class="calendar-section" aria-labelledby="calendarTitle">
+<h2 id="calendarTitle">업무 캘린더</h2><p class="calendar-intro">날짜를 선택하고 기존 업무를 등록하세요. 업무마다 날짜 하나를 지정할 수 있어요.</p>
+<div class="calendar-layout"><div class="calendar-main"><div class="calendar-nav"><h3 id="calendarMonth" aria-live="polite"></h3><div class="calendar-actions"><button class="calendar-button" id="prevMonth" aria-label="이전 달">←</button><button class="calendar-button" id="today">오늘</button><button class="calendar-button" id="nextMonth" aria-label="다음 달">→</button></div></div><div class="weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div class="calendar-days" id="calendarDays" role="group" aria-label="날짜 선택"></div></div>
+<div class="calendar-side"><h3 id="selectedDateTitle"></h3><p class="date-caption">등록된 업무의 체크 상태는 프로젝트 보드와 연결됩니다.</p>
+<form class="schedule-form" id="scheduleForm"><label for="scheduleTask">등록할 업무</label><select id="scheduleTask" required></select><label for="scheduleDate">등록 날짜</label><input type="date" id="scheduleDate" required min="0001-01-01" max="9999-12-31"><button class="schedule-submit" id="scheduleSubmit" type="submit">선택한 날짜에 등록</button></form>
+<p class="schedule-status" id="scheduleStatus" role="status"></p><ul class="agenda" id="agenda" aria-label="선택한 날짜의 업무"></ul></div></div></section>
+<div class="board-toolbar"><div class="board-title"><h2>프로젝트 보드</h2><span class="phase-count" id="phaseCount"></span></div><div class="filters" role="group" aria-label="작업 상태 필터"><button class="filter" data-filter="all" aria-pressed="true">전체</button><button class="filter" data-filter="pending" aria-pressed="false">미완료</button><button class="filter" data-filter="done" aria-pressed="false">완료</button></div></div>
+<div class="board" id="phases"></div><div class="bottom-note"><p class="save-note" role="status"><span class="save-dot" aria-hidden="true"></span><span id="saveText">체크 상태와 등록 날짜는 계정에 저장됩니다.</span></p><button class="reset" id="reset">체크 초기화 ↺</button></div>
+<footer><span class="mono">SMALL STEPS. REAL PROGRESS.</span><span class="mono" id="updated"></span></footer></main>
+
+<dialog class="celebration" id="celebration" aria-labelledby="celebrationTitle" aria-describedby="celebrationSummary">
+<div class="confetti" id="confetti" aria-hidden="true"></div>
+<div class="celebration-card"><div class="celebration-mark" aria-hidden="true">✓</div><h2 id="celebrationTitle">프로젝트 완료!</h2><p id="celebrationSummary"></p><button class="celebration-close" id="celebrationClose" type="button" autofocus>닫기</button></div>
+</dialog>
+
+<dialog class="shop-dialog" id="themeShop" aria-labelledby="shopTitle" aria-describedby="shopHelp">
+<div class="shop-header"><h2 id="shopTitle">테마 상점</h2><button class="shop-close" id="shopClose" aria-label="테마 상점 닫기" type="button" autofocus>×</button></div>
+<div class="shop-body"><div class="shop-balance"><span>보유 포인트</span><strong id="shopBalance">0 P</strong></div><p class="shop-help" id="shopHelp">보유 포인트로 테마를 구매하세요. 구매한 테마는 계속 사용할 수 있어요.</p>
+<div class="shop-grid" id="shopItems"></div>
+<div class="shop-bottom"><span class="shop-help">기본 네온 라임은 무료예요.</span><button class="shop-action" id="defaultTheme" type="button">기본 테마 적용</button></div>
+<p class="preview-indicator" id="previewIndicator"></p><p class="shop-status" id="shopStatus" role="status"></p><p class="shop-help" id="shopFootnote">완료한 업무마다 10P를 최초 한 번 지급합니다. 포인트와 테마는 계정에 저장됩니다.</p></div>
+</dialog>
+
+<dialog class="task-detail" id="taskDetail" aria-labelledby="detailTitle" aria-describedby="detailMeta"><div class="detail-header"><h2 id="detailTitle"></h2><button class="detail-close" id="detailClose" type="button" aria-label="업무 상세 닫기" autofocus>×</button></div><div class="detail-body"><p class="detail-meta" id="detailMeta"></p><p class="detail-text" id="detailText"></p></div></dialog>
+<!-- Empty state for the hosted application. Project JSON is loaded through the authenticated API. -->
+<script id="data" type="application/json">
+{
+  "project": "프로젝트 선택",
+  "subtitle": "JSON을 가져와 진행 상황과 일정을 관리하세요.",
+  "updated": "",
+  "phases": []
+}
+</script>
+<script>
+
+(async function () {
+  if (location.protocol === 'file:') { location.replace('https://sensior-progress-tracker.pages.dev'); return; }
+  var data = JSON.parse(document.getElementById('data').textContent);
+  var cloudSession = null, cloudProjectId = new URL(location.href).searchParams.get('project'), cloudWallet = null;
+  async function cloudApi(path, method, payload) {
+    var options = {method:method || 'GET', credentials:'same-origin', headers:{}};
+    if (payload !== undefined) { options.headers['Content-Type'] = 'application/json'; options.body = JSON.stringify(payload); }
+    var response = await fetch(path,options), result = await response.json();
+    if (!response.ok) throw new Error(result.error || '서버 요청을 처리하지 못했어요.');
+    return result;
+  }
+  function cloudMessage(message) { document.getElementById('cloudStatus').textContent = message; }
+  document.getElementById('cloudPanel').hidden = false;
+  try {
+    cloudSession = await cloudApi('/api/session'); cloudWallet = cloudSession.wallet;
+    document.getElementById('cloudAccount').textContent = cloudSession.user ? cloudSession.user.login + ' · 공용 계정' : '로그인하면 프로젝트와 포인트가 기기 간에 연결됩니다.';
+    document.getElementById('cloudLogin').hidden = !!cloudSession.user;
+    document.getElementById('cloudLogout').hidden = !cloudSession.user;
+    document.getElementById('cloudControls').hidden = !cloudSession.user;
+    if (!cloudSession.loginReady) { document.getElementById('cloudLogin').setAttribute('aria-disabled','true'); document.getElementById('cloudLogin').textContent = '로그인 설정 준비 중'; cloudMessage('GitHub 로그인 설정이 완료되면 사용할 수 있습니다.'); }
+    if (cloudSession.user) {
+      var projects = await cloudApi('/api/projects'), select = document.getElementById('cloudProjects');
+      projects.forEach(function(project) { var option = document.createElement('option'); option.value = project.id; option.textContent = project.title + ' (' + project.done + '/' + project.total + ')'; select.appendChild(option); });
+      if (cloudProjectId) { data = await cloudApi('/api/projects/' + encodeURIComponent(cloudProjectId)); select.value = cloudProjectId; }
+      cloudMessage(cloudProjectId ? '계정에 저장된 진행 상태와 날짜를 불러왔어요. 완료한 업무마다 10P를 최초 한 번 지급합니다.' : '프로젝트를 선택하거나 스킬로 만든 JSON을 가져오세요.');
+    }
+  } catch (error) { cloudMessage(error.message); cloudProjectId = null; }
+  document.getElementById('cloudProjects').onchange = function() { location.href = this.value ? '/?project=' + encodeURIComponent(this.value) : '/'; };
+  document.getElementById('cloudImport').onclick = function() { document.getElementById('cloudImportFile').click(); };
+  document.getElementById('cloudImportFile').onchange = async function() {
+    var file = this.files[0]; if (!file) return;
+    try {
+      if (file.size > 512000) throw new Error('500KB 이하의 파일을 선택하세요.');
+      var raw = await file.text(), imported;
+      if (file.name.toLowerCase().endsWith('.html')) { var parsed = new DOMParser().parseFromString(raw,'text/html'); var block = parsed.querySelector('script#data[type="application/json"]'); if (!block) throw new Error('스킬의 프로젝트 데이터가 없는 HTML입니다.'); imported = JSON.parse(block.textContent); }
+      else imported = JSON.parse(raw);
+      var project = await cloudApi('/api/projects','POST',imported); location.href = '/?project=' + encodeURIComponent(project.id);
+    } catch (error) { cloudMessage(error.message); this.value = ''; }
+  };
+  document.getElementById('cloudLogout').onclick = async function() { try { await cloudApi('/auth/logout','POST',{}); location.href = '/'; } catch(error) { cloudMessage(error.message); } };
+  document.getElementById('shopHelp').textContent = '프로젝트 완료로 받은 공용 포인트로 테마를 구매하세요. 테마는 계정에 저장됩니다.';
+  document.getElementById('shopFootnote').textContent = '완료한 업무 수 × 10P를 받아요. 같은 업무를 다시 체크해도 중복 적립되지 않아요.';
+  document.getElementById('saveText').textContent = '완료 상태와 등록 날짜는 로그인한 계정에 저장됩니다.';
+  function isDone(task, state) { return Object.prototype.hasOwnProperty.call(state, task.id) ? !!state[task.id] : !!task.done; }
+  var state = {}, collapsed = {}, filter = 'all';
+  var dates = {};
+  var taskEntries = [];
+  data.phases.forEach(function(phase) { phase.tasks.forEach(function(task) { taskEntries.push({task:task, phase:phase}); }); });
+  function dateKey(date) { return String(date.getFullYear()).padStart(4, '0') + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0'); }
+  function parseDate(value) {
+    if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+    var date = new Date(2000, 0, 1); date.setHours(12, 0, 0, 0); date.setFullYear(Number(value.slice(0,4)), Number(value.slice(5,7))-1, Number(value.slice(8,10)));
+    return date.getFullYear() > 0 && dateKey(date) === value ? date : null;
+  }
+  function taskDate(task) {
+    var value = Object.prototype.hasOwnProperty.call(dates, task.id) ? dates[task.id] : task.date;
+    return parseDate(value) ? value : '';
+  }
+  var selectedDate = dateKey(new Date());
+  var monthDate = parseDate(selectedDate); monthDate.setDate(1);
+  var cloudTaskBusy = false;
+  async function setDone(task, checked) {
+    if (cloudTaskBusy) { render(); return; }
+    cloudTaskBusy = true;
+    try {
+      var result = await cloudApi('/api/projects/' + encodeURIComponent(cloudProjectId) + '/tasks','PATCH',{taskId:task.id,done:checked});
+      state[task.id] = checked; dates[task.id] = result.date; cloudWallet = result.wallet;
+      cloudMessage(result.reward ? '업무 완료! ' + result.reward + 'P를 적립하고 완료한 날짜에 등록했어요.' : '완료 상태를 저장했어요.');
+      refreshWallet();
+    } catch(error) { cloudMessage(error.message); }
+    finally { cloudTaskBusy = false; render(); }
+  }
+  async function setTaskDate(task, value) {
+    await cloudApi('/api/projects/' + encodeURIComponent(cloudProjectId) + '/tasks','PATCH',{taskId:task.id,date:value});
+    dates[task.id] = value;
+  }
+  var colors = ['var(--lime)'];
+  function el(tag, cls, value) { var node = document.createElement(tag); if (cls) node.className = cls; if (value !== undefined) node.textContent = value; return node; }
+  document.title = data.project + ' · Progress Tracker';
+  document.getElementById('title').textContent = data.project;
+  document.getElementById('subtitle').textContent = data.subtitle || '';
+  document.getElementById('updated').textContent = data.updated ? 'UPDATED / ' + data.updated : '';
+  var themeCatalog = [
+    {id:'pink', name:'네온 핑크', color:'#ff7de9', price:1000},
+    {id:'red', name:'빨강', color:'#ff6666', price:1000},
+    {id:'orange', name:'오렌지', color:'#ffae66', price:1000},
+    {id:'blue', name:'파랑', color:'#6aa9ff', price:1000}
+  ];
+  var wallet = null, previewTheme = null, shopBusy = false;
+  var shop = document.getElementById('themeShop');
+  function themeById(id) { return themeCatalog.find(function(theme) { return theme.id === id; }); }
+  function readWallet() {
+    if (!cloudWallet) throw new Error('Login required');
+    return cloudWallet;
+  }
+  function applyTheme(id) {
+    var theme = themeById(id);
+    document.documentElement.style.setProperty('--lime', theme ? theme.color : '#edff55');
+  }
+  function refreshWallet() {
+    try { wallet = readWallet(); }
+    catch (e) { wallet = null; document.getElementById('shopStatus').textContent = '포인트를 보려면 먼저 로그인하세요.'; }
+    applyTheme(previewTheme || (wallet ? wallet.activeTheme : 'lime'));
+    renderShop();
+  }
+  function renderShop() {
+    var balance = wallet ? wallet.balance.toLocaleString('ko-KR') + ' P' : '— P';
+    document.getElementById('walletBalance').textContent = !wallet ? '로그인' : balance;
+    document.getElementById('shopBalance').textContent = balance;
+    var root = document.getElementById('shopItems'); root.replaceChildren();
+    themeCatalog.forEach(function(theme) {
+      var owned = wallet && wallet.owned.indexOf(theme.id) !== -1;
+      var active = wallet && wallet.activeTheme === theme.id;
+      var card = el('article', 'shop-card'); card.style.setProperty('--sample', theme.color);
+      var sample = el('div', 'theme-sample'); sample.setAttribute('aria-hidden','true'); sample.appendChild(el('span','sample-heading')); sample.appendChild(el('span','sample-lines')); card.appendChild(sample);
+      var body = el('div','shop-card-body'); body.appendChild(el('h3','',theme.name)); body.appendChild(el('p','theme-price', active ? '적용 중' : owned ? '구매 완료' : theme.price.toLocaleString('ko-KR') + ' P'));
+      var actions = el('div','theme-actions');
+      var preview = el('button','shop-action','미리보기'); preview.type = 'button'; preview.id = 'preview-' + theme.id; preview.setAttribute('aria-pressed',String(previewTheme === theme.id)); preview.setAttribute('aria-label',theme.name + ' 미리보기');
+      preview.onclick = function() { previewTheme = previewTheme === theme.id ? null : theme.id; applyTheme(previewTheme || (wallet ? wallet.activeTheme : 'lime')); renderShop(); document.getElementById(preview.id).focus({preventScroll:true}); };
+      var action = el('button','shop-action primary', active ? '적용 중' : owned ? '적용하기' : wallet && wallet.balance < theme.price ? '포인트 부족' : theme.price.toLocaleString('ko-KR') + ' P로 구매');
+      action.type = 'button'; action.id = 'buy-' + theme.id; action.disabled = shopBusy || !wallet || (active && !previewTheme) || (!owned && wallet.balance < theme.price); action.setAttribute('aria-label',theme.name + ' ' + action.textContent);
+      action.onclick = function() { return transactTheme(theme.id); };
+      actions.appendChild(preview); actions.appendChild(action); body.appendChild(actions); card.appendChild(body); root.appendChild(card);
+    });
+    document.getElementById('defaultTheme').disabled = shopBusy || !wallet || (wallet.activeTheme === 'lime' && !previewTheme);
+    document.getElementById('previewIndicator').textContent = previewTheme ? themeById(previewTheme).name + ' 미리보기 중 · 상점을 닫으면 원래 테마로 돌아갑니다.' : '';
+  }
+  async function transactTheme(id) {
+    if (shopBusy) return;
+    shopBusy = true; renderShop();
+    var buttonId = id === 'lime' ? 'defaultTheme' : 'buy-' + id;
+    try {
+      cloudWallet = await cloudApi('/api/themes/purchase','POST',{themeId:id});
+      previewTheme = null; document.getElementById('shopStatus').textContent = '테마를 계정에 저장하고 적용했어요.';
+    } catch (error) { document.getElementById('shopStatus').textContent = error.message; }
+    finally { shopBusy = false; refreshWallet(); var target = document.getElementById(buttonId); if (target && !target.disabled) target.focus({preventScroll:true}); else document.getElementById('shopClose').focus({preventScroll:true}); }
+  }
+  document.getElementById('shopOpen').onclick = async function() { document.getElementById('shopStatus').textContent = ''; previewTheme = null; if (cloudSession?.user) { try { cloudWallet = await cloudApi('/api/wallet'); } catch(error) { document.getElementById('shopStatus').textContent = error.message; } } refreshWallet(); if (!shop.open) shop.showModal(); };
+  document.getElementById('shopClose').onclick = function() { shop.close(); };
+  shop.addEventListener('close',function() { previewTheme = null; refreshWallet(); });
+  document.getElementById('defaultTheme').onclick = function() { return transactTheme('lime'); };
+  refreshWallet();
+  function openTaskDetail(task, phase) {
+    document.getElementById('detailTitle').textContent = task.text;
+    document.getElementById('detailMeta').textContent = phase.title + ' · ' + (isDone(task,state) ? '완료' : '미완료') + (taskDate(task) ? ' · ' + taskDate(task) : '');
+    document.getElementById('detailText').textContent = task.details || task.note || '아직 상세 설명이 없어요. 프로젝트 JSON의 details에 작업 목적, 진행 순서와 완료 기준을 작성하세요.';
+    var dialog = document.getElementById('taskDetail'); if (!dialog.open) dialog.showModal();
+  }
+  document.getElementById('detailClose').onclick = function() { document.getElementById('taskDetail').close(); };
+  var wasComplete = null, confettiTimer = null;
+  var celebration = document.getElementById('celebration');
+  function clearConfetti() {
+    clearTimeout(confettiTimer); confettiTimer = null;
+    document.getElementById('confetti').replaceChildren();
+  }
+  function celebrate(total) {
+    document.getElementById('celebrationSummary').textContent = total + '개 업무를 모두 완료했어요. 수고했어요!';
+    if (!celebration.open) celebration.showModal();
+    clearConfetti();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var layer = document.getElementById('confetti');
+    var palette = ['var(--lime)', 'var(--lime)', '#ffffff', '#bdbdbd', '#000000'];
+    for (var i = 0; i < 80; i++) {
+      var piece = el('span', 'confetti-piece');
+      var values = {'--x':Math.random()*100+'%', '--w':5+Math.random()*6+'px', '--h':8+Math.random()*9+'px', '--color':palette[i%palette.length], '--duration':2.4+Math.random()*1.4+'s', '--delay':Math.random()*.7+'s', '--drift':(Math.random()-.5)*32+'vw', '--spin':(Math.random()-.5)*1440+'deg'};
+      Object.keys(values).forEach(function(key) { piece.style.setProperty(key, values[key]); });
+      layer.appendChild(piece);
+    }
+    confettiTimer = setTimeout(clearConfetti, 5000);
+  }
+  function updateCelebration(total, done) {
+    var complete = total > 0 && done === total;
+    if (wasComplete === false && complete) celebrate(total);
+    wasComplete = complete;
+  }
+  document.getElementById('celebrationClose').onclick = function() { celebration.close(); };
+  celebration.addEventListener('close', clearConfetti);
+  function render() {
+    var focusId = document.activeElement && document.activeElement.id;
+    var root = document.getElementById('phases'); root.replaceChildren();
+    var total = 0, done = 0, completedPhases = 0, next = null;
+    data.phases.forEach(function (phase, pi) {
+      var pDone = phase.tasks.filter(function(t) { return isDone(t, state); }).length;
+      var pTotal = phase.tasks.length;
+      total += pTotal; done += pDone;
+      if (pTotal && pDone === pTotal) completedPhases++;
+      if (!next) { var task = phase.tasks.find(function(t) { return !isDone(t, state); }); if (task) next = { task:task, phase:phase }; }
+      var sec = el('section', 'phase'); sec.style.setProperty('--phase-color', colors[pi % colors.length]);
+      var heading = el('div', 'phase-heading');
+      var meta = el('div', 'phase-meta'); meta.appendChild(el('span', 'phase-no', 'PHASE ' + String(pi + 1).padStart(2, '0')));
+      meta.appendChild(el('span', 'badge', pTotal && pDone === pTotal ? '완료 ✓' : pDone ? '진행 중 ↗' : '시작 전'));
+      heading.appendChild(meta);
+      var h = el('h3'); h.style.margin = '0';
+      var toggle = el('button', 'phase-toggle'); toggle.id = 'phase-toggle-' + pi;
+      toggle.setAttribute('aria-expanded', String(!collapsed[pi])); toggle.setAttribute('aria-controls', 'phase-tasks-' + pi);
+      toggle.appendChild(el('span', '', phase.title)); toggle.appendChild(el('span', 'chevron', collapsed[pi] ? '+' : '−'));
+      toggle.onclick = function () { collapsed[pi] = !collapsed[pi]; render(); };
+      h.appendChild(toggle); heading.appendChild(h);
+      if (phase.description) heading.appendChild(el('p', 'desc', phase.description));
+      sec.appendChild(heading);
+      var ul = el('ul', 'tasks'); ul.id = 'phase-tasks-' + pi; ul.hidden = !!collapsed[pi];
+      var visible = 0;
+      phase.tasks.forEach(function (task) {
+        var checked = isDone(task, state);
+        if ((filter === 'done' && !checked) || (filter === 'pending' && checked)) return;
+        visible++;
+        var li = el('li', 'task' + (checked ? ' checked' : ''));
+        var cb = el('input'); cb.type = 'checkbox'; cb.id = 't-' + task.id; cb.checked = checked;
+        cb.onchange = function () { return setDone(task, cb.checked); };
+        cb.setAttribute('aria-label',task.text + ' 완료');
+        var titleButton = el('button','task-open'); titleButton.type = 'button'; titleButton.id = 'detail-' + task.id; titleButton.appendChild(el('span','task-text',task.text));
+        titleButton.setAttribute('aria-label',task.text + ' 상세 보기'); titleButton.onclick = function() { openTaskDetail(task,phase); };
+        var body = el('div', 'task-body'); body.appendChild(titleButton);
+        if (task.note) body.appendChild(el('span', 'note', task.note));
+        var dateButton = el('button', 'task-date' + (taskDate(task) ? ' scheduled' : ''), taskDate(task) || '+ 날짜 등록');
+        dateButton.id = 'task-date-' + task.id;
+        dateButton.setAttribute('aria-label', task.text + ' 날짜 ' + (taskDate(task) || '등록'));
+        dateButton.onclick = function() {
+          document.getElementById('scheduleTask').value = task.id;
+          selectedDate = taskDate(task) || selectedDate; monthDate = parseDate(selectedDate); monthDate.setDate(1);
+          renderCalendar(); document.getElementById('scheduleDate').focus(); document.getElementById('calendarTitle').scrollIntoView({behavior:'auto', block:'start'});
+        };
+        body.appendChild(dateButton); li.appendChild(cb); li.appendChild(body); ul.appendChild(li);
+      });
+      if (!visible) ul.appendChild(el('li', 'empty', pTotal ? '이 조건에 맞는 작업이 없어요.' : '아직 등록된 작업이 없어요.'));
+      sec.appendChild(ul);
+      var foot = el('div', 'phase-footer'); foot.appendChild(el('span', '', pDone + ' / ' + pTotal + ' 완료'));
+      var bar = el('div', 'mini-bar'); bar.setAttribute('aria-hidden', 'true'); var fill = el('span'); fill.style.width = (pTotal ? pDone / pTotal * 100 : 0) + '%'; bar.appendChild(fill); foot.appendChild(bar); sec.appendChild(foot); root.appendChild(sec);
+    });
+    if (!data.phases.length) root.appendChild(el('p', 'empty', '등록된 단계가 없어요. 프로젝트의 첫 단계를 추가해보세요.'));
+    var pct = total ? Math.round(done / total * 100) : 0;
+    document.getElementById('percent').textContent = pct;
+    document.getElementById('overallBar').style.width = pct + '%';
+    document.getElementById('progress').setAttribute('aria-valuenow', String(pct));
+    document.getElementById('overallText').textContent = done + ' / ' + total + '개 작업 완료';
+    document.getElementById('doneCount').textContent = done;
+    document.getElementById('leftCount').textContent = total - done;
+    document.getElementById('phaseSummary').textContent = data.phases.length + '개 단계 중 ' + completedPhases + '개 완료';
+    document.getElementById('phaseCount').textContent = String(data.phases.length).padStart(2, '0');
+    document.getElementById('nextTask').textContent = next ? next.task.text : total ? '모든 작업을 완료했어요! 🎉' : '첫 번째 작업을 기다리는 중';
+    document.getElementById('nextPhase').textContent = next ? next.phase.title : total ? '하나씩 쌓아온 결과예요. 수고했어요.' : '프로젝트 데이터를 채워 시작해보세요.';
+    renderCalendar();
+    if (focusId) { var target = document.getElementById(focusId); if (target) target.focus({preventScroll:true}); else if (focusId.indexOf('t-') === 0) document.querySelector('.filter[aria-pressed="true"]').focus({preventScroll:true}); }
+    updateCelebration(total, done);
+  }
+  var taskSelect = document.getElementById('scheduleTask');
+  var placeholder = el('option', '', taskEntries.length ? '업무를 선택하세요' : '먼저 프로젝트에 업무를 추가하세요'); placeholder.value = ''; taskSelect.appendChild(placeholder);
+  taskEntries.forEach(function(entry) { var option = el('option', '', entry.phase.title + ' · ' + entry.task.text); option.value = entry.task.id; taskSelect.appendChild(option); });
+  taskSelect.disabled = !taskEntries.length; document.getElementById('scheduleSubmit').disabled = !taskEntries.length;
+  function renderCalendar() {
+    var year = monthDate.getFullYear(), month = monthDate.getMonth();
+    document.getElementById('calendarMonth').textContent = year + '년 ' + (month + 1) + '월';
+    document.getElementById('prevMonth').disabled = year === 1 && month === 0;
+    document.getElementById('nextMonth').disabled = year === 9999 && month === 11;
+    var root = document.getElementById('calendarDays'); root.replaceChildren();
+    var start = new Date(monthDate); start.setDate(1);
+    var last = new Date(monthDate); last.setMonth(month + 1, 0);
+    var days = last.getDate(), offset = start.getDay(), slots = Math.ceil((offset + days) / 7) * 7;
+    var byDate = Object.create(null);
+    taskEntries.forEach(function(entry) { var key = taskDate(entry.task); if (key) { if (!byDate[key]) byDate[key] = []; byDate[key].push(entry); } });
+    for (var i = 0; i < slots; i++) {
+      var day = i - offset + 1;
+      if (day < 1 || day > days) { var blank = el('div', 'day blank'); blank.setAttribute('aria-hidden','true'); root.appendChild(blank); continue; }
+      var date = new Date(monthDate); date.setDate(day); var key = dateKey(date);
+      var entries = byDate[key] || [];
+      var button = el('button', 'day'); button.id = 'day-' + key; button.type = 'button';
+      button.setAttribute('aria-pressed', String(key === selectedDate));
+      button.setAttribute('aria-label', key + ', 업무 ' + entries.length + '개');
+      if (key === dateKey(new Date())) button.setAttribute('aria-current','date');
+      button.appendChild(el('span','day-number',day));
+      if (entries.length) { button.appendChild(el('span','day-count', entries.length + '개 업무')); button.appendChild(el('span','day-preview',entries[0].task.text)); }
+      button.onclick = (function(value) { return function() { selectedDate = value; document.getElementById('scheduleStatus').textContent = ''; renderCalendar(); document.getElementById('day-' + value).focus({preventScroll:true}); }; })(key);
+      root.appendChild(button);
+    }
+    document.getElementById('scheduleDate').value = selectedDate;
+    var selected = parseDate(selectedDate);
+    document.getElementById('selectedDateTitle').textContent = selected.getFullYear() + '년 ' + (selected.getMonth()+1) + '월 ' + selected.getDate() + '일';
+    var agenda = document.getElementById('agenda'); agenda.replaceChildren();
+    var scheduled = byDate[selectedDate] || [];
+    scheduled.forEach(function(entry) {
+      var task = entry.task, checked = isDone(task,state);
+      var item = el('li','agenda-item' + (checked ? ' done' : ''));
+      var cb = el('input'); cb.type = 'checkbox'; cb.id = 'agenda-' + task.id; cb.checked = checked; cb.onchange = function() { return setDone(task,cb.checked); };
+      cb.setAttribute('aria-label',task.text + ' 완료');
+      var label = el('div','agenda-body'); var titleButton = el('button','task-open agenda-text',task.text); titleButton.type = 'button'; titleButton.id = 'agenda-detail-' + task.id; titleButton.onclick = function() { openTaskDetail(task,entry.phase); }; titleButton.setAttribute('aria-label',task.text + ' 상세 보기'); label.appendChild(titleButton); label.appendChild(el('small','',entry.phase.title));
+      var remove = el('button','remove-date','해제'); remove.type = 'button'; remove.id = 'remove-date-' + task.id; remove.setAttribute('aria-label',task.text + ' 날짜 해제');
+      remove.onclick = async function() { try { await setTaskDate(task,''); document.getElementById('scheduleStatus').textContent = '날짜 등록을 해제했어요. 업무는 보드에 유지됩니다.'; render(); document.getElementById('scheduleTask').focus(); } catch(error) { document.getElementById('scheduleStatus').textContent = error.message; } };
+      item.appendChild(cb); item.appendChild(label); item.appendChild(remove); agenda.appendChild(item);
+    });
+    if (!scheduled.length) agenda.appendChild(el('li','empty','이 날짜에 등록된 업무가 없어요.'));
+  }
+  function moveMonth(delta) { monthDate.setMonth(monthDate.getMonth() + delta); renderCalendar(); }
+  document.getElementById('prevMonth').onclick = function() { moveMonth(-1); };
+  document.getElementById('nextMonth').onclick = function() { moveMonth(1); };
+  document.getElementById('today').onclick = function() { selectedDate = dateKey(new Date()); monthDate = parseDate(selectedDate); monthDate.setDate(1); renderCalendar(); };
+  document.getElementById('scheduleForm').onsubmit = async function(event) {
+    event.preventDefault();
+    var entry = taskEntries.find(function(entry) { return entry.task.id === taskSelect.value; });
+    var value = document.getElementById('scheduleDate').value;
+    if (!entry || !parseDate(value)) { document.getElementById('scheduleStatus').textContent = '업무와 올바른 날짜를 선택하세요.'; return; }
+    try {
+      await setTaskDate(entry.task,value); selectedDate = value; monthDate = parseDate(value); monthDate.setDate(1);
+      render(); document.getElementById('scheduleStatus').textContent = '선택한 업무를 ' + value + '에 등록했어요.';
+    } catch(error) { document.getElementById('scheduleStatus').textContent = error.message; }
+  };
+  document.querySelectorAll('.filter').forEach(function(button) {
+    button.onclick = function() { filter = button.dataset.filter; document.querySelectorAll('.filter').forEach(function(b) { b.setAttribute('aria-pressed', String(b === button)); }); render(); };
+  });
+  document.getElementById('reset').onclick = async function () {
+    if (!confirm('모든 업무를 미완료로 바꿀까요? 등록 날짜와 이미 받은 포인트는 유지됩니다.')) return;
+    try { await cloudApi('/api/projects/' + encodeURIComponent(cloudProjectId) + '/reset','POST',{}); taskEntries.forEach(function(entry) { state[entry.task.id] = false; }); render(); cloudMessage('업무를 미완료로 초기화했어요.'); } catch(error) { cloudMessage(error.message); }
+  };
+  document.getElementById('theme').onclick = function () {
+    var dark = document.documentElement.dataset.theme !== 'dark'; document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    this.setAttribute('aria-label', dark ? '밝은 테마로 전환' : '어두운 테마로 전환');
+  };
+  render();
+})();
+</script>
+</body>
+</html>
