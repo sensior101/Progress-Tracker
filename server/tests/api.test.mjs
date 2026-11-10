@@ -39,6 +39,46 @@ async function fixture(legacy=false) {
   return {sql,db,env,request};
 }
 
+for(const themeId of ['retro','blueprint'])test(themeId+' theme uses the existing atomic purchase and charges only once',async()=>{
+  const {request,sql}=await fixture();
+  const buy=id=>request('/api/themes/purchase','POST',{themeId:id});
+  sql.prepare("UPDATE wallets SET balance=99 WHERE user_id='alice'").run();
+  assert.equal((await buy(themeId)).status,409);
+  assert.equal(sql.prepare("SELECT balance FROM wallets WHERE user_id='alice'").get().balance,99);
+  assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM purchases').get().n,0);
+  sql.prepare("UPDATE wallets SET balance=200 WHERE user_id='alice'").run();
+  const purchased=await buy(themeId);
+  assert.equal(purchased.status,200);
+  assert.deepEqual(await purchased.json(),{version:1,balance:0,activeTheme:themeId,owned:[themeId]});
+  assert.equal((await buy('lime')).status,200);
+  const reapplied=await buy(themeId);
+  assert.equal(reapplied.status,200);
+  assert.equal((await reapplied.json()).balance,0);
+  assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM point_ledger WHERE event_key=?').get('theme:'+themeId).n,1);
+  assert.equal(sql.prepare("SELECT balance FROM wallets WHERE user_id='bob'").get().balance,0);
+  sql.close();
+});
+
+for(const migration of ['0015_retro_desktop_theme.sql','0016_blueprint_theme.sql'])test(migration+' preserves existing balances, purchases, ledger and foreign keys',()=>{
+  const sql=new DatabaseSync(':memory:');
+  const dir=new URL('../migrations/',import.meta.url);
+  for(const file of readdirSync(dir).filter(f=>f.endsWith('.sql')&&f<migration).sort())sql.exec(readFileSync(new URL(file,dir),'utf8'));
+  sql.exec("INSERT INTO users(id,login) VALUES('existing','existing'); INSERT INTO wallets(user_id,balance) VALUES('existing',400); INSERT INTO purchases(user_id,theme_id) VALUES('existing','pink'); UPDATE wallets SET active_theme='pink' WHERE user_id='existing'; INSERT INTO sticker_pack_purchases(user_id,pack_id) VALUES('existing','basic');");
+  if(migration.startsWith('0016'))sql.exec("INSERT INTO purchases(user_id,theme_id) VALUES('existing','retro'); UPDATE wallets SET active_theme='retro' WHERE user_id='existing';");
+  const tables=['wallets','purchases','point_ledger','sticker_pack_purchases'];
+  const before=tables.map(t=>sql.prepare('SELECT * FROM '+t).all());
+  const triggers=sql.prepare("SELECT name,sql FROM sqlite_schema WHERE type='trigger' ORDER BY name").all();
+  sql.exec('BEGIN');
+  sql.exec(readFileSync(new URL(migration,dir),'utf8'));
+  sql.exec('COMMIT');
+  assert.deepEqual(tables.map(t=>sql.prepare('SELECT * FROM '+t).all()),before);
+  assert.deepEqual(sql.prepare("SELECT name,sql FROM sqlite_schema WHERE type='trigger' ORDER BY name").all(),triggers);
+  assert.deepEqual(sql.prepare('PRAGMA foreign_key_check').all(),[]);
+  sql.exec("INSERT INTO purchases(user_id,theme_id) VALUES('existing','"+(migration.startsWith('0016')?'blueprint':'retro')+"'); UPDATE wallets SET active_theme='"+(migration.startsWith('0016')?'blueprint':'retro')+"' WHERE user_id='existing';");
+  assert.equal(sql.prepare("SELECT balance FROM wallets WHERE user_id='existing'").get().balance,migration.startsWith('0016')?70:170);
+  sql.close();
+});
+
 test('migrations initialize a zero wallet and protect incomplete rewards',async()=>{
   const {db,sql}=await fixture();assert.equal((await getWallet(db,'alice')).balance,0);
   const {id}=await registerProject(db,'alice',template);
@@ -158,14 +198,14 @@ test('each completed task pays 10P exactly once across retries and reset/recompl
 test('purchase debit/ownership/equip are atomic, replay costs nothing',async()=>{
   const {db,sql}=await fixture();const {id}=await registerProject(db,'alice',template);
   await setTask(db,'alice',id,'one',{done:true});await setTask(db,'alice',id,'two',{done:true});
-  sql.prepare('UPDATE wallets SET balance=100 WHERE user_id=?').run('alice');
-  let wallet=await purchaseTheme(db,'alice','pink');assert.equal(wallet.balance,0);assert.deepEqual(wallet.owned,['pink']);assert.equal(wallet.activeTheme,'pink');
-  await purchaseTheme(db,'alice','pink');await purchaseTheme(db,'alice','lime');wallet=await getWallet(db,'alice');assert.equal(wallet.balance,0);assert.equal(wallet.activeTheme,'lime');
+  sql.prepare('UPDATE wallets SET balance=200 WHERE user_id=?').run('alice');
+  let wallet=await purchaseTheme(db,'alice','receipt');assert.equal(wallet.balance,0);assert.deepEqual(wallet.owned,['receipt']);assert.equal(wallet.activeTheme,'receipt');
+  await purchaseTheme(db,'alice','receipt');await purchaseTheme(db,'alice','lime');wallet=await getWallet(db,'alice');assert.equal(wallet.balance,0);assert.equal(wallet.activeTheme,'lime');
   assert.equal(sql.prepare('SELECT count(*) n FROM point_ledger').get().n,3);sql.close();
 });
 test('insufficient funds and racing different purchases never overdraw or retain ownership',async()=>{
-  const {db,sql}=await fixture();sql.prepare('UPDATE wallets SET balance=100 WHERE user_id=?').run('alice');
-  const result=await Promise.allSettled([purchaseTheme(db,'alice','blue'),purchaseTheme(db,'alice','orange')]);assert.equal(result.filter(r=>r.status==='fulfilled').length,1);
+  const {db,sql}=await fixture();sql.prepare('UPDATE wallets SET balance=200 WHERE user_id=?').run('alice');
+  const result=await Promise.allSettled([purchaseTheme(db,'alice','receipt'),purchaseTheme(db,'alice','chalkboard')]);assert.equal(result.filter(r=>r.status==='fulfilled').length,1);
   const wallet=await getWallet(db,'alice');assert.equal(wallet.balance,0);assert.equal(wallet.owned.length,1);assert.equal(sql.prepare('SELECT count(*) n FROM point_ledger').get().n,1);sql.close();
 });
 test('re-import preserves identity/progress/reward and syncs task definitions',async()=>{
@@ -191,7 +231,7 @@ test('API enforces authentication, ownership, same-origin writes and content typ
   const created=await request('/api/projects','POST',template);assert.equal(created.status,201);
   const project=await created.json();assert.equal((await request('/api/projects/'+project.id+'/tasks','PATCH',{taskId:'one',date:'2028-02-29'})).status,200);
   const data=await (await request('/api/projects/'+project.id)).json();assert.equal(data.phases[0].tasks[0].date,'2028-02-29');
-  assert.equal((await request('/api/themes/purchase','POST',{themeId:'blue',price:0,balance:9999})).status,409);
+  assert.equal((await request('/api/themes/purchase','POST',{themeId:'receipt',price:0,balance:9999})).status,409);
   assert.equal((await request('/api/projects','POST',null)).status,400);sql.close();
 });
 test('logout revokes the hashed session; raw tokens are never stored',async()=>{
@@ -245,4 +285,47 @@ test('importing completed tasks credits them once, and removing/readding an ID c
   await registerProject(db,'alice',data);assert.equal((await getWallet(db,'alice')).balance,10);
   const changed=structuredClone(data);changed.phases[0].tasks.shift();await registerProject(db,'alice',changed);
   await registerProject(db,'alice',data);assert.equal((await getWallet(db,'alice')).balance,10);sql.close();
+});
+
+test('sticker anchors survive reload and movement and reject invalid values',async()=>{
+ const {request,sql}=await fixture();
+ sql.prepare("UPDATE wallets SET balance=100 WHERE user_id='alice'").run();
+ await request('/api/sticker-packs','POST',{packId:'basic'});
+ const project=await (await request('/api/projects','POST',template)).json();
+ const path='/api/projects/'+project.id+'/stickers';
+ const anchor={target:'sticker-progress',u:0.9,v:0.1};
+ const created=await request(path,'POST',{packId:'basic',sticker:0,x:0.3,y:0.2,canvas:'page',anchor});
+ assert.equal(created.status,201);const sticker=await created.json();
+ assert.deepEqual(sticker.anchor,anchor);
+ assert.deepEqual((await (await request(path)).json())[0].anchor,anchor);
+ assert.equal((await request(path,'PATCH',{moveId:sticker.id,x:0.5,y:0.5,anchor:{...anchor,u:Infinity}})).status,400);
+ const changed={version:2,target:'sticker-title',edgeX:1,edgeY:0.5,dx:24,dy:-8};
+ assert.equal((await request(path,'PATCH',{moveId:sticker.id,x:0.5,y:0.5,anchor:changed})).status,200);
+ assert.deepEqual((await (await request(path)).json())[0].anchor,changed);
+ assert.equal((await request(path,'PATCH',{moveId:sticker.id,x:.5,y:.5,anchor:{...changed,edgeX:.7}})).status,400);
+ assert.equal((await request(path,'PATCH',{moveId:sticker.id,x:.5,y:.5,anchor:{...changed,dx:100001}})).status,400);
+ assert.deepEqual((await (await request(path)).json())[0].anchor,changed);
+ sql.close();
+});
+
+test('0019 retires colour themes: refunds what was paid, resets active theme, keeps other ownership and triggers',()=>{
+  const sql=new DatabaseSync(':memory:');
+  const dir=new URL('../migrations/',import.meta.url);
+  for(const file of readdirSync(dir).filter(f=>f.endsWith('.sql')&&f<'0019').sort())sql.exec(readFileSync(new URL(file,dir),'utf8'));
+  sql.exec("INSERT INTO users(id,login) VALUES('buyer','buyer'),('other','other'); INSERT INTO wallets(user_id,balance) VALUES('buyer',400),('other',50); INSERT INTO purchases(user_id,theme_id) VALUES('buyer','pink'),('buyer','retro'); UPDATE wallets SET active_theme='pink' WHERE user_id='buyer';");
+  assert.equal(sql.prepare("SELECT balance FROM wallets WHERE user_id='buyer'").get().balance,100);
+  const triggers=sql.prepare("SELECT name,sql FROM sqlite_schema WHERE type='trigger' ORDER BY name").all();
+  sql.exec('BEGIN');sql.exec(readFileSync(new URL('0019_retire_color_themes.sql',dir),'utf8'));sql.exec('COMMIT');
+  const buyer=sql.prepare("SELECT balance,active_theme FROM wallets WHERE user_id='buyer'").get();
+  assert.equal(buyer.balance,200);assert.equal(buyer.active_theme,'lime');
+  assert.equal(sql.prepare("SELECT delta FROM point_ledger WHERE user_id='buyer' AND event_key='theme-refund:pink'").get().delta,100);
+  assert.deepEqual(sql.prepare("SELECT theme_id FROM purchases WHERE user_id='buyer'").all().map(r=>r.theme_id),['retro']);
+  assert.equal(sql.prepare("SELECT balance FROM wallets WHERE user_id='other'").get().balance,50);
+  assert.deepEqual(sql.prepare('SELECT id,price FROM themes ORDER BY id').all().map(r=>r.id+':'+r.price),['blueprint:200','chalkboard:200','receipt:200','retro:200']);
+  assert.deepEqual(sql.prepare("SELECT name,sql FROM sqlite_schema WHERE type='trigger' ORDER BY name").all(),triggers);
+  assert.deepEqual(sql.prepare('PRAGMA foreign_key_check').all(),[]);
+  assert.throws(()=>sql.exec("UPDATE wallets SET active_theme='pink' WHERE user_id='buyer'"));
+  sql.exec("INSERT INTO purchases(user_id,theme_id) VALUES('buyer','receipt'); UPDATE wallets SET active_theme='receipt' WHERE user_id='buyer';");
+  assert.equal(sql.prepare("SELECT balance FROM wallets WHERE user_id='buyer'").get().balance,0);
+  sql.close();
 });
