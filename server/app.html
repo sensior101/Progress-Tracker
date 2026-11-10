@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-appearance="lime">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,8 +20,8 @@
 @media(max-width:520px){.calendar-nav{padding:12px}.calendar-nav h3{font-size:17px}.calendar-button{padding:4px 8px}.day{padding:6px 4px;min-height:68px}.day-preview{display:none}.day-count{font-size:9px}.calendar-side{padding:16px}}
 
 /* Shared hover treatment for all enabled buttons, including selected dates and filters. */
-button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):not(.placed-sticker):hover{background:#000000;color:#ffffff;border-color:#000000}
-button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):not(.placed-sticker):hover .day-number{background:transparent;color:inherit}
+:root:not([data-appearance="retro"]):not([data-appearance="blueprint"]):not([data-appearance="receipt"]):not([data-appearance="chalkboard"]) button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):not(.placed-sticker):hover{background:#000000;color:#ffffff;border-color:#000000}
+:root:not([data-appearance="retro"]):not([data-appearance="blueprint"]):not([data-appearance="receipt"]):not([data-appearance="chalkboard"]) button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):not(.placed-sticker):hover .day-number{background:transparent;color:inherit}
 .calendar-side h3,.calendar-side .date-caption,.schedule-form label,.schedule-status{background-color:var(--paper);width:fit-content;max-width:100%}
 .agenda-item{background-color:var(--paper)}
 
@@ -141,13 +141,13 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
 #stickerEditToggle{position:fixed;right:16px;bottom:16px;z-index:3}
 #stickerEditToggle[aria-pressed="false"]{background:var(--paper);color:var(--ink)}
 #stickerLayer[inert] .placed-sticker{pointer-events:none}
-.placed-sticker{position:absolute;transform:translate(-50%,-50%);width:clamp(32px,5vw,72px);height:clamp(32px,5vw,72px);padding:0;border:0;background:transparent;pointer-events:auto}
+.placed-sticker{position:absolute;transform:translate(-50%,-50%);width:56px;height:56px;padding:0;border:0;background:transparent;pointer-events:auto}
 #stickerAttach{position:absolute;z-index:2;transform:translate(-50%,6px);width:max-content}
 #stickerAttach[hidden],#stickerActions[hidden]{display:none}
 .placed-sticker[aria-pressed="true"]{outline:2px solid #000;outline-offset:0;box-shadow:0 0 0 3px #fff;border-radius:0;cursor:grab;touch-action:none}
 #stickerActions{position:absolute;z-index:2;display:flex;gap:4px;width:max-content;transform:translate(-50%,clamp(20px,3vw,40px))}
 .placed-sticker[data-dragging="true"]{cursor:grabbing}
-.placed-sticker{width:calc(clamp(32px,5vw,72px) * var(--sticker-scale,1));height:calc(clamp(32px,5vw,72px) * var(--sticker-scale,1))}
+.placed-sticker{width:calc(56px * var(--sticker-scale,1));height:calc(56px * var(--sticker-scale,1))}
 #stickerActions{transform:translate(-50%,calc(clamp(16px,2.5vw,36px) * var(--sticker-scale,1) + 6px))}
 .sticker-corner{display:none;position:absolute;width:12px;height:12px;background:#fff;border:2px solid #000}
 .placed-sticker[aria-pressed="true"] .sticker-corner{display:block}
@@ -158,11 +158,401 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
 .sticker-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px;margin-top:12px}
 .sticker-option{min-width:0;padding:6px;border:1px solid var(--ink);background:var(--paper)}
 .sticker-art{display:block;aspect-ratio:1;background-repeat:no-repeat}
+/* Desktop appearance: shared account, tasks and shop keep their existing behavior. */
+.theme-description{font-size:11px;line-height:1.6;color:var(--muted);margin:0 0 12px}
+.shop-card[data-appearance="retro"] .theme-sample{background:#008080;padding:12px;gap:10px}
+.shop-card[data-appearance="retro"] .sample-heading{width:100%;height:17px;background:linear-gradient(90deg,#000080,#1084d0);border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:0 0 0 2px #c0c0c0}
+.shop-card[data-appearance="retro"] .sample-lines{background:repeating-linear-gradient(90deg,#000080 0 10px,#fff 10px 12px);border:2px solid;border-color:#808080 #fff #fff #808080;width:78%;height:23px}
+.shop-card[data-appearance="retro"] .sample-lines::after{display:none}
+:root[data-appearance="retro"]{color-scheme:light;--bg:#008080;--paper:#c0c0c0;--ink:#111;--muted:#444;--line:#929292;--grid:transparent;--shadow:#003c3c;--desktop-title:linear-gradient(90deg,#000080,#1084d0);--desktop-white:#fff;--desktop-edge:#808080;--desktop-input:#fff;--desktop-selected:#000080;--desktop-green:#008000}
+:root[data-appearance="retro"][data-theme="dark"]{color-scheme:dark;--bg:#003f46;--paper:#353b43;--ink:#f1f2f4;--muted:#c5cbd3;--line:#626974;--shadow:#001b20;--desktop-title:linear-gradient(90deg,#060650,#155078);--desktop-white:#74808f;--desktop-edge:#171b22;--desktop-input:#20252c;--desktop-selected:#1a4d82;--desktop-green:#69d889}
+:root[data-appearance="retro"] body{font-family:Tahoma,"Malgun Gothic",sans-serif;background-image:radial-gradient(#ffffff0d 1px,transparent 1px);background-size:4px 4px}
+:root[data-appearance="retro"] .topbar{margin:8px;background:var(--paper);border:2px solid;border-color:var(--desktop-white) #222 #222 var(--desktop-white);box-shadow:1px 1px #000}
+:root[data-appearance="retro"] .nav{min-height:64px;padding-block:10px}
+:root[data-appearance="retro"] .brand{font-family:Tahoma,"Malgun Gothic",sans-serif;letter-spacing:0;font-size:14px}
+:root[data-appearance="retro"] .brand-icon{background:var(--desktop-title);color:#fff;border:2px solid;border-color:var(--desktop-white) #222 #222 var(--desktop-white);box-shadow:none}
+:root[data-appearance="retro"] :is(.cloud-panel,.overview,.calendar-layout,.phase,#themeShop,#taskDetail,.celebration-card){border:2px solid;border-color:var(--desktop-white) #222 #222 var(--desktop-white);box-shadow:3px 3px 0 #0005;background:var(--paper);border-radius:0}
+:root[data-appearance="retro"] .cloud-panel{padding:4px 14px 12px}
+:root[data-appearance="retro"] .cloud-panel::before{content:"▣  MY COMPUTER / 프로젝트";display:block;margin:0 -10px 12px;padding:4px 8px;background:var(--desktop-title);color:#fff;font-size:12px;font-weight:700;letter-spacing:.3px}
+:root[data-appearance="retro"] .hero{padding:32px 0 24px}
+:root[data-appearance="retro"] h1{color:#fff;text-shadow:2px 2px #004444;font-size:clamp(28px,3.5vw,46px);letter-spacing:-1px}
+:root[data-appearance="retro"] .subtitle{color:#fff}
+:root[data-appearance="retro"] .overview{gap:4px;padding:4px}
+:root[data-appearance="retro"] .overview>div{background:var(--paper);color:var(--ink);border:1px solid var(--desktop-edge);padding:0 18px 18px}
+:root[data-appearance="retro"] .metric-title{background:var(--desktop-title);color:#fff;margin:0 -18px 14px;padding:5px 9px;font-size:12px}
+:root[data-appearance="retro"] .big-number{font-family:"Courier New",monospace;font-size:58px;letter-spacing:-3px}
+:root[data-appearance="retro"] :is(.bar,.mini-bar){background:var(--desktop-input);border:2px solid;border-color:var(--desktop-edge) var(--desktop-white) var(--desktop-white) var(--desktop-edge);height:20px;padding:2px}
+:root[data-appearance="retro"] :is(.bar,.mini-bar)>span{background:repeating-linear-gradient(90deg,var(--desktop-selected) 0 9px,transparent 9px 12px)}
+:root[data-appearance="retro"] .mini-bar{height:14px;width:90px;padding:1px}
+:root[data-appearance="retro"] :is(.calendar-section>h2,.calendar-intro,.board-title){color:#fff}
+:root[data-appearance="retro"] .calendar-nav{margin:3px;padding:8px 10px;background:var(--desktop-title);color:#fff;border:0}
+:root[data-appearance="retro"] .calendar-nav h3{font-size:16px;letter-spacing:0}
+:root[data-appearance="retro"] .weekdays{background:var(--paper)}
+:root[data-appearance="retro"] .calendar-days{background:var(--desktop-input);margin:3px;border:2px solid;border-color:var(--desktop-edge) var(--desktop-white) var(--desktop-white) var(--desktop-edge)}
+:root[data-appearance="retro"] .day.blank{background:var(--paper)}
+:root[data-appearance="retro"] .day[aria-pressed="true"]{background:var(--desktop-selected);color:#fff;box-shadow:inset 0 0 0 1px #fff}
+:root[data-appearance="retro"] .day[aria-current="date"] .day-number{background:var(--desktop-selected);color:#fff}
+:root[data-appearance="retro"] .calendar-side{background:var(--paper)}
+:root[data-appearance="retro"] .phase{padding:3px;background-image:none}
+:root[data-appearance="retro"] .phase-heading{background:var(--desktop-title);color:#fff;padding:10px 12px;border:0}
+:root[data-appearance="retro"] .phase-heading:is(:hover,:focus-within){background:linear-gradient(90deg,#0038a0,#168cbb);color:#fff}
+:root[data-appearance="retro"] .phase-no{letter-spacing:.4px;color:#e0eaff}
+:root[data-appearance="retro"] .phase-toggle{font-size:17px;letter-spacing:0}
+:root[data-appearance="retro"] .phase-meta::before{content:"";width:22px;height:16px;background:#ffdc73;border:1px solid #704b13;box-shadow:inset 1px 1px #fff3b1;margin-right:8px;clip-path:polygon(0 0,43% 0,53% 22%,100% 22%,100% 100%,0 100%);flex-shrink:0}
+:root[data-appearance="retro"] .phase-no{margin-right:auto}
+:root[data-appearance="retro"] .badge{background:#c0c0c0;color:#111;box-shadow:none;border:1px solid #fff;padding:1px 5px}
+:root[data-appearance="retro"] .tasks{background:var(--desktop-input);margin:8px 4px;padding:0 10px;border:2px solid;border-color:var(--desktop-edge) var(--desktop-white) var(--desktop-white) var(--desktop-edge)}
+:root[data-appearance="retro"] .task{padding:13px 0;gap:10px}
+:root[data-appearance="retro"] .task input{background:var(--desktop-input);border:2px solid;border-color:var(--desktop-edge) var(--desktop-white) var(--desktop-white) var(--desktop-edge)}
+:root[data-appearance="retro"] .task input:checked{background:var(--desktop-input)}
+:root[data-appearance="retro"] .task input:checked::after{border-color:var(--desktop-green)}
+:root[data-appearance="retro"] .phase-footer{margin:0 3px 3px;padding:7px 8px;border:1px solid;border-color:var(--desktop-edge) var(--desktop-white) var(--desktop-white) var(--desktop-edge)}
+:root[data-appearance="retro"] :is(.shop-open,.nav-button,.cloud-button,.calendar-button,.schedule-submit,.filter,.shop-action,.shop-close,.detail-close,.celebration-close){background:var(--paper);color:var(--ink);border:2px solid;border-color:var(--desktop-white) #222 #222 var(--desktop-white);box-shadow:1px 1px 0 #000;border-radius:0;transform:none}
+:root[data-appearance="retro"] :is(.shop-open,.nav-button,.cloud-button,.calendar-button,.schedule-submit,.filter,.shop-action,.shop-close,.detail-close,.celebration-close):not(:disabled):hover{background:var(--paper);color:var(--ink);border-color:var(--desktop-white) #222 #222 var(--desktop-white);outline:1px dotted var(--ink);outline-offset:-5px}
+:root[data-appearance="retro"] :is(.shop-open,.nav-button,.cloud-button,.calendar-button,.schedule-submit,.filter,.shop-action,.shop-close,.detail-close,.celebration-close):not(:disabled):active,
+:root[data-appearance="retro"] .filter[aria-pressed="true"]{background:var(--desktop-input);border-color:#222 var(--desktop-white) var(--desktop-white) #222;box-shadow:none;color:var(--ink)}
+:root[data-appearance="retro"] :is(.schedule-form select,.schedule-form input,.cloud-controls select){background:var(--desktop-input);color:var(--ink);border:2px solid;border-color:var(--desktop-edge) var(--desktop-white) var(--desktop-white) var(--desktop-edge)}
+:root[data-appearance="retro"] .filters{border:0;gap:4px;background:transparent}
+:root[data-appearance="retro"] :is(#themeShop,#taskDetail)>:is(.shop-header,.detail-header){margin:3px;padding:5px 8px;background:var(--desktop-title);color:#fff;border:0}
+:root[data-appearance="retro"] :is(#themeShop,#taskDetail)>:is(.shop-header,.detail-header) h2{font-size:16px;letter-spacing:0}
+:root[data-appearance="retro"] :is(.shop-close,.detail-close){width:26px;height:26px;font-size:20px}
+:root[data-appearance="retro"] .shop-wallet-pill{background:var(--desktop-input);border:1px solid var(--desktop-edge)}
+:root[data-appearance="retro"] .shop-card{box-shadow:none}
+:root[data-appearance="retro"] .bottom-note :is(.save-note,.reset){color:#fff}
+:root[data-appearance="retro"] .save-dot{background:#9fff9f;border-radius:0}
+:root[data-appearance="retro"] footer{margin-bottom:10px;padding:8px 12px;background:var(--paper);color:var(--ink);border:2px solid;border-color:var(--desktop-white) #222 #222 var(--desktop-white);font-family:Tahoma,"Malgun Gothic",sans-serif}
+:root[data-appearance="retro"] .phase-count{color:var(--ink)}
+:root[data-appearance="retro"] .day:not(:disabled):hover{background:var(--desktop-selected);color:#fff}
+:root[data-appearance="retro"] .shop-action[aria-pressed="true"]{background:var(--desktop-input);border-color:#222 var(--desktop-white) var(--desktop-white) #222;box-shadow:none}
+@media(max-width:520px){:root[data-appearance="retro"] .topbar{margin:4px}:root[data-appearance="retro"] .nav{padding-inline:12px}:root[data-appearance="retro"] .overview{gap:5px}:root[data-appearance="retro"] .calendar-nav{flex-wrap:wrap}:root[data-appearance="retro"] .filter{padding:7px 13px}:root[data-appearance="retro"] .hero{padding:24px 0 20px}}
+.blueprint-scale,.blueprint-mark{display:none}
+/* Blueprint Lab: drafting sheets and measurements on the existing tracker. */
+.shop-card[data-appearance="blueprint"] .theme-sample{background-color:#123f67;background-image:linear-gradient(#e4f0ff26 1px,transparent 1px),linear-gradient(90deg,#e4f0ff26 1px,transparent 1px);background-size:12px 12px;border:5px double #d8e5ec;padding:14px}
+.shop-card[data-appearance="blueprint"] .sample-heading{height:12px;background:none;border-block:1px solid #e7f0f6;width:85%}
+.shop-card[data-appearance="blueprint"] .sample-lines{background:repeating-linear-gradient(135deg,#e4e9ef 0 1px,transparent 1px 5px);border:1px solid #e4e9ef;width:68%;height:18px}
+.shop-card[data-appearance="blueprint"] .sample-lines::after{display:none}
+:root[data-appearance="blueprint"]{color-scheme:dark;--bg:#123b60;--paper:#174970;--ink:#f2eee1;--muted:#c0d4df;--line:#749ab2;--grid:#d0e9ff15;--shadow:#071f36;--draft-paper:#efe2c3;--draft-ink:#183c58;--draft-accent:#ffb0a4;--draft-panel:#123b60e8}
+:root[data-appearance="blueprint"][data-theme="dark"]{--bg:#09253e;--paper:#10324e;--muted:#b8cbd8;--line:#66849c;--grid:#cce9ff10;--draft-panel:#09253eed}
+:root[data-appearance="blueprint"] body{font-family:"Malgun Gothic",Tahoma,sans-serif;background-image:linear-gradient(#d0e9ff1a 1px,transparent 1px),linear-gradient(90deg,#d0e9ff1a 1px,transparent 1px),linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:100px 100px,100px 100px,20px 20px,20px 20px;background-attachment:fixed}
+:root[data-appearance="blueprint"] :is(.mono,.phase-no,.phase-count,.metric-foot,.phase-footer,footer){font-family:"Courier New","Malgun Gothic",monospace;letter-spacing:.5px}
+:root[data-appearance="blueprint"] .topbar{margin:12px 12px 0;border:4px double var(--line);background:var(--draft-panel)}
+:root[data-appearance="blueprint"] .nav{min-height:76px}
+:root[data-appearance="blueprint"] .brand{font-family:Georgia,"Malgun Gothic",serif;letter-spacing:1px;font-weight:400}
+:root[data-appearance="blueprint"] .brand-icon{background:transparent;border:1px solid var(--ink);outline:1px solid var(--line);outline-offset:3px;color:var(--ink);box-shadow:none}
+:root[data-appearance="blueprint"] .brand-arrow{display:none}
+:root[data-appearance="blueprint"] .blueprint-mark{display:block;width:60px;height:46px}
+:root[data-appearance="blueprint"] .brand-icon{width:66px;height:50px;border:0;outline:0}
+:root[data-appearance="blueprint"] .hero{position:relative;margin:32px 0 24px;padding:20px 0 18px;border-block:1px solid var(--line)}
+:root[data-appearance="blueprint"] .hero::before{content:"PROJECT DRAWING / 진행 설계도";display:block;font:11px/1.5 "Courier New",monospace;letter-spacing:2px;color:var(--muted);margin-bottom:14px}
+:root[data-appearance="blueprint"] .hero::after{content:"+";position:absolute;right:0;top:-16px;color:var(--ink);font:26px/1 monospace;background:var(--bg)}
+:root[data-appearance="blueprint"] h1{font-family:Georgia,"Malgun Gothic",serif;font-size:clamp(30px,4vw,52px);letter-spacing:0;font-weight:500}
+:root[data-appearance="blueprint"] :is(.cloud-panel,.overview,.calendar-layout,.phase,#themeShop,#taskDetail,.celebration-card){border:4px double var(--line);box-shadow:4px 4px 0 #061e344d;background-color:var(--draft-panel);border-radius:0}
+:root[data-appearance="blueprint"] .cloud-panel{padding:18px 20px 16px}
+:root[data-appearance="blueprint"] .cloud-panel::before{content:"ACCOUNT / PROJECT INDEX";display:block;font:10px/1.5 "Courier New",monospace;letter-spacing:2px;color:var(--muted);padding-bottom:9px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+:root[data-appearance="blueprint"] .overview{gap:10px;padding:10px}
+:root[data-appearance="blueprint"] .overview>div{border:1px solid var(--line);background:transparent;color:var(--ink);padding:20px 22px}
+:root[data-appearance="blueprint"] .metric-title{padding-bottom:9px;border-bottom:1px solid var(--line)}
+:root[data-appearance="blueprint"] .big-number{font-family:"Courier New",monospace;letter-spacing:-3px;font-size:60px;font-weight:400}
+:root[data-appearance="blueprint"] .bar{position:relative;height:24px;padding:3px;border:1px solid var(--ink);background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),var(--line) calc(10% - 1px) 10%);margin-bottom:26px}
+:root[data-appearance="blueprint"] .bar>span{background:repeating-linear-gradient(135deg,var(--draft-paper) 0 1px,transparent 1px 5px);border-right:1px solid var(--draft-paper)}
+:root[data-appearance="blueprint"] .bar::after{content:"";position:absolute;inset:auto -1px -6px;height:4px;background:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 10%)}
+:root[data-appearance="blueprint"] .blueprint-scale{display:flex;justify-content:space-between;position:absolute;inset:auto -1px -23px;font:9px/1.5 "Courier New",monospace;color:var(--muted)}
+:root[data-appearance="blueprint"] .mini-bar{height:9px;background:transparent;border:1px solid var(--line)}
+:root[data-appearance="blueprint"] .mini-bar span{background:repeating-linear-gradient(135deg,var(--draft-paper) 0 1px,transparent 1px 4px)}
+:root[data-appearance="blueprint"] .phase{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px}
+:root[data-appearance="blueprint"] .phase-heading{margin:5px;padding:14px;background:var(--draft-paper);color:var(--draft-ink);border:1px solid var(--draft-ink);box-shadow:0 0 0 2px var(--draft-paper)}
+:root[data-appearance="blueprint"] .phase-heading:is(:hover,:focus-within){background:#fff2d7;color:var(--draft-ink)}
+:root[data-appearance="blueprint"] .phase-toggle{font-size:18px;letter-spacing:0}
+:root[data-appearance="blueprint"] .phase-no{font-size:10px}
+:root[data-appearance="blueprint"] .badge{border:1px solid var(--draft-ink);background:transparent;color:var(--draft-ink);box-shadow:none}
+:root[data-appearance="blueprint"] .phase-heading:is(:hover,:focus-within) .badge{background:transparent;color:var(--draft-ink);border-color:var(--draft-ink);box-shadow:none}
+:root[data-appearance="blueprint"] .tasks{padding:2px 18px}
+:root[data-appearance="blueprint"] .task input{border:1px solid var(--muted);outline:1px solid var(--line);outline-offset:2px;background:transparent;flex-basis:17px;width:17px;height:17px;margin-top:4px}
+:root[data-appearance="blueprint"] .task input:checked{background:transparent;border-color:var(--ink)}
+:root[data-appearance="blueprint"] .task input:checked::after{border-color:var(--draft-accent);width:11px;height:6px;border-width:0 0 2px 2px}
+:root[data-appearance="blueprint"] .phase-footer{margin:4px;border:1px solid var(--line);padding:8px 10px}
+:root[data-appearance="blueprint"] :is(.shop-open,.nav-button,.cloud-button,.calendar-button,.schedule-submit,.filter,.shop-action,.shop-close,.detail-close,.celebration-close){background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;border-radius:0;transform:none}
+:root[data-appearance="blueprint"] :is(.cloud-button,.schedule-submit,.shop-action.primary){background:var(--draft-paper);color:var(--draft-ink);border-color:var(--draft-paper)}
+:root[data-appearance="blueprint"] :is(.shop-open,.nav-button,.cloud-button,.calendar-button,.schedule-submit,.filter,.shop-action,.shop-close,.detail-close,.celebration-close):not(:disabled):hover{background:var(--draft-paper);color:var(--draft-ink);border-color:var(--draft-paper);outline:1px solid var(--line);outline-offset:3px}
+:root[data-appearance="blueprint"] :is(.filter,.shop-action)[aria-pressed="true"]{background:var(--draft-paper);color:var(--draft-ink)}
+:root[data-appearance="blueprint"] :is(.filters,.phase-count){background:transparent;border:1px solid var(--line)}
+:root[data-appearance="blueprint"] .calendar-nav{border-bottom:1px solid var(--line);padding:14px 18px}
+:root[data-appearance="blueprint"] .calendar-nav h3{font-family:"Courier New","Malgun Gothic",monospace;font-size:18px;font-weight:400}
+:root[data-appearance="blueprint"] .calendar-side{background-color:transparent;border-left:1px solid var(--line)}
+:root[data-appearance="blueprint"] .day.blank{background:#d0e9ff08}
+:root[data-appearance="blueprint"] .day[aria-pressed="true"],:root[data-appearance="blueprint"] .day:not(:disabled):hover{background:var(--draft-paper);color:var(--draft-ink);box-shadow:inset 0 0 0 3px var(--paper),inset 0 0 0 4px var(--draft-paper)}
+:root[data-appearance="blueprint"] .day[aria-current="date"] .day-number{background:var(--draft-paper);color:var(--draft-ink)}
+:root[data-appearance="blueprint"] :is(.calendar-side h3,.calendar-side .date-caption,.schedule-form label,.schedule-status,.agenda-item){background:transparent}
+:root[data-appearance="blueprint"] :is(.schedule-form select,.schedule-form input,.cloud-controls select){background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+:root[data-appearance="blueprint"] :is(#themeShop,#taskDetail)>:is(.shop-header,.detail-header){background:transparent;color:var(--ink);border-bottom:1px solid var(--line);margin:4px;padding:15px 18px}
+:root[data-appearance="blueprint"] :is(#themeShop,#taskDetail)>:is(.shop-header,.detail-header) h2{font-family:Georgia,"Malgun Gothic",serif;font-weight:400;letter-spacing:1px}
+:root[data-appearance="blueprint"] .shop-card{background:var(--bg);border:1px solid var(--line);box-shadow:none}
+:root[data-appearance="blueprint"] .shop-wallet-pill{border:1px solid var(--line);background:transparent}
+:root[data-appearance="blueprint"] .task-date.scheduled{background:var(--draft-paper);color:var(--draft-ink)}
+:root[data-appearance="blueprint"] footer{border:4px double var(--line);padding:12px 16px;margin-bottom:20px;background:var(--draft-panel)}
+:root[data-appearance="blueprint"] .save-dot{border-radius:0;background:var(--draft-paper)}
+@media(max-width:800px){:root[data-appearance="blueprint"] .calendar-side{border-left:0;border-top:1px solid var(--line)}}
+@media(max-width:520px){:root[data-appearance="blueprint"] .topbar{margin:6px}:root[data-appearance="blueprint"] .nav{padding-inline:14px}:root[data-appearance="blueprint"] .overview{padding:6px;gap:6px}:root[data-appearance="blueprint"] .hero{margin-top:24px}:root[data-appearance="blueprint"] .overview>div{padding:18px}:root[data-appearance="blueprint"] .bar::after{font-size:8px}}
+
+/* Paid theme: 영수증 (thermal receipt). The page is one long receipt strip on a shop counter. */
+:root[data-appearance="receipt"]{color-scheme:light;--bg:#d9d5cc;--paper:#fbfaf5;--ink:#2a2a2a;--muted:#6b6862;--line:#bdb8ad;--shadow:transparent;--grid:transparent;--rc-red:#d0392b;--rc-font:"D2Coding","Consolas","Malgun Gothic",monospace}
+:root[data-appearance="receipt"][data-theme="dark"]{--bg:#2a2826}
+:root[data-appearance="receipt"] body{font-family:var(--rc-font);font-variant-numeric:tabular-nums}
+:root[data-appearance="receipt"] :is(.mono,.big-number,.count-numbers strong,.phase-no,.phase-count,.day-number,.shop-wallet-pill,.shop-balance strong){font-family:var(--rc-font)}
+:root[data-appearance="receipt"] .topbar{background:var(--paper);border-bottom:2px dashed var(--ink)}
+:root[data-appearance="receipt"] #projectContent{background:var(--paper);max-width:980px;margin:28px auto 48px;padding-top:8px;padding-bottom:8px;position:relative;box-shadow:0 2px 0 #00000014,0 14px 30px -12px #00000040}
+:root[data-appearance="receipt"] #projectContent::before,:root[data-appearance="receipt"] #projectContent::after{content:"";position:absolute;left:0;right:0;height:12px;background:linear-gradient(-45deg,var(--paper) 6px,transparent 0) 0 0/12px 12px repeat-x,linear-gradient(45deg,var(--paper) 6px,transparent 0) 0 0/12px 12px repeat-x}
+:root[data-appearance="receipt"] #projectContent::before{top:-12px;transform:scaleY(-1)}
+:root[data-appearance="receipt"] #projectContent::after{bottom:-12px}
+:root[data-appearance="receipt"] .brand-icon{background:var(--paper);border:2px dashed var(--ink);box-shadow:none}
+:root[data-appearance="receipt"] :is(.nav-button,.shop-open){border:1px solid var(--ink);background:var(--paper)}
+:root[data-appearance="receipt"] .hero{text-align:center;border-bottom:2px dashed var(--ink)}
+:root[data-appearance="receipt"] h1{letter-spacing:-.02em;font-weight:700}
+:root[data-appearance="receipt"] .hero h1::before{content:"*** ";color:var(--muted)}
+:root[data-appearance="receipt"] .hero h1::after{content:" ***";color:var(--muted)}
+:root[data-appearance="receipt"] .overview{border:0;border-bottom:2px dashed var(--ink);box-shadow:none;margin-top:6px}
+:root[data-appearance="receipt"] .overview>div+div{border-left:1px dashed var(--line)}
+:root[data-appearance="receipt"] .progress-card{background:transparent;color:var(--ink)}
+:root[data-appearance="receipt"] .big-number{font-weight:700;letter-spacing:-.04em}
+:root[data-appearance="receipt"] .bar{height:34px;border:0;background:repeating-linear-gradient(90deg,#00000014 0 2px,transparent 2px 5px)}
+:root[data-appearance="receipt"] .bar>span{background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 7px,transparent 7px 8px,var(--ink) 8px 9px,transparent 9px 12px)}
+:root[data-appearance="receipt"] .count-numbers>div+div{border-left:1px dashed var(--line)}
+:root[data-appearance="receipt"] .filters{border:1px solid var(--ink)}
+:root[data-appearance="receipt"] .filter[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+:root[data-appearance="receipt"] .phase-count{border:1px dashed var(--ink);background:transparent}
+:root[data-appearance="receipt"] .phase{border:0;border-top:2px dashed var(--ink);border-bottom:2px dashed var(--ink);background:transparent;box-shadow:none}
+:root[data-appearance="receipt"] .phase-heading{background:transparent;color:var(--ink);border-bottom:1px dashed var(--line);text-align:center}
+:root[data-appearance="receipt"] .phase-heading:is(:hover,:focus-within){background:#00000008;color:var(--ink)}
+:root[data-appearance="receipt"] .badge,:root[data-appearance="receipt"] .phase-heading:is(:hover,:focus-within) .badge{border:0;background:transparent;box-shadow:none;color:var(--muted);padding:0}
+:root[data-appearance="receipt"] .badge::before{content:"["}:root[data-appearance="receipt"] .badge::after{content:"]"}
+:root[data-appearance="receipt"] .task{position:relative}
+:root[data-appearance="receipt"] .task+.task{border-top:1px dashed var(--line)}
+:root[data-appearance="receipt"] .task input{border:1.5px solid var(--ink);background:var(--paper)}
+:root[data-appearance="receipt"] .task input:checked{background:var(--ink);border-color:var(--ink)}
+:root[data-appearance="receipt"] .task input:checked::after{border-color:var(--paper)}
+:root[data-appearance="receipt"] .task.checked .task-text{text-decoration:none;color:var(--muted)}
+:root[data-appearance="receipt"] .task.checked::after{content:"결제완료";position:absolute;right:2px;top:14px;padding:1px 7px;border:2px solid var(--rc-red);color:var(--rc-red);font-weight:700;font-size:12px;letter-spacing:.08em;transform:rotate(-9deg);opacity:.85;pointer-events:none}
+:root[data-appearance="receipt"] .task.checked .task-body{padding-right:78px}
+:root[data-appearance="receipt"] .task-date{border:1px dashed var(--line);background:transparent}
+:root[data-appearance="receipt"] .task-date.scheduled{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+:root[data-appearance="receipt"] .phase-footer{border-top:0;font-weight:700;color:var(--ink)}
+:root[data-appearance="receipt"] .phase-footer::before{content:"소계";margin-right:auto}
+:root[data-appearance="receipt"] .mini-bar{background:repeating-linear-gradient(90deg,#00000018 0 2px,transparent 2px 4px);height:10px}
+:root[data-appearance="receipt"] .mini-bar span{background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 3px,var(--ink) 3px 5px,transparent 5px 7px)}
+:root[data-appearance="receipt"] .calendar-layout{border:0;border-block:2px dashed var(--ink);box-shadow:none;background:transparent}
+:root[data-appearance="receipt"] .calendar-nav{border-bottom:1px dashed var(--line)}
+:root[data-appearance="receipt"] .day{border-color:var(--line);border-style:dashed;border-width:0 1px 1px 0}
+:root[data-appearance="receipt"] .day[aria-pressed="true"]{background:var(--ink);color:var(--paper);box-shadow:none}
+:root[data-appearance="receipt"] .calendar-side{border-left:1px dashed var(--line);background:transparent}
+:root[data-appearance="receipt"] :is(.calendar-side h3,.calendar-side .date-caption,.schedule-form label,.schedule-status,.agenda-item){background:transparent}
+:root[data-appearance="receipt"] :is(.schedule-form select,.schedule-form input,.cloud-controls select){border:1px solid var(--ink);background:var(--paper)}
+:root[data-appearance="receipt"] :is(.schedule-submit,.cloud-button){border:1px solid var(--ink);background:var(--ink);color:var(--paper);box-shadow:none}
+:root[data-appearance="receipt"] .cloud-panel{border:1px dashed var(--ink);box-shadow:none;background:transparent}
+:root[data-appearance="receipt"] :is(.shop-dialog,.task-detail){border:0;box-shadow:0 18px 40px -10px #00000066}
+:root[data-appearance="receipt"] :is(.shop-header,.detail-header){background:var(--paper);color:var(--ink);border-bottom:2px dashed var(--ink)}
+:root[data-appearance="receipt"] .shop-close{border:1px solid var(--ink);background:var(--paper);color:var(--ink)}
+:root[data-appearance="receipt"] :is(.shop-card,.trophy-card){border:1px dashed var(--ink);box-shadow:none}
+:root[data-appearance="receipt"] footer{border-top:2px dashed var(--ink);justify-content:center;text-align:center;flex-direction:column;gap:4px}
+:root[data-appearance="receipt"] footer .mono:first-child::before{content:"감사합니다 · "}
+:root[data-appearance="receipt"] footer::after{content:"";display:block;height:34px;margin:8px auto 0;width:min(260px,70%);background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 8px,var(--ink) 8px 11px,transparent 11px 12px)}
+:root[data-appearance="receipt"] button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):not(.placed-sticker):not(.celebration-close):hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.shop-card[data-appearance="receipt"] .theme-sample{background:#d9d5cc;padding:12px 26px 0;justify-content:flex-start;gap:7px}
+.shop-card[data-appearance="receipt"] .sample-heading{width:100%;height:auto;flex:1;background:#fbfaf5 repeating-linear-gradient(transparent 0 10px,#2a2a2a 10px 11px,transparent 11px 15px);background-clip:content-box;padding:10px 10px 0;border-bottom:2px dashed #2a2a2a}
+.shop-card[data-appearance="receipt"] .sample-lines{display:none}
+.shop-card[data-appearance="receipt"] .shop-action.primary{background:#2a2a2a;color:#fbfaf5}
+@media(max-width:800px){:root[data-appearance="receipt"] #projectContent{margin:20px 10px 40px}:root[data-appearance="receipt"] .overview>div+div{border-left:0;border-top:1px dashed var(--line)}:root[data-appearance="receipt"] .calendar-side{border-left:0;border-top:1px dashed var(--line)}}
+
+/* Paid theme: 칠판 교실 (classroom chalkboard). Green board, chalk lines, tally-mark progress, circled checks. */
+:root[data-appearance="chalkboard"]{color-scheme:dark;--bg:#2e4636;--paper:#34503e;--ink:#eef0e6;--muted:#bccabc;--line:#eef0e655;--shadow:transparent;--grid:transparent;--ck-yellow:#f4e48c;--ck-pink:#f4aebf;--ck-wood:#8a5a34;--ck-glow:0 0 1.5px #ffffff66}
+:root[data-appearance="chalkboard"] body{background:radial-gradient(ellipse at 20% 10%,#ffffff0d,transparent 45%),radial-gradient(ellipse at 80% 70%,#ffffff0a,transparent 50%),var(--bg);text-shadow:var(--ck-glow)}
+:root[data-appearance="chalkboard"] .topbar{background:var(--ck-wood);border-bottom:6px solid #6a4224;color:#fff4e6;text-shadow:none}
+:root[data-appearance="chalkboard"] .brand-icon{background:var(--ck-yellow);border:2px solid #fff4e6;box-shadow:none;color:#2e4636}
+:root[data-appearance="chalkboard"] :is(.nav-button,.shop-open){border:2px solid #fff4e6;background:transparent;color:#fff4e6}
+:root[data-appearance="chalkboard"] .shop-wallet-pill{border-color:currentColor}
+:root[data-appearance="chalkboard"] h1{letter-spacing:-.01em;font-weight:700}
+:root[data-appearance="chalkboard"] .hero h1{border-bottom:3px solid var(--ck-yellow);display:inline-block;padding-bottom:4px}
+:root[data-appearance="chalkboard"] .overview{border:2px solid var(--line);box-shadow:none}
+:root[data-appearance="chalkboard"] .overview>div+div{border-left:2px dashed var(--line)}
+:root[data-appearance="chalkboard"] .progress-card{background:transparent;color:var(--ink)}
+:root[data-appearance="chalkboard"] .big-number{color:var(--ck-yellow)}
+:root[data-appearance="chalkboard"] .bar{height:26px;border:0;background:transparent}
+:root[data-appearance="chalkboard"] .bar>span{background:repeating-linear-gradient(90deg,var(--ink) 0 3px,transparent 3px 9px,var(--ink) 9px 12px,transparent 12px 18px,var(--ink) 18px 21px,transparent 21px 27px,var(--ink) 27px 30px,transparent 30px 44px);position:relative}
+:root[data-appearance="chalkboard"] .bar>span::after{content:"";position:absolute;inset:40% 0 auto;height:3px;background:repeating-linear-gradient(90deg,var(--ck-yellow) 0 34px,transparent 34px 44px);transform:rotate(-8deg)}
+:root[data-appearance="chalkboard"] .count-numbers strong{color:var(--ck-yellow)}
+:root[data-appearance="chalkboard"] .count-numbers>div+div{border-left:2px dashed var(--line)}
+:root[data-appearance="chalkboard"] .filters{border:2px solid var(--ink);background:transparent}
+:root[data-appearance="chalkboard"] .filter[aria-pressed="true"]{background:var(--ink);color:var(--bg);text-shadow:none}
+:root[data-appearance="chalkboard"] .phase-count{border:2px solid var(--ink);background:transparent}
+:root[data-appearance="chalkboard"] .phase{border:2px solid var(--line);background:#ffffff06;box-shadow:none}
+:root[data-appearance="chalkboard"] .phase-heading{background:transparent;color:var(--ink);border-bottom:2px dashed var(--line)}
+:root[data-appearance="chalkboard"] .phase-heading:is(:hover,:focus-within){background:#ffffff0d;color:var(--ink)}
+:root[data-appearance="chalkboard"] .badge,:root[data-appearance="chalkboard"] .phase-heading:is(:hover,:focus-within) .badge{border:2px solid var(--ck-pink);background:transparent;color:var(--ck-pink);box-shadow:none;border-radius:999px}
+:root[data-appearance="chalkboard"] .task+.task{border-top:2px dashed #eef0e622}
+:root[data-appearance="chalkboard"] .task input{border:2px solid var(--ink);background:transparent;border-radius:3px}
+:root[data-appearance="chalkboard"] .task input:checked{background:transparent;border-color:var(--ck-yellow);border-radius:50%;box-shadow:0 0 0 3px #f4e48c33}
+:root[data-appearance="chalkboard"] .task input:checked::after{border-color:var(--ck-yellow)}
+:root[data-appearance="chalkboard"] .task.checked .task-text{color:var(--muted);text-decoration-color:var(--ck-pink);text-decoration-thickness:2px}
+:root[data-appearance="chalkboard"] .task-date{border:1px dashed var(--line);background:transparent;color:var(--muted)}
+:root[data-appearance="chalkboard"] .task-date.scheduled{border:2px solid var(--ck-yellow);color:var(--ck-yellow);background:transparent}
+:root[data-appearance="chalkboard"] .phase-footer{border-top:2px dashed #eef0e622}
+:root[data-appearance="chalkboard"] .mini-bar{background:transparent;height:12px}
+:root[data-appearance="chalkboard"] .mini-bar span{background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 6px)}
+:root[data-appearance="chalkboard"] .calendar-layout{border:2px solid var(--line);box-shadow:none;background:transparent}
+:root[data-appearance="chalkboard"] .calendar-nav{border-bottom:2px dashed var(--line)}
+:root[data-appearance="chalkboard"] :is(.calendar-button,.calendar-button){border:2px solid var(--ink);background:transparent}
+:root[data-appearance="chalkboard"] .day{border-color:#eef0e622}
+:root[data-appearance="chalkboard"] .day.blank{background:#00000018}
+:root[data-appearance="chalkboard"] .day[aria-pressed="true"]{background:transparent;color:var(--ck-yellow);box-shadow:inset 0 0 0 2px var(--ck-yellow)}
+:root[data-appearance="chalkboard"] .day[aria-current="date"] .day-number{background:var(--ck-pink);color:#2e4636;text-shadow:none}
+:root[data-appearance="chalkboard"] .calendar-side{border-left:2px dashed var(--line);background:transparent}
+:root[data-appearance="chalkboard"] :is(.calendar-side h3,.calendar-side .date-caption,.schedule-form label,.schedule-status,.agenda-item){background:transparent}
+:root[data-appearance="chalkboard"] :is(.schedule-form select,.schedule-form input,.cloud-controls select){border:2px solid var(--line);background:#00000020;color:var(--ink)}
+:root[data-appearance="chalkboard"] :is(.schedule-submit,.cloud-button){border:2px solid var(--ck-yellow);background:transparent;color:var(--ck-yellow);box-shadow:none}
+:root[data-appearance="chalkboard"] .cloud-panel{border:2px dashed var(--line);box-shadow:none;background:transparent}
+:root[data-appearance="chalkboard"] :is(.shop-dialog,.task-detail){border:6px solid var(--ck-wood);background:var(--bg);color:var(--ink);box-shadow:0 20px 50px #00000080}
+:root[data-appearance="chalkboard"] :is(.shop-header,.detail-header){background:transparent;color:var(--ink);border-bottom:2px dashed var(--line)}
+:root[data-appearance="chalkboard"] .shop-close{border:2px solid var(--ink);background:transparent;color:var(--ink)}
+:root[data-appearance="chalkboard"] :is(.shop-card,.trophy-card){border:2px solid var(--line);background:transparent;box-shadow:none}
+:root[data-appearance="chalkboard"] .shop-action{background:transparent;color:var(--ink);border:2px solid var(--line)}
+:root[data-appearance="chalkboard"] footer{border-top:12px solid var(--ck-wood);padding-top:14px}
+:root[data-appearance="chalkboard"] footer .mono:first-child::before{content:"오늘의 한마디: "}
+:root[data-appearance="chalkboard"] .reset{color:var(--ck-pink);border-bottom-color:var(--ck-pink)}
+:root[data-appearance="chalkboard"] button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):not(.placed-sticker):not(.celebration-close):hover{background:#ffffff14;color:var(--ck-yellow);border-color:var(--ck-yellow)}
+.shop-card[data-appearance="chalkboard"] .theme-sample{background:#2e4636;border:0;border-bottom:8px solid #8a5a34;padding:16px;gap:10px;justify-content:center}
+.shop-card[data-appearance="chalkboard"] .sample-heading{width:62%;height:3px;background:#f4e48c;box-shadow:0 0 1.5px #fff}
+.shop-card[data-appearance="chalkboard"] .sample-lines{height:16px;width:70%;border:0;background:repeating-linear-gradient(90deg,#eef0e6 0 3px,transparent 3px 8px)}
+.shop-card[data-appearance="chalkboard"] .sample-lines::after{display:none}
+.shop-card[data-appearance="chalkboard"] .shop-action.primary{background:#2e4636;color:#f4e48c;border-color:#2e4636}
+@media(max-width:800px){:root[data-appearance="chalkboard"] .overview>div+div{border-left:0;border-top:2px dashed var(--line)}:root[data-appearance="chalkboard"] .calendar-side{border-left:0;border-top:2px dashed var(--line)}}
+
+/* Default theme: 원고지 (manuscript sheet). One task = one ruled cell; a finished task fills its cell. */
+:root[data-appearance="lime"]{--bg:#fcfcfa;--paper:#fcfcfa;--ink:#1d2230;--muted:#5f6470;--line:#e6e2dd;--shadow:transparent;--grid:transparent;--ms-rule:#e0573a;--ms-soft:#f1cbbf;--ms-tint:#fbefea;--ms-text:#b23d1d;--ms-cell:22px}
+:root[data-appearance="lime"][data-theme="dark"]{--bg:#17181d;--paper:#1d1f25;--ink:#ecebe7;--muted:#a9abb3;--line:#33353d;--ms-rule:#ef6f50;--ms-soft:#5a3a31;--ms-tint:#2e221f;--ms-text:#f39a82}
+:root[data-appearance="lime"] body{font-variant-numeric:tabular-nums}
+:root[data-appearance="lime"] ::selection{background:var(--ms-soft);color:var(--ink)}
+:root[data-appearance="lime"] :is(button,input,select,a):focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+:root[data-appearance="lime"] :is(.mono,.phase-count,.day-number,.shop-wallet-pill,.phase-no){font-family:inherit;letter-spacing:0}
+:root[data-appearance="lime"] .topbar{border-bottom:5px double var(--ms-rule)}
+:root[data-appearance="lime"] .badge-glyph{display:none}
+:root[data-appearance="lime"] .phase-heading{position:relative}
+:root[data-appearance="lime"] .phase-meta{position:absolute;right:20px;bottom:15px;margin:0}
+:root[data-appearance="lime"] .brand{font-size:16px;letter-spacing:-.2px}
+:root[data-appearance="lime"] .brand-icon{width:30px;height:30px;border:1px solid var(--ms-rule);background:linear-gradient(var(--ms-rule),var(--ms-rule)) 0 0/50% 50% no-repeat,linear-gradient(var(--ms-rule),var(--ms-rule)) 50% 0/1px 100% no-repeat,linear-gradient(var(--ms-rule),var(--ms-rule)) 0 50%/100% 1px no-repeat,var(--paper)}
+:root[data-appearance="lime"] .brand-icon>*{display:none}
+:root[data-appearance="lime"] :is(.nav-button,.shop-open){border:1px solid var(--ink);background:var(--paper);color:var(--ink)}
+:root[data-appearance="lime"] .nav-button:is(:hover,:active){transform:none}
+:root[data-appearance="lime"] h1{letter-spacing:-.03em;font-weight:700}
+:root[data-appearance="lime"] .overview{border:0;border-block:1px solid var(--ms-rule);margin-bottom:34px}
+:root[data-appearance="lime"] .overview>div{padding:22px 26px 22px 0}
+:root[data-appearance="lime"] .overview>div+div{border-left:1px solid var(--ms-soft);padding-left:26px}
+:root[data-appearance="lime"] .progress-card{background:transparent;color:var(--ink)}
+:root[data-appearance="lime"] .metric-title{font-size:13px;font-weight:700;color:var(--muted)}
+:root[data-appearance="lime"] .metric-title .mono{display:none}
+:root[data-appearance="lime"] .big-number{font-family:inherit;font-weight:700;font-size:28px;line-height:1.2;letter-spacing:-.02em;margin:10px 0 12px}
+:root[data-appearance="lime"] .big-number small{font-size:18px;margin-left:1px}
+:root[data-appearance="lime"] .bar{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);border:0}
+:root[data-appearance="lime"] .metric-foot{font-size:13px;color:var(--muted)}
+:root[data-appearance="lime"] .count-numbers{gap:26px;margin:10px 0 8px}
+:root[data-appearance="lime"] .count-numbers strong{font-family:inherit;font-weight:700;font-size:28px;line-height:1.2;letter-spacing:-.02em}
+:root[data-appearance="lime"] .count-numbers span{font-size:13px}
+:root[data-appearance="lime"] .count-numbers>div+div{border-left-color:var(--ms-soft);padding-left:26px}
+:root[data-appearance="lime"] .next-title{font-size:18px;margin:10px 0 8px}
+:root[data-appearance="lime"] .next-phase{font-size:13px}
+.ms-cells{display:none}
+:root[data-appearance="lime"] .ms-cells{display:flex;flex-wrap:wrap;row-gap:6px}
+:root[data-appearance="lime"] .ms-group{display:flex;margin-right:8px}
+:root[data-appearance="lime"] .ms-cell{width:var(--ms-cell);height:var(--ms-cell);border:1px solid var(--ms-rule);margin-left:-1px;position:relative;transition:background-color .25s cubic-bezier(.16,1,.3,1)}
+:root[data-appearance="lime"] .ms-group .ms-cell:first-child{margin-left:0}
+:root[data-appearance="lime"] .ms-cell.on{background:var(--ms-rule)}
+:root[data-appearance="lime"] .ms-cell.on::after{content:"";position:absolute;left:50%;top:44%;width:28%;height:48%;border:solid var(--paper);border-width:0 2px 2px 0;transform:translate(-50%,-50%) rotate(45deg)}
+:root[data-appearance="lime"] .phase-heading .ms-cells{margin-top:12px;--ms-cell:14px}
+:root[data-appearance="lime"] .phase-heading .ms-cell.on::after{border-width:0 1.5px 1.5px 0}
+:root[data-appearance="lime"] .phase-count{display:none}
+:root[data-appearance="lime"] .filters{border:1px solid var(--ink)}
+:root[data-appearance="lime"] .filter{font-size:13px}
+:root[data-appearance="lime"] .filter[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+:root[data-appearance="lime"] .board{gap:22px}
+:root[data-appearance="lime"] .phase{border:1px solid var(--ms-soft);background:var(--paper)}
+:root[data-appearance="lime"] .phase-heading{background:var(--paper);color:var(--ink);border-bottom:1px solid var(--ms-rule);padding:18px 20px 16px}
+:root[data-appearance="lime"] .phase-heading:is(:hover,:focus-within){background:var(--ms-tint);color:var(--ink)}
+:root[data-appearance="lime"] .phase-meta{margin-bottom:6px;justify-content:flex-end}
+:root[data-appearance="lime"] .phase-no{display:none}
+:root[data-appearance="lime"] .badge,:root[data-appearance="lime"] .phase-heading:is(:hover,:focus-within) .badge{border:0;background:transparent;color:var(--muted);box-shadow:none;padding:0;font-size:12px;font-weight:700}
+:root[data-appearance="lime"] .phase-toggle{font-size:18px;letter-spacing:-.02em;font-weight:700}
+:root[data-appearance="lime"] .desc{font-size:13px;color:var(--muted);opacity:1}
+:root[data-appearance="lime"] .task input{border:1.5px solid var(--ink);background:var(--paper)}
+:root[data-appearance="lime"] .task input:checked{background:var(--ms-rule);border-color:var(--ms-rule)}
+:root[data-appearance="lime"] .task input:checked::after{border-color:var(--paper)}
+:root[data-appearance="lime"] .task-open{font-size:14px}
+:root[data-appearance="lime"] .note{font-size:12px}
+:root[data-appearance="lime"] .task-date{font-size:12px;border-color:var(--line)}
+:root[data-appearance="lime"] .task-date.scheduled{background:var(--ms-tint);color:var(--ms-text);border-color:var(--ms-soft)}
+:root[data-appearance="lime"] .phase-footer{font-size:12px}
+:root[data-appearance="lime"] .mini-bar{display:none}
+:root[data-appearance="lime"] .calendar-layout{border:1px solid var(--ms-soft)}
+:root[data-appearance="lime"] .calendar-nav{border-bottom:1px solid var(--ms-rule)}
+:root[data-appearance="lime"] .calendar-button{border:1px solid var(--ink)}
+:root[data-appearance="lime"] .weekdays span{font-size:12px}
+:root[data-appearance="lime"] .day[aria-pressed="true"]{background:var(--ms-tint);color:var(--ink);box-shadow:inset 0 0 0 1px var(--ms-rule)}
+:root[data-appearance="lime"] .day-count{font-size:11px;color:var(--ms-text)}
+:root[data-appearance="lime"] .calendar-side{border-left:1px solid var(--ms-soft);background-image:none}
+:root[data-appearance="lime"] :is(.schedule-form select,.schedule-form input,.cloud-controls select){border:1px solid var(--line);font-size:13px}
+:root[data-appearance="lime"] .schedule-submit{border:1px solid var(--ink);background:var(--ink);color:var(--paper);font-size:13px}
+:root[data-appearance="lime"] .agenda-item input{accent-color:var(--ms-rule)}
+:root[data-appearance="lime"] .cloud-panel{border:1px solid var(--ms-soft)}
+:root[data-appearance="lime"] .cloud-button{border:1px solid var(--ink);background:var(--ink);color:var(--paper)}
+:root[data-appearance="lime"] :is(.shop-dialog,.task-detail){border:1px solid var(--ink);box-shadow:none}
+:root[data-appearance="lime"] :is(.shop-header,.detail-header){background:var(--paper);color:var(--ink);border-bottom:3px double var(--ms-rule)}
+:root[data-appearance="lime"] .shop-balance strong{font-family:inherit;font-size:24px;font-weight:700;letter-spacing:-.02em}
+:root[data-appearance="lime"] .shop-close{border:1px solid var(--ink);background:var(--paper);color:var(--ink)}
+:root[data-appearance="lime"] :is(.shop-card,.trophy-card){border:1px solid var(--ms-soft)}
+:root[data-appearance="lime"] .shop-card[data-appearance="lime"] .theme-sample{background:var(--paper)}
+:root[data-appearance="lime"] .shop-action{border:1px solid var(--ink)}
+:root[data-appearance="lime"] .save-note,:root[data-appearance="lime"] .reset{font-size:12px}
+:root[data-appearance="lime"] footer{border-top:1px solid var(--ms-rule);justify-content:flex-end}
+:root[data-appearance="lime"] footer .mono{font-size:12px}
+:root[data-appearance="lime"] footer .mono:first-child{display:none}
+:root[data-appearance="lime"]:not([data-appearance="retro"]):not([data-appearance="blueprint"]) button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigger):not(.trophy-choice):not(.placed-sticker):not(.celebration-close):hover{background:var(--ms-tint);color:var(--ink);border-color:var(--ink)}
+:root[data-appearance="lime"] :is(.shop-close,.detail-close){font-size:0;line-height:0}
+:root[data-appearance="lime"] :is(.shop-close,.detail-close)::before{content:"";display:block;width:16px;height:16px;margin:auto;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M4%204l8%208M12%204l-8%208'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M4%204l8%208M12%204l-8%208'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat}
+:root[data-appearance="lime"] #prevMonth{font-size:0;line-height:0}
+:root[data-appearance="lime"] #prevMonth::before{content:"";display:block;width:16px;height:16px;margin:auto;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M13%208H3M7%204L3%208l4%204'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M13%208H3M7%204L3%208l4%204'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat}
+:root[data-appearance="lime"] #nextMonth{font-size:0;line-height:0}
+:root[data-appearance="lime"] #nextMonth::before{content:"";display:block;width:16px;height:16px;margin:auto;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M3%208h10M9%204l4%204-4%204'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M3%208h10M9%204l4%204-4%204'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat}
+:root[data-appearance="lime"] #theme{font-size:0;line-height:0}
+:root[data-appearance="lime"] #theme::before{content:"";display:block;width:16px;height:16px;margin:auto;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M8%202.5a5.5%205.5%200%201%200%200%2011a5.5%205.5%200%201%200%200-11z'%2F%3E%3Cpath%20d%3D'M8%202.5a5.5%205.5%200%200%201%200%2011z'%20fill%3D'black'%20stroke%3D'none'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M8%202.5a5.5%205.5%200%201%200%200%2011a5.5%205.5%200%201%200%200-11z'%2F%3E%3Cpath%20d%3D'M8%202.5a5.5%205.5%200%200%201%200%2011z'%20fill%3D'black'%20stroke%3D'none'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat}
+:root[data-appearance="lime"] .phase-toggle[aria-expanded="true"] .chevron{font-size:0;line-height:0}
+:root[data-appearance="lime"] .phase-toggle[aria-expanded="true"] .chevron::before{content:"";display:block;width:16px;height:16px;margin:auto;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M3%208h10'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M3%208h10'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat}
+:root[data-appearance="lime"] .phase-toggle[aria-expanded="false"] .chevron{font-size:0;line-height:0}
+:root[data-appearance="lime"] .phase-toggle[aria-expanded="false"] .chevron::before{content:"";display:block;width:16px;height:16px;margin:auto;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M3%208h10M8%203v10'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2016%2016'%20fill%3D'none'%20stroke%3D'black'%20stroke-width%3D'1.75'%20stroke-linecap%3D'square'%3E%3Cpath%20d%3D'M3%208h10M8%203v10'%2F%3E%3C%2Fsvg%3E") center/16px no-repeat}
+:root[data-appearance="lime"] .phase-toggle .chevron{width:16px;height:16px;flex:0 0 16px}
+:root[data-appearance="lime"] :is(#prevMonth,#nextMonth){min-width:36px}
+:root[data-appearance="lime"] .reset-glyph{display:none}
+:root[data-appearance="lime"] #theme{display:flex;align-items:center;justify-content:center;width:auto;min-width:36px;height:auto;align-self:stretch;padding:0}
+:root[data-appearance="lime"] #theme::before{margin:0}
+/* Calendar shares the manuscript ruling. */
+:root[data-appearance="lime"] .calendar-layout{border-color:var(--ms-rule)}
+:root[data-appearance="lime"] .calendar-side{border-left-color:var(--ms-rule)}
+:root[data-appearance="lime"] .day{border-right-color:var(--ms-soft);border-bottom-color:var(--ms-soft)}
+:root[data-appearance="lime"] .weekdays span{border-bottom-color:var(--ms-rule)}
+/* No display numbers: the cell strip and one sentence carry the quantity. */
+:root[data-appearance="lime"] .big-number{display:none}
+:root[data-appearance="lime"] .count-numbers{display:flex;gap:14px;margin:12px 0 6px}
+:root[data-appearance="lime"] .count-numbers>div{display:flex;align-items:baseline;gap:6px}
+:root[data-appearance="lime"] .count-numbers>div+div{padding-left:14px}
+:root[data-appearance="lime"] .count-numbers strong{font-size:15px;font-weight:700;letter-spacing:0}
+:root[data-appearance="lime"] .count-numbers span{margin:0;font-size:14px}
+:root[data-appearance="lime"] #overallCells{margin:14px 0 10px}
+:root[data-appearance="lime"] #overallText{font-size:14px;font-weight:700;color:var(--ink)}
+:root[data-appearance="lime"]{scrollbar-color:var(--ms-soft) var(--paper)}
+:root[data-appearance="lime"] input[type=date]{accent-color:var(--ms-rule)}
+@media(max-width:800px){:root[data-appearance="lime"] .overview>div{padding:18px 0}:root[data-appearance="lime"] .overview>div+div{padding-left:0;border-left:0}:root[data-appearance="lime"] .overview>.count-card{border-top:1px solid var(--ms-soft)}:root[data-appearance="lime"] .overview>.next-card{border-top:1px solid var(--ms-soft);padding-left:22px;border-left:1px solid var(--ms-soft)}:root[data-appearance="lime"] .calendar-side{border-left:0;border-top:1px solid var(--ms-rule)}}
+@media(max-width:520px){:root[data-appearance="lime"] .overview>.next-card{padding-left:0;border-left:0}:root[data-appearance="lime"] .overview>div{padding:16px 0}}
 </style>
 </head>
 <body>
 
-<header class="topbar"><div class="wrap nav"><div class="brand"><span class="brand-icon" aria-hidden="true">↗</span><span>PROGRESS<br>TRACKER</span></div><div class="nav-right"><button class="shop-open" id="trophyOpen" type="button">트로피 진열장</button><button class="shop-open" id="shopOpen" type="button">상점 <span class="shop-wallet-pill" id="walletBalance">0 P</span></button><button class="nav-button" id="theme" aria-label="어두운 테마로 전환" title="테마 전환">◐</button></div></div></header>
+<header class="topbar"><div class="wrap nav"><div class="brand"><span class="brand-icon" aria-hidden="true"><span class="brand-arrow">↗</span><svg class="blueprint-mark" viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width=".8"><path d="M3 23 31 7 59 23M9 20v23h44V20M23 43V23h16v20M12 26h7v9h-7zM43 26h7v9h-7zM23 23l8-5 8 5M31 7v36M2 45h60M3 4v37M1 7h4M1 40h4M9 3h44M9 1v4M53 1v4"/><path d="M7 21 31 4l26 16M11 39h10m20 0h10" stroke-dasharray="2 2"/></svg></span><span>PROGRESS<br>TRACKER</span></div><div class="nav-right"><button class="shop-open" id="trophyOpen" type="button">트로피 진열장</button><button class="shop-open" id="shopOpen" type="button">상점 <span class="shop-wallet-pill" id="walletBalance">0 P</span></button><button class="nav-button" id="theme" aria-label="어두운 테마로 전환" title="테마 전환">◐</button></div></div></header>
 <div id="projectCanvas">
 <div id="stickerSurface" hidden></div>
 <div id="stickerLayer" aria-label="붙인 스티커" inert></div>
@@ -172,19 +562,19 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
 <main class="wrap" id="projectContent">
 <section class="cloud-panel" id="cloudPanel" aria-label="공용 계정과 프로젝트" hidden><div class="cloud-top"><span class="cloud-account" id="cloudAccount">계정 확인 중</span><a class="cloud-button" id="cloudLogin" href="https://sensior-progress-tracker.pages.dev/auth/login">GitHub 로그인</a><button class="cloud-button" id="cloudLogout" type="button" hidden>로그아웃</button></div><div class="cloud-controls" id="cloudControls" hidden><label for="cloudProjects">프로젝트</label><select id="cloudProjects"><option value="">프로젝트 선택</option></select><button class="cloud-button" id="cloudImport" type="button">JSON 가져오기</button><input id="cloudImportFile" type="file" accept=".html,.json,text/html,application/json" hidden></div><p class="cloud-status" id="cloudStatus" role="status"></p></section>
 
-<div class="hero"><div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div></div>
+<div class="hero" id="sticker-hero"><div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p></div></div>
 <div class="overview" aria-label="프로젝트 진행 현황">
-<div class="progress-card"><div class="metric-title"><span>전체 진행률</span><span class="mono">PROGRESS ↗</span></div><div class="big-number"><span id="percent">0</span><small>%</small></div><div class="bar" id="progress" role="progressbar" aria-label="전체 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="overallBar"></span></div><div class="metric-foot" id="overallText"></div></div>
-<div class="count-card"><div class="metric-title"><span>작업 현황</span><span class="mono">TASKS / ✓</span></div><div class="count-numbers"><div><strong id="doneCount">0</strong><span>완료한 작업</span></div><div><strong id="leftCount">0</strong><span>남은 작업</span></div></div><div class="metric-foot" id="phaseSummary"></div></div>
-<div class="next-card"><div class="metric-title"><span>다음 할 일</span><span class="mono">UP NEXT →</span></div><div class="next-title" id="nextTask"></div><div class="next-phase" id="nextPhase"></div></div></div>
+<div class="progress-card" id="sticker-progress"><div class="metric-title"><span>전체 진행률</span><span class="mono">PROGRESS ↗</span></div><div class="big-number"><span id="percent">0</span><small>%</small></div><div class="ms-cells" id="overallCells" aria-hidden="true"></div><div class="bar" id="progress" role="progressbar" aria-label="전체 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="overallBar"></span><div class="blueprint-scale" aria-hidden="true"><span>0%</span><span>50%</span><span>100%</span></div></div><div class="metric-foot" id="overallText"></div></div>
+<div class="count-card" id="sticker-counts"><div class="metric-title"><span>작업 현황</span><span class="mono">TASKS / ✓</span></div><div class="count-numbers"><div><strong id="doneCount">0</strong><span>완료한 작업</span></div><div><strong id="leftCount">0</strong><span>남은 작업</span></div></div><div class="metric-foot" id="phaseSummary"></div></div>
+<div class="next-card" id="sticker-next"><div class="metric-title"><span>다음 할 일</span><span class="mono">UP NEXT →</span></div><div class="next-title" id="nextTask"></div><div class="next-phase" id="nextPhase"></div></div></div>
 <section class="calendar-section" aria-labelledby="calendarTitle">
 <h2 id="calendarTitle">업무 캘린더</h2><p class="calendar-intro">날짜를 선택하고 기존 업무를 등록하세요. 업무마다 날짜 하나를 지정할 수 있어요.</p>
-<div class="calendar-layout"><div class="calendar-main"><div class="calendar-nav"><h3 id="calendarMonth" aria-live="polite"></h3><div class="calendar-actions"><button class="calendar-button" id="prevMonth" aria-label="이전 달">←</button><button class="calendar-button" id="today">오늘</button><button class="calendar-button" id="nextMonth" aria-label="다음 달">→</button></div></div><div class="weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div class="calendar-days" id="calendarDays" role="group" aria-label="날짜 선택"></div></div>
-<div class="calendar-side"><h3 id="selectedDateTitle"></h3><p class="date-caption">등록된 업무의 체크 상태는 프로젝트 보드와 연결됩니다.</p>
+<div class="calendar-layout"><div class="calendar-main" id="sticker-calendar"><div class="calendar-nav"><h3 id="calendarMonth" aria-live="polite"></h3><div class="calendar-actions"><button class="calendar-button" id="prevMonth" aria-label="이전 달">←</button><button class="calendar-button" id="today">오늘</button><button class="calendar-button" id="nextMonth" aria-label="다음 달">→</button></div></div><div class="weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div class="calendar-days" id="calendarDays" role="group" aria-label="날짜 선택"></div></div>
+<div class="calendar-side" id="sticker-agenda"><h3 id="selectedDateTitle"></h3><p class="date-caption">등록된 업무의 체크 상태는 프로젝트 보드와 연결됩니다.</p>
 <form class="schedule-form" id="scheduleForm"><label for="scheduleTask">등록할 업무</label><select id="scheduleTask" required></select><label for="scheduleDate">등록 날짜</label><input type="date" id="scheduleDate" required min="0001-01-01" max="9999-12-31"><button class="schedule-submit" id="scheduleSubmit" type="submit">선택한 날짜에 등록</button></form>
 <p class="schedule-status" id="scheduleStatus" role="status"></p><ul class="agenda" id="agenda" aria-label="선택한 날짜의 업무"></ul></div></div></section>
 <div class="board-toolbar"><div class="board-title"><h2>프로젝트 보드</h2><span class="phase-count" id="phaseCount"></span></div><div class="filters" role="group" aria-label="작업 상태 필터"><button class="filter" data-filter="all" aria-pressed="true">전체</button><button class="filter" data-filter="pending" aria-pressed="false">미완료</button><button class="filter" data-filter="done" aria-pressed="false">완료</button></div></div>
-<div class="board" id="phases"></div><div class="bottom-note"><p class="save-note" role="status"><span class="save-dot" aria-hidden="true"></span><span id="saveText">체크 상태와 등록 날짜는 계정에 저장됩니다.</span></p><button class="reset" id="reset">체크 초기화 ↺</button></div>
+<div class="board" id="phases"></div><div class="bottom-note"><p class="save-note" role="status"><span class="save-dot" aria-hidden="true"></span><span id="saveText">체크 상태와 등록 날짜는 계정에 저장됩니다.</span></p><button class="reset" id="reset">체크 초기화<span class="reset-glyph"> ↺</span></button></div>
 <footer><span class="mono">SMALL STEPS. REAL PROGRESS.</span><span class="mono" id="updated"></span></footer></main></div>
 
 <dialog class="celebration" id="celebration" aria-labelledby="celebrationTitle" aria-describedby="celebrationSummary">
@@ -251,7 +641,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
 <div class="shop-header"><h2 id="shopTitle">상점</h2><button class="shop-close" id="shopClose" aria-label="상점 닫기" type="button" autofocus>×</button></div>
 <div class="shop-body"><div class="shop-balance"><span>보유 포인트</span><strong id="shopBalance">0 P</strong></div><p class="shop-help" id="shopHelp">보유 포인트로 테마를 구매하세요. 구매한 테마는 계속 사용할 수 있어요.</p>
 <div class="shop-grid" id="shopItems"></div>
-<div class="shop-bottom"><span class="shop-help">기본 네온 라임은 무료예요.</span><button class="shop-action" id="defaultTheme" type="button">기본 테마 적용</button></div>
+<div class="shop-bottom"><span class="shop-help">기본 원고지 테마는 무료예요.</span><button class="shop-action" id="defaultTheme" type="button">기본 테마 적용</button></div>
 <h3>진열장 테마</h3><p class="shop-help">기본은 무료예요. 구매한 테마는 트로피 진열장에서 선택할 수 있어요.</p>
 <div class="shop-grid" id="shelfShopItems"></div>
 <p class="shop-help" id="shelfShopStatus" role="status"></p>
@@ -471,10 +861,10 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
   document.getElementById('subtitle').textContent = data.subtitle || '';
   document.getElementById('updated').textContent = data.updated ? 'UPDATED / ' + data.updated : '';
   var themeCatalog = [
-    {id:'pink', name:'네온 핑크', color:'#ff7de9', price:100},
-    {id:'red', name:'빨강', color:'#ff6666', price:100},
-    {id:'orange', name:'오렌지', color:'#ffae66', price:100},
-    {id:'blue', name:'파랑', color:'#6aa9ff', price:100}
+    {id:'retro', name:'레트로 데스크톱', color:'#c0c0c0', price:200, description:'입체 창 · 폴더 · 클래식 진행 막대'},
+    {id:'blueprint', name:'블루프린트 랩', color:'#efe2c3', price:200, description:'설계도 격자 · 치수선 · 눈금형 진행 막대'},
+    {id:'receipt', name:'영수증', color:'#d0392b', price:200, description:'감열지 · 점선 절취선 · 결제완료 도장'},
+    {id:'chalkboard', name:'칠판 교실', color:'#f4e48c', price:200, description:'분필 글씨 · 바를 정 진행 막대 · 동그라미 체크'}
   ];
   var wallet = null, previewTheme = null, shopBusy = false;
   var shop = document.getElementById('themeShop');
@@ -485,6 +875,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
   }
   function applyTheme(id) {
     var theme = themeById(id);
+    document.documentElement.dataset.appearance = theme ? theme.id : 'lime';
     document.documentElement.style.setProperty('--lime', theme ? theme.color : '#edff55');
   }
   function refreshWallet() {
@@ -501,9 +892,10 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
     themeCatalog.forEach(function(theme) {
       var owned = wallet && wallet.owned.indexOf(theme.id) !== -1;
       var active = wallet && wallet.activeTheme === theme.id;
-      var card = el('article', 'shop-card'); card.style.setProperty('--sample', theme.color);
+      var card = el('article', 'shop-card'); card.style.setProperty('--sample', theme.color); card.dataset.appearance = theme.id;
       var sample = el('div', 'theme-sample'); sample.setAttribute('aria-hidden','true'); sample.appendChild(el('span','sample-heading')); sample.appendChild(el('span','sample-lines')); card.appendChild(sample);
       var body = el('div','shop-card-body'); body.appendChild(el('h3','',theme.name)); body.appendChild(el('p','theme-price', active ? '적용 중' : owned ? '구매 완료' : theme.price.toLocaleString('ko-KR') + ' P'));
+      if (theme.description) body.appendChild(el('p','theme-description',theme.description));
       var actions = el('div','theme-actions');
       var preview = el('button','shop-action','미리보기'); preview.type = 'button'; preview.id = 'preview-' + theme.id; preview.setAttribute('aria-pressed',String(previewTheme === theme.id)); preview.setAttribute('aria-label',theme.name + ' 미리보기');
       preview.onclick = function() { previewTheme = previewTheme === theme.id ? null : theme.id; applyTheme(previewTheme || (wallet ? wallet.activeTheme : 'lime')); renderShop(); document.getElementById(preview.id).focus({preventScroll:true}); };
@@ -604,15 +996,65 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
   var stickerActions = document.getElementById('stickerActions');
   var stickerRemove = document.getElementById('stickerRemove');
   var selectedSticker = null;
+  var placedStickers = [];
   var lastStickerPack = null;
   var editingSticker = false;
+  function anchorBounds(id) {
+    var target=document.getElementById(id==='sticker-title'?'title':id);
+    if(!target || !target.getBoundingClientRect) return null;
+    var box=target.getBoundingClientRect();
+    // The title element fills the row; measure the last line of its text instead.
+    if(id==='sticker-title' && document.createRange) {
+      var range=document.createRange();range.selectNodeContents(target);
+      var lines=range.getClientRects();if(lines.length) box=lines[lines.length-1];
+    }
+    if(!box.width || !box.height)return null;
+    return {left:box.left,top:box.top,width:box.width,height:box.height,right:box.left+box.width,bottom:box.top+box.height};
+  }
+  function fixedStickerAnchor(target,box,x,y) {
+    var edgeX=Math.round(Math.max(0,Math.min(1,(x-box.left)/box.width))*2)/2;
+    var edgeY=Math.round(Math.max(0,Math.min(1,(y-box.top)/box.height))*2)/2;
+    return {version:2,target:target,edgeX:edgeX,edgeY:edgeY,dx:x-box.left-box.width*edgeX,dy:y-box.top-box.height*edgeY};
+  }
+  function anchorPosition(sticker) {
+    if(!sticker.anchor) return null;
+    var a=sticker.anchor,box=anchorBounds(a.target);
+    if(!box)return null;
+    var page=projectCanvas.getBoundingClientRect();
+    var left=box.left-page.left+box.width*(a.version===2?a.edgeX:a.u)+(a.version===2?a.dx:0);
+    var top=box.top-page.top+box.height*(a.version===2?a.edgeY:a.v)+(a.version===2?a.dy:0);
+    // Clamp only the displayed position; retain the saved offset for wider windows.
+    var radius=Math.min(28*(sticker.scale ?? 1),page.width/2);
+    return {left:Math.max(radius,Math.min(page.width-radius,left)),top:top};
+  }
+  function findStickerAnchor(clientX,clientY) {
+    var title=anchorBounds('sticker-title');
+    if(title && clientX>=title.left-28 && clientX<=title.right+96 && clientY>=title.top-28 && clientY<=title.bottom+28)
+      return fixedStickerAnchor('sticker-title',title,clientX,clientY);
+    var ids=['sticker-hero','sticker-progress','sticker-counts','sticker-next','sticker-calendar','sticker-agenda'];
+    data.phases.forEach(function(phase){if(phase.tasks[0])ids.push('sticker-phase-'+phase.tasks[0].id);});
+    var best=null,distance=Infinity;
+    ids.forEach(function(id){
+      var box=anchorBounds(id);if(!box)return;
+      var d=Math.hypot(Math.max(box.left-clientX,0,clientX-box.right),Math.max(box.top-clientY,0,clientY-box.bottom));
+      if(d<distance){distance=d;best=fixedStickerAnchor(id,box,clientX,clientY);}
+    });
+    return best;
+  }
+  function refreshStickerPositions() {
+    placedStickers.forEach(function(item) { positionSticker(item.button,item.sticker); });
+    if(selectedSticker) selectPlacedSticker(selectedSticker);
+  }
+  if(typeof ResizeObserver !== 'undefined') new ResizeObserver(refreshStickerPositions).observe(projectCanvas);
+  window.addEventListener('resize',refreshStickerPositions);
   function stickerLeft(sticker) {
     if (sticker.canvas === 'page') return sticker.x*100 + '%';
     return 'calc(50% + min(100%, 1320px) * ' + (sticker.x-.5) + ')';
   }
   function positionSticker(node,sticker) {
-    node.style.left = stickerLeft(sticker);
-    node.style.top = sticker.y*100 + '%';
+    var anchored = anchorPosition(sticker);
+    node.style.left = anchored ? anchored.left+'px' : stickerLeft(sticker);
+    node.style.top = anchored ? anchored.top+'px' : sticker.y*100 + '%';
     node.style.setProperty('--sticker-scale',sticker.scale ?? 1);
   }
   function selectPlacedSticker(selection) {
@@ -622,7 +1064,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
     if (!selection) return;
     selection.button.setAttribute('aria-pressed','true');
     positionSticker(stickerActions,selection.sticker);
-    stickerActions.style.left = 'clamp(54px,' + stickerLeft(selection.sticker) + ',calc(100% - 54px))';
+    stickerActions.style.left = 'clamp(54px,' + (anchorPosition(selection.sticker) ? anchorPosition(selection.sticker).left+'px' : stickerLeft(selection.sticker)) + ',calc(100% - 54px))';
   }
   function showPlacedSticker(sticker) {
     var button = el('button','placed-sticker');
@@ -638,6 +1080,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
       button.appendChild(handle);
     });
     var selection = {button:button,sticker:sticker};
+    placedStickers.push(selection);
     button.onclick = function(event) {
       event.stopPropagation();
       if (editingSticker) return;
@@ -690,7 +1133,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
       editingSticker = true;
       positionSticker(button,point);
       try {
-        var patch = resizing ? {resizeId:sticker.id,scale:point.scale} : {moveId:sticker.id,x:point.x,y:point.y};
+        var patch = resizing ? {resizeId:sticker.id,scale:point.scale} : {moveId:sticker.id,x:point.x,y:point.y,...(point.anchor?{anchor:point.anchor}:{})};
         await cloudApi(projectStickerUrl,'PATCH',patch);
         Object.assign(sticker,point);
       } catch(error) { cloudMessage(error.message); }
@@ -708,6 +1151,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
     try {
       await cloudApi(projectStickerUrl,'PATCH',{removeId:selectedSticker.sticker.id});
       selectedSticker.button.remove();
+      placedStickers=placedStickers.filter(function(item){return item!==selectedSticker;});
       selectPlacedSticker(null);
       cloudMessage('스티커를 뗐어요.');
     } catch(error) { cloudMessage(error.message); }
@@ -773,7 +1217,8 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
     var bounds = projectCanvas.getBoundingClientRect();
     return {
       x:Math.max(0,Math.min(1,(clientX-bounds.left)/bounds.width)),
-      y:Math.max(0,Math.min(1,(clientY-bounds.top)/bounds.height))
+      y:Math.max(0,Math.min(1,(clientY-bounds.top)/bounds.height)),
+      ...(findStickerAnchor(clientX,clientY)?{anchor:findStickerAnchor(clientX,clientY)}:{})
     };
   }
   if (cloudSession?.user && cloudProjectId) {
@@ -800,7 +1245,21 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
       stickerAttach.style.top = stickerPoint.y*100 + '%';
       stickerAttach.hidden = false;
     };
-    cloudApi(projectStickerUrl).then(function(stickers) { stickers.forEach(showPlacedSticker); })
+    cloudApi(projectStickerUrl).then(function(stickers) { stickers.forEach(function(sticker) {
+      if (!sticker.anchor || sticker.anchor.version!==2) {
+        var page=projectCanvas.getBoundingClientRect(),old=sticker.anchor,box=old?anchorBounds(old.target):null;
+        var width=sticker.canvas==='page'?page.width:Math.min(page.width,1320);
+        var x=box?box.left+box.width*old.u:page.left+page.width/2+width*(sticker.x-.5);
+        var y=box?box.top+box.height*old.v:page.top+page.height*sticker.y;
+        var converted=box && old.target!=='sticker-hero'?fixedStickerAnchor(old.target,box,x,y):findStickerAnchor(x,y);
+        // Upgrade once from the current layout, keeping the same visible placement.
+        if(converted){
+          sticker.anchor=converted;
+          cloudApi(projectStickerUrl,'PATCH',{moveId:sticker.id,x:sticker.x,y:sticker.y,anchor:converted}).catch(function(error){cloudMessage(error.message);});
+        }
+      }
+      showPlacedSticker(sticker);
+    }); })
       .catch(function(error) { cloudMessage(error.message); });
   }
   function renderPackShop(category,catalog,ownedItems) {
@@ -932,8 +1391,15 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
   }
   document.getElementById('celebrationClose').onclick = function() { celebration.close(); };
   celebration.addEventListener('close', clearConfetti);
+  function manuscriptGroup(tasks) {
+    var group = el('span', 'ms-group');
+    tasks.forEach(function(task) { group.appendChild(el('span', 'ms-cell' + (isDone(task, state) ? ' on' : ''))); });
+    return group;
+  }
   function render() {
     var focusId = document.activeElement && document.activeElement.id;
+    var overallCells = document.getElementById('overallCells');
+    if (overallCells) { overallCells.replaceChildren(); data.phases.forEach(function(phase) { if (phase.tasks.length) overallCells.appendChild(manuscriptGroup(phase.tasks)); }); }
     var root = document.getElementById('phases'); root.replaceChildren();
     var total = 0, done = 0, completedPhases = 0, next = null;
     data.phases.forEach(function (phase, pi) {
@@ -942,10 +1408,10 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
       total += pTotal; done += pDone;
       if (pTotal && pDone === pTotal) completedPhases++;
       if (!next) { var task = phase.tasks.find(function(t) { return !isDone(t, state); }); if (task) next = { task:task, phase:phase }; }
-      var sec = el('section', 'phase'); sec.style.setProperty('--phase-color', colors[pi % colors.length]);
+      var sec = el('section', 'phase'); if(phase.tasks[0]) sec.id='sticker-phase-'+phase.tasks[0].id; sec.style.setProperty('--phase-color', colors[pi % colors.length]);
       var heading = el('div', 'phase-heading');
       var meta = el('div', 'phase-meta'); meta.appendChild(el('span', 'phase-no', 'PHASE ' + String(pi + 1).padStart(2, '0')));
-      meta.appendChild(el('span', 'badge', pTotal && pDone === pTotal ? '완료 ✓' : pDone ? '진행 중 ↗' : '시작 전'));
+      var badge = el('span', 'badge', pTotal && pDone === pTotal ? '완료' : pDone ? '진행 중' : '시작 전'); if (pDone) badge.appendChild(el('span', 'badge-glyph', pDone === pTotal ? ' ✓' : ' ↗')); meta.appendChild(badge);
       heading.appendChild(meta);
       var h = el('h3'); h.style.margin = '0';
       var toggle = el('button', 'phase-toggle'); toggle.id = 'phase-toggle-' + pi;
@@ -954,6 +1420,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
       toggle.onclick = function () { collapsed[pi] = !collapsed[pi]; render(); };
       h.appendChild(toggle); heading.appendChild(h);
       if (phase.description) heading.appendChild(el('p', 'desc', phase.description));
+      var phaseCells = el('div', 'ms-cells'); phaseCells.setAttribute('aria-hidden', 'true'); phaseCells.appendChild(manuscriptGroup(phase.tasks)); heading.appendChild(phaseCells);
       sec.appendChild(heading);
       var ul = el('ul', 'tasks'); ul.id = 'phase-tasks-' + pi; ul.hidden = !!collapsed[pi];
       var visible = 0;
@@ -985,6 +1452,7 @@ button:not(:disabled):not(.phase-toggle):not(.task-open):not(.trophy-pick-trigge
       var bar = el('div', 'mini-bar'); bar.setAttribute('aria-hidden', 'true'); var fill = el('span'); fill.style.width = (pTotal ? pDone / pTotal * 100 : 0) + '%'; bar.appendChild(fill); foot.appendChild(bar); sec.appendChild(foot); root.appendChild(sec);
     });
     if (!data.phases.length) root.appendChild(el('p', 'empty', '등록된 단계가 없어요. 프로젝트의 첫 단계를 추가해보세요.'));
+    refreshStickerPositions();
     var pct = total ? Math.round(done / total * 100) : 0;
     document.getElementById('percent').textContent = pct;
     document.getElementById('overallBar').style.width = pct + '%';

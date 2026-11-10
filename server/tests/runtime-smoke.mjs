@@ -19,11 +19,11 @@ try{
   await api('/api/projects/'+project.id+'/tasks','PATCH',{taskId:'a',done:true});
   let result=await api('/api/projects/'+project.id+'/tasks','PATCH',{taskId:'b',done:true});assert.equal(result.reward,10);assert.equal(result.wallet.balance,100);
   result=await api('/api/projects/'+project.id+'/tasks','PATCH',{taskId:'b',done:true});assert.equal(result.reward,0);
-  let wallet=await api('/api/themes/purchase','POST',{themeId:'blue',price:0});assert.equal(wallet.balance,0);assert.deepEqual(wallet.owned,['blue']);
-  wallet=await api('/api/themes/purchase','POST',{themeId:'blue'});assert.equal(wallet.balance,0);
+  let wallet=await api('/api/themes/purchase','POST',{themeId:'blueprint',price:0});assert.equal(wallet.balance,0);assert.deepEqual(wallet.owned,['blueprint']);
+  wallet=await api('/api/themes/purchase','POST',{themeId:'blueprint'});assert.equal(wallet.balance,0);
   await api('/api/projects/'+project.id+'/tasks','PATCH',{taskId:'a',date:'2028-02-29'});
   assert.equal((await api('/api/projects/'+project.id)).phases[0].tasks[0].date,'2028-02-29');
-  const response=await fetch(origin+'/api/themes/purchase',{method:'POST',headers:{Cookie:'__Host-pt_session='+token,Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({themeId:'pink'})});assert.equal(response.status,409);
+  const response=await fetch(origin+'/api/themes/purchase',{method:'POST',headers:{Cookie:'__Host-pt_session='+token,Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({themeId:'receipt'})});assert.equal(response.status,409);
   console.log('PASS: actual Wrangler/Pages/D1 runtime: health, account session, project import, one-time reward, debit/ownership, retry, date persistence, insufficient funds.');
 }finally{
   await sql(cleanup,`DELETE FROM point_ledger WHERE user_id='${id}'; DELETE FROM purchases WHERE user_id='${id}'; DELETE FROM task_reward_claims WHERE user_id='${id}'; DELETE FROM reward_claims WHERE user_id='${id}'; DELETE FROM projects WHERE user_id='${id}'; DELETE FROM sessions WHERE user_id='${id}'; DELETE FROM wallets WHERE user_id='${id}'; DELETE FROM users WHERE id='${id}';`);

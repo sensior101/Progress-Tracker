@@ -90,6 +90,17 @@ export async function setTask(db,userId,projectId,taskId,patch){
  const saved=await stmt(db,'SELECT date FROM tasks WHERE project_id=? AND id=?',projectId,taskId).first();
  return {wallet:await getWallet(db,userId),reward:results[1]?.meta.changes?10:0,date:saved.date,trophyAwarded:!!results[2]?.meta.changes};
 }
+function stickerAnchor(value){
+ if(value==null)return null;
+ const fail=()=>{throw new HttpError(400,'스티커 기준 영역이 올바르지 않습니다.');};
+ if(typeof value!=='object'||typeof value.target!=='string'||!/^sticker-(title|hero|progress|counts|next|calendar|agenda|account|phase-.{1,120})$/.test(value.target))fail();
+ if(value.version===2){
+  if(![value.edgeX,value.edgeY].every(n=>[0,0.5,1].includes(n))||![value.dx,value.dy].every(n=>typeof n==='number'&&Number.isFinite(n)&&Math.abs(n)<=100000))fail();
+  return JSON.stringify({version:2,target:value.target,edgeX:value.edgeX,edgeY:value.edgeY,dx:value.dx,dy:value.dy});
+ }
+ if(value.version!==undefined||![value.u,value.v].every(n=>typeof n==='number'&&Number.isFinite(n)&&n>=-2&&n<=3))fail();
+ return JSON.stringify({target:value.target,u:value.u,v:value.v});
+}
 export async function purchaseTheme(db,userId,themeId){
  if(themeId!=='lime'&&!await stmt(db,'SELECT id FROM themes WHERE id=?',themeId).first())throw new HttpError(400,'존재하지 않는 테마입니다.');const operations=[];
  if(themeId!=='lime')operations.push(stmt(db,'INSERT INTO purchases(user_id,theme_id) VALUES(?,?) ON CONFLICT(user_id,theme_id) DO NOTHING',userId,themeId));
@@ -170,8 +181,8 @@ async function route(request,env){
  const match=path.match(/^\/api\/projects\/([^/]+)(?:\/(tasks|reset|stickers))?$/);if(match){const row=await project(env.DB,id,match[1]);if(!match[2]&&request.method==='GET')return json(await projectData(env.DB,row));if(match[2]==='tasks'&&request.method==='PATCH'){const patch=await body(request);return json(await setTask(env.DB,id,row.id,text(patch.taskId,120,'업무 ID'),patch));}if(match[2]==='reset'&&request.method==='POST'){await stmt(env.DB,'UPDATE tasks SET done=0 WHERE project_id=?',row.id).run();return json({ok:true});}
   if(match[2]==='stickers'){
    if(request.method==='GET'){
-    const list=await stmt(env.DB,'SELECT id,pack_id AS packId,sticker,x,y,canvas,scale FROM project_stickers WHERE project_id=? ORDER BY rowid',row.id).all();
-    return json(list.results);
+    const list=await stmt(env.DB,'SELECT id,pack_id AS packId,sticker,x,y,canvas,scale,anchor FROM project_stickers WHERE project_id=? ORDER BY rowid',row.id).all();
+    return json(list.results.map(({anchor,...item})=>anchor?{...item,anchor:JSON.parse(anchor)}:item));
    }
    if(request.method==='PATCH'){
     const patch=await body(request);
@@ -179,7 +190,7 @@ async function route(request,env){
      const {moveId,x,y}=patch;
      text(moveId,120,'스티커 ID');
      if(![x,y].every(n=>typeof n==='number'&&n>=0&&n<=1))throw new HttpError(400,'스티커 위치가 올바르지 않습니다.');
-     const moved=await stmt(env.DB,"UPDATE project_stickers SET x=?,y=?,canvas='page' WHERE project_id=? AND id=?",x,y,row.id,moveId).run();
+     const moved=await stmt(env.DB,"UPDATE project_stickers SET x=?,y=?,canvas='page',anchor=? WHERE project_id=? AND id=?",x,y,stickerAnchor(patch.anchor),row.id,moveId).run();
      if(!moved.meta.changes)throw new HttpError(404,'스티커를 찾을 수 없습니다.');
     }else if(Object.hasOwn(patch,'resizeId')){
      const {resizeId,scale}=patch;
@@ -193,18 +204,19 @@ async function route(request,env){
     return json({ok:true});
    }
    if(request.method==='POST'){
-    const {packId,sticker,x,y,canvas='content'}=await body(request);
+    const {packId,sticker,x,y,canvas='content',anchor}=await body(request);
+    const savedAnchor=stickerAnchor(anchor);
     text(packId,32,'스티커팩');
     if(!['content','page'].includes(canvas)||!Number.isInteger(sticker)||sticker<0||sticker>19||![x,y].every(n=>typeof n==='number'&&n>=0&&n<=1))
      throw new HttpError(400,'스티커 또는 위치가 올바르지 않습니다.');
     if(!await stmt(env.DB,'SELECT pack_id FROM sticker_pack_purchases WHERE user_id=? AND pack_id=?',id,packId).first())
      throw new HttpError(403,'보유한 스티커팩만 사용할 수 있습니다.');
     const stickerId=crypto.randomUUID();
-    const result=await stmt(env.DB,`INSERT INTO project_stickers(id,project_id,pack_id,sticker,x,y,canvas)
-     SELECT ?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM project_stickers WHERE project_id=?)<80`,
-     stickerId,row.id,packId,sticker,x,y,canvas,row.id).run();
+    const result=await stmt(env.DB,`INSERT INTO project_stickers(id,project_id,pack_id,sticker,x,y,canvas,anchor)
+     SELECT ?,?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM project_stickers WHERE project_id=?)<80`,
+     stickerId,row.id,packId,sticker,x,y,canvas,savedAnchor,row.id).run();
     if(!result.meta.changes)throw new HttpError(409,'프로젝트에 스티커는 최대 80개까지 붙일 수 있어요.');
-    return json({id:stickerId,packId,sticker,x,y,canvas,scale:1},201);
+    return json({id:stickerId,packId,sticker,x,y,canvas,scale:1,...(savedAnchor?{anchor:JSON.parse(savedAnchor)}:{})},201);
    }
   }
  }

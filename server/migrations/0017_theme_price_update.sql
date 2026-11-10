@@ -1,0 +1,1 @@
+UPDATE themes SET price=200 WHERE id IN ('retro','blueprint');

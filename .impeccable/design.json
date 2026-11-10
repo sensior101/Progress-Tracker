@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-11T00:00:00Z",
+  "title": "Design System: Progress Tracker",
+  "extensions": {
+    "colorMeta": {
+      "manuscript-paper": {
+        "role": "neutral",
+        "displayName": "Manuscript Paper",
+        "canonical": "#fcfcfa",
+        "tonalRamp": [
+          "#3f3d38",
+          "#6b6862",
+          "#97948d",
+          "#c3c0b9",
+          "#e6e2dd",
+          "#f0eee9",
+          "#f7f6f2",
+          "#fcfcfa"
+        ]
+      },
+      "blue-black-ink": {
+        "role": "neutral",
+        "displayName": "Blue-Black Ink",
+        "canonical": "#1d2230",
+        "tonalRamp": [
+          "#0e1118",
+          "#1d2230",
+          "#2f3546",
+          "#474e60",
+          "#5f6470",
+          "#8a8f99",
+          "#c4c7cd",
+          "#eceef1"
+        ]
+      },
+      "graphite-muted": {
+        "role": "neutral",
+        "displayName": "Graphite Muted",
+        "canonical": "#5f6470",
+        "tonalRamp": [
+          "#0e1118",
+          "#1d2230",
+          "#2f3546",
+          "#474e60",
+          "#5f6470",
+          "#8a8f99",
+          "#c4c7cd",
+          "#eceef1"
+        ]
+      },
+      "pencil-line": {
+        "role": "neutral",
+        "displayName": "Pencil Line",
+        "canonical": "#e6e2dd",
+        "tonalRamp": [
+          "#3f3d38",
+          "#6b6862",
+          "#97948d",
+          "#c3c0b9",
+          "#e6e2dd",
+          "#f0eee9",
+          "#f7f6f2",
+          "#fcfcfa"
+        ]
+      },
+      "vermilion-rule": {
+        "role": "primary",
+        "displayName": "Vermilion Rule",
+        "canonical": "#e0573a",
+        "tonalRamp": [
+          "#4a160b",
+          "#7a2614",
+          "#a8381e",
+          "#e0573a",
+          "#ea7f66",
+          "#f1cbbf",
+          "#f7ddd4",
+          "#fbefea"
+        ]
+      },
+      "vermilion-text": {
+        "role": "primary",
+        "displayName": "Vermilion Text",
+        "canonical": "#b23d1d",
+        "tonalRamp": [
+          "#4a160b",
+          "#7a2614",
+          "#a8381e",
+          "#e0573a",
+          "#ea7f66",
+          "#f1cbbf",
+          "#f7ddd4",
+          "#fbefea"
+        ]
+      },
+      "soft-ruling": {
+        "role": "secondary",
+        "displayName": "Soft Ruling",
+        "canonical": "#f1cbbf",
+        "tonalRamp": [
+          "#4a160b",
+          "#7a2614",
+          "#a8381e",
+          "#e0573a",
+          "#ea7f66",
+          "#f1cbbf",
+          "#f7ddd4",
+          "#fbefea"
+        ]
+      },
+      "vermilion-wash": {
+        "role": "secondary",
+        "displayName": "Vermilion Wash",
+        "canonical": "#fbefea",
+        "tonalRamp": [
+          "#4a160b",
+          "#7a2614",
+          "#a8381e",
+          "#e0573a",
+          "#ea7f66",
+          "#f1cbbf",
+          "#f7ddd4",
+          "#fbefea"
+        ]
+      },
+      "night-desk": {
+        "role": "neutral",
+        "displayName": "Night Desk (dark page)",
+        "canonical": "#17181d",
+        "tonalRamp": [
+          "#0e1118",
+          "#1d2230",
+          "#2f3546",
+          "#474e60",
+          "#5f6470",
+          "#8a8f99",
+          "#c4c7cd",
+          "#eceef1"
+        ]
+      },
+      "night-paper": {
+        "role": "neutral",
+        "displayName": "Night Paper (dark surface)",
+        "canonical": "#1d1f25",
+        "tonalRamp": [
+          "#0e1118",
+          "#1d2230",
+          "#2f3546",
+          "#474e60",
+          "#5f6470",
+          "#8a8f99",
+          "#c4c7cd",
+          "#eceef1"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Night Ink (dark text)",
+        "canonical": "#ecebe7",
+        "tonalRamp": [
+          "#0e1118",
+          "#1d2230",
+          "#2f3546",
+          "#474e60",
+          "#5f6470",
+          "#8a8f99",
+          "#c4c7cd",
+          "#eceef1"
+        ]
+      },
+      "night-muted": {
+        "role": "neutral",
+        "displayName": "Night Muted",
+        "canonical": "#a9abb3",
+        "tonalRamp": [
+          "#0e1118",
+          "#1d2230",
+          "#2f3546",
+          "#474e60",
+          "#5f6470",
+          "#8a8f99",
+          "#c4c7cd",
+          "#eceef1"
+        ]
+      },
+      "night-line": {
+        "role": "neutral",
+        "displayName": "Night Line",
+        "canonical": "#33353d",
+        "tonalRamp": [
+          "#0e1118",
+          "#1d2230",
+          "#2f3546",
+          "#474e60",
+          "#5f6470",
+          "#8a8f99",
+          "#c4c7cd",
+          "#eceef1"
+        ]
+      },
+      "night-rule": {
+        "role": "primary",
+        "displayName": "Night Vermilion Rule",
+        "canonical": "#ef6f50",
+        "tonalRamp": [
+          "#4a160b",
+          "#7a2614",
+          "#a8381e",
+          "#e0573a",
+          "#ea7f66",
+          "#f1cbbf",
+          "#f7ddd4",
+          "#fbefea"
+        ]
+      },
+      "night-soft-ruling": {
+        "role": "secondary",
+        "displayName": "Night Soft Ruling",
+        "canonical": "#5a3a31",
+        "tonalRamp": [
+          "#4a160b",
+          "#7a2614",
+          "#a8381e",
+          "#e0573a",
+          "#ea7f66",
+          "#f1cbbf",
+          "#f7ddd4",
+          "#fbefea"
+        ]
+      },
+      "night-wash": {
+        "role": "secondary",
+        "displayName": "Night Wash",
+        "canonical": "#2e221f",
+        "tonalRamp": [
+          "#4a160b",
+          "#7a2614",
+          "#a8381e",
+          "#e0573a",
+          "#ea7f66",
+          "#f1cbbf",
+          "#f7ddd4",
+          "#fbefea"
+        ]
+      },
+      "night-vermilion-text": {
+        "role": "primary",
+        "displayName": "Night Vermilion Text",
+        "canonical": "#f39a82",
+        "tonalRamp": [
+          "#4a160b",
+          "#7a2614",
+          "#a8381e",
+          "#e0573a",
+          "#ea7f66",
+          "#f1cbbf",
+          "#f7ddd4",
+          "#fbefea"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Project title, once per page."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Phase names, next task, dialog and calendar headings."
+      },
+      "task": {
+        "displayName": "Task",
+        "purpose": "Task names in phase lists."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text and subtitle; tabular numerals page-wide."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Metric titles, filters, solid buttons."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Notes, date chips, phase footers, footer, badges (at 700)."
+      }
+    },
+    "shadows": [
+      {
+        "name": "none",
+        "value": "none",
+        "purpose": "The system is flat; every drop shadow is cancelled (--shadow: transparent)."
+      },
+      {
+        "name": "selected-day-rule",
+        "value": "inset 0 0 0 1px #e0573a",
+        "purpose": "Drawn 1px vermilion outline on the selected calendar day; a rule, not elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "cell-fill",
+        "value": "background-color .25s cubic-bezier(.16,1,.3,1)",
+        "purpose": "A manuscript cell fills when its task is done; disabled under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tablet",
+        "value": "800px"
+      },
+      {
+        "name": "phone",
+        "value": "520px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Manuscript Cell Strip",
+      "kind": "custom",
+      "refersTo": "manuscript-cell",
+      "description": "One square per task, grouped by phase; a done task's cell fills vermilion with a paper check.",
+      "html": "<div class=\"ds-cells\"><span class=\"ds-group\"><span class=\"ds-cell on\"></span><span class=\"ds-cell on\"></span><span class=\"ds-cell on\"></span></span><span class=\"ds-group\"><span class=\"ds-cell on\"></span><span class=\"ds-cell\"></span><span class=\"ds-cell\"></span></span><span class=\"ds-group\"><span class=\"ds-cell\"></span><span class=\"ds-cell\"></span><span class=\"ds-cell\"></span></span></div><p class=\"ds-cells-text\">4 / 9개 작업 완료</p>",
+      "css": ":host{--paper:#fcfcfa;--ink:#1d2230;--muted:#5f6470;--line:#e6e2dd;--ms-rule:#e0573a;--ms-soft:#f1cbbf;--ms-tint:#fbefea;--ms-text:#b23d1d;font:15px/1.6 'Pretendard','Malgun Gothic',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)} .ds-cells{display:flex;flex-wrap:wrap;row-gap:6px;background:var(--paper);padding:8px}.ds-group{display:flex;margin-right:8px}.ds-cell{width:22px;height:22px;border:1px solid var(--ms-rule);margin-left:-1px;position:relative;transition:background-color .25s cubic-bezier(.16,1,.3,1)}.ds-group .ds-cell:first-child{margin-left:0}.ds-cell.on{background:var(--ms-rule)}.ds-cell.on::after{content:'';position:absolute;left:50%;top:44%;width:28%;height:48%;border:solid var(--paper);border-width:0 2px 2px 0;transform:translate(-50%,-50%) rotate(45deg)}.ds-cells-text{margin:10px 8px 0;font-size:14px;font-weight:700}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Default button: paper with a 1px ink frame; vermilion wash on hover, no movement.",
+      "html": "<button class=\"ds-btn-outline\">트로피 진열장</button>",
+      "css": ":host{--paper:#fcfcfa;--ink:#1d2230;--muted:#5f6470;--line:#e6e2dd;--ms-rule:#e0573a;--ms-soft:#f1cbbf;--ms-tint:#fbefea;--ms-text:#b23d1d;font:15px/1.6 'Pretendard','Malgun Gothic',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)} .ds-btn-outline{border:1px solid var(--ink);background:var(--paper);color:var(--ink);font:inherit;font-size:13px;font-weight:700;padding:8px 13px;border-radius:0;cursor:pointer}.ds-btn-outline:hover{background:var(--ms-tint);color:var(--ink);border-color:var(--ink)}.ds-btn-outline:focus-visible{outline:2px solid var(--ink);outline-offset:3px}"
+    },
+    {
+      "name": "Solid Button",
+      "kind": "button",
+      "refersTo": "button-solid",
+      "description": "The single committing action in a panel: ink fill, paper text.",
+      "html": "<button class=\"ds-btn-solid\">JSON 가져오기</button>",
+      "css": ":host{--paper:#fcfcfa;--ink:#1d2230;--muted:#5f6470;--line:#e6e2dd;--ms-rule:#e0573a;--ms-soft:#f1cbbf;--ms-tint:#fbefea;--ms-text:#b23d1d;font:15px/1.6 'Pretendard','Malgun Gothic',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)} .ds-btn-solid{border:1px solid var(--ink);background:var(--ink);color:var(--paper);font:inherit;font-size:13px;font-weight:700;padding:7px 12px;border-radius:0;cursor:pointer}.ds-btn-solid:hover{background:var(--ms-tint);color:var(--ink);border-color:var(--ink)}.ds-btn-solid:focus-visible{outline:2px solid var(--ink);outline-offset:3px}"
+    },
+    {
+      "name": "Filter Segments",
+      "kind": "nav",
+      "refersTo": "filter-active",
+      "description": "Segmented filter in a 1px ink frame; the active segment is solid ink.",
+      "html": "<div class=\"ds-filters\"><button class=\"ds-filter\" aria-pressed=\"true\">전체</button><button class=\"ds-filter\" aria-pressed=\"false\">남은 작업</button><button class=\"ds-filter\" aria-pressed=\"false\">완료</button></div>",
+      "css": ":host{--paper:#fcfcfa;--ink:#1d2230;--muted:#5f6470;--line:#e6e2dd;--ms-rule:#e0573a;--ms-soft:#f1cbbf;--ms-tint:#fbefea;--ms-text:#b23d1d;font:15px/1.6 'Pretendard','Malgun Gothic',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)} .ds-filters{display:inline-flex;border:1px solid var(--ink);background:var(--paper)}.ds-filter{padding:7px 15px;border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;font-weight:700;cursor:pointer}.ds-filter+.ds-filter{border-left:1px solid var(--ink)}.ds-filter[aria-pressed=true]{background:var(--ink);color:var(--paper)}.ds-filter[aria-pressed=false]:hover{background:var(--ms-tint)}.ds-filter:focus-visible{outline:2px solid var(--ink);outline-offset:3px}"
+    },
+    {
+      "name": "Phase Card",
+      "kind": "card",
+      "refersTo": "phase-card",
+      "description": "Soft-ruled phase column; heading underlined in vermilion and carrying its own 14px cell strip.",
+      "html": "<section class=\"ds-phase\"><div class=\"ds-phase-head\"><span class=\"ds-badge\">진행 중</span><h3>업무 처리</h3><p>업무 생성과 상태 변경</p><div class=\"ds-mini\"><span class=\"on\"></span><span></span><span></span></div></div><ul class=\"ds-tasks\"><li><input type=\"checkbox\" checked aria-label=\"완료\"><span>업무 생성 API</span></li><li><input type=\"checkbox\" aria-label=\"미완료\"><span>업무 마감일 변경하기</span></li></ul></section>",
+      "css": ":host{--paper:#fcfcfa;--ink:#1d2230;--muted:#5f6470;--line:#e6e2dd;--ms-rule:#e0573a;--ms-soft:#f1cbbf;--ms-tint:#fbefea;--ms-text:#b23d1d;font:15px/1.6 'Pretendard','Malgun Gothic',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)} .ds-phase{border:1px solid var(--ms-soft);background:var(--paper);max-width:320px}.ds-phase-head{position:relative;padding:18px 20px 16px;border-bottom:1px solid var(--ms-rule)}.ds-phase-head:hover{background:var(--ms-tint)}.ds-phase-head h3{margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em}.ds-phase-head p{margin:4px 0 0;font-size:13px;color:var(--muted)}.ds-badge{position:absolute;right:20px;top:18px;font-size:12px;font-weight:700;color:var(--muted)}.ds-mini{display:flex;margin-top:12px}.ds-mini span{width:14px;height:14px;border:1px solid var(--ms-rule);margin-left:-1px}.ds-mini span:first-child{margin-left:0}.ds-mini span.on{background:var(--ms-rule)}.ds-tasks{list-style:none;margin:0;padding:5px 18px}.ds-tasks li{display:flex;gap:12px;padding:18px 0;font-size:14px;font-weight:700}.ds-tasks li+li{border-top:1px solid var(--line)}.ds-tasks input{appearance:none;-webkit-appearance:none;flex:0 0 20px;width:20px;height:20px;margin:2px 0 0;border:1.5px solid var(--ink);background:var(--paper);display:grid;place-content:center;border-radius:0}.ds-tasks input:checked{background:var(--ms-rule);border-color:var(--ms-rule)}.ds-tasks input:checked::after{content:'';width:9px;height:5px;border-left:2px solid var(--paper);border-bottom:2px solid var(--paper);transform:translateY(-1px) rotate(-45deg)}.ds-tasks input:focus-visible{outline:2px solid var(--ink);outline-offset:3px}"
+    },
+    {
+      "name": "Date Chip",
+      "kind": "chip",
+      "refersTo": "date-chip-scheduled",
+      "description": "Task date chip: pencil line when unscheduled, vermilion wash with vermilion text when scheduled.",
+      "html": "<button class=\"ds-date\">날짜 지정</button> <button class=\"ds-date scheduled\">11월 14일</button>",
+      "css": ":host{--paper:#fcfcfa;--ink:#1d2230;--muted:#5f6470;--line:#e6e2dd;--ms-rule:#e0573a;--ms-soft:#f1cbbf;--ms-tint:#fbefea;--ms-text:#b23d1d;font:15px/1.6 'Pretendard','Malgun Gothic',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)} .ds-date{border:1px solid var(--line);background:transparent;color:var(--muted);font:inherit;font-size:12px;padding:2px 7px;border-radius:0;cursor:pointer}.ds-date.scheduled{background:var(--ms-tint);color:var(--ms-text);border-color:var(--ms-soft)}.ds-date:hover{background:var(--ms-tint);color:var(--ink);border-color:var(--ink)}.ds-date:focus-visible{outline:2px solid var(--ink);outline-offset:3px}"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "button-outline",
+      "description": "Select or input: 1px pencil line on paper, 2px ink focus outline.",
+      "html": "<select class=\"ds-field\"><option>Desk Pet 백엔드 (4/9)</option></select>",
+      "css": ":host{--paper:#fcfcfa;--ink:#1d2230;--muted:#5f6470;--line:#e6e2dd;--ms-rule:#e0573a;--ms-soft:#f1cbbf;--ms-tint:#fbefea;--ms-text:#b23d1d;font:15px/1.6 'Pretendard','Malgun Gothic',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)} .ds-field{border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;font-size:13px;padding:8px;border-radius:0;min-width:240px}.ds-field:focus-visible{outline:2px solid var(--ink);outline-offset:3px}"
+    },
+    {
+      "name": "Sheet Header",
+      "kind": "custom",
+      "refersTo": "manuscript-cell",
+      "description": "Top bar closed by the 5px double vermilion rule; the brand mark is a quartered manuscript cell.",
+      "html": "<header class=\"ds-top\"><span class=\"ds-mark\"></span><strong>PROGRESS TRACKER</strong></header>",
+      "css": ":host{--paper:#fcfcfa;--ink:#1d2230;--muted:#5f6470;--line:#e6e2dd;--ms-rule:#e0573a;--ms-soft:#f1cbbf;--ms-tint:#fbefea;--ms-text:#b23d1d;font:15px/1.6 'Pretendard','Malgun Gothic',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)} .ds-top{display:flex;align-items:center;gap:11px;padding:20px 24px;background:var(--paper);border-bottom:5px double var(--ms-rule);font-size:16px;letter-spacing:-.2px}.ds-mark{width:30px;height:30px;border:1px solid var(--ms-rule);background:linear-gradient(var(--ms-rule),var(--ms-rule)) 0 0/50% 50% no-repeat,linear-gradient(var(--ms-rule),var(--ms-rule)) 50% 0/1px 100% no-repeat,linear-gradient(var(--ms-rule),var(--ms-rule)) 0 50%/100% 1px no-repeat,var(--paper)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Manuscript Sheet (원고지)",
+    "overview": "The free default theme treats the project as a Korean manuscript sheet. Each task is one ruled square; finishing the task fills its square in vermilion. Progress is read by counting filled cells, not by a percentage or a large number. Cells are grouped by phase, so the strip of squares in the overview and the smaller strip under each phase heading show the same thing at two scales.\n\nThe page is quiet, near-white paper with blue-black ink. Vermilion is the ruling colour of the sheet. It draws structure (the double rule under the top bar, section rules, cell borders) and the done state, and nothing else. Hierarchy comes from weight (700 against 400) and position, not from size. Structure is made of 1px rules and whitespace. There are no shadows, no background textures and no rounded corners.\n\nThe theme lives under the appearance key `lime`, a legacy slug kept for stored user preferences. The paid themes (retro desktop, blueprint, receipt, chalkboard) and the completion celebration dialog are separately owned skins. This system does not cover them, and they stay unchanged.",
+    "keyCharacteristics": [
+      "One task = one square cell; a finished task's cell is filled vermilion with a paper-coloured check.",
+      "Vermilion is reserved for ruling and completion.",
+      "Weight-led hierarchy on a single Korean system sans; no display numbers.",
+      "Hairline rules, a double rule as the sheet's header line, square corners everywhere.",
+      "A full dark counterpart: same roles, re-tuned values."
+    ],
+    "rules": [
+      {
+        "name": "The Ruling Colour Rule",
+        "body": "Vermilion means the sheet's ruling or \"done\". It never marks a warning, a promotion or a decorative accent.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Wash Rule",
+        "body": "Every hover, selected and scheduled state uses the same vermilion wash with ink text. Never invert to solid ink on hover.",
+        "section": "colors"
+      },
+      {
+        "name": "The Weight Not Size Rule",
+        "body": "Only two weights exist: 400 and 700. Do not add a size step to show importance. Make the text Bold or move it.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Display Number Rule",
+        "body": "Quantities appear as the cell strip plus one sentence or as 15px Bold inline counts. Never set a big KPI figure. The percentage figure is hidden in this theme, and the visual bar is replaced by an accessible visually-hidden progressbar.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ruled Not Raised Rule",
+        "body": "Nothing floats. If an element needs separation, give it a rule of the right weight and colour, never a shadow or a tinted elevation layer.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** represent each task as exactly one ruled cell, and fill it only when the task is done.",
+      "**Do** keep vermilion for rules and the done state, and render vermilion text as vermilion-text on the wash.",
+      "**Do** rank with 700 against 400 on the one system stack, with tabular numerals.",
+      "**Do** separate with 1px rules (vermilion, then soft ruling, then pencil line) and a double rule at sheet headers.",
+      "**Do** use the vermilion wash with ink text for every hover and selected state.",
+      "**Do** draw icons as 16px inline SVG with square caps in the current colour."
+    ],
+    "donts": [
+      "**Don't** add drop shadows, hard offset shadows, or background grid textures behind cards. The cell strip and calendar grid are the only grids.",
+      "**Don't** round corners.",
+      "**Don't** set display-size numbers, percentages as heroes, or progress bars in this theme.",
+      "**Don't** add English monospace kickers or eyebrow labels above Korean headings.",
+      "**Don't** use text glyphs (arrows, check marks, plus and minus) as icons.",
+      "**Don't** use acid lime or any second accent hue. The legacy `lime` key is only a storage slug.",
+      "**Don't** restyle the paid themes or the completion celebration from this system. They are separately owned skins."
+    ]
+  }
+}
